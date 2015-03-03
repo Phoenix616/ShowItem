@@ -40,7 +40,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("showitem.command")) {
-            if(args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+            if(args.length > 0 && args[0].equalsIgnoreCase("-reload")) {
                 if(sender.hasPermission("showitem.command.reload")) {
                     this.loadConfig();
                     sender.sendMessage(ChatColor.GREEN + "Config reloaded.");
@@ -51,7 +51,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 if(args.length == 0) {
                     showInRadius((Player) sender, this.defaultradius);
                 } else if (args.length > 0) {
-                    if(args.length > 1 && args[0].equalsIgnoreCase("radius")) {
+                    if(args.length > 1 && (args[0].equalsIgnoreCase("-radius") || args[0].equalsIgnoreCase("-r"))) {
                         if(sender.hasPermission("showitem.command.radius")) {
                             try {
                                 showInRadius((Player) sender, Integer.parseInt(args[1]));
