@@ -1,0 +1,25 @@
+name: ShowItem
+main: de.themoep.ShowItem.ShowItem
+version: 0.1.2
+description: Show items in chat via a command. Also let's you see the item's info via hovering over the message
+authors: [Phoenix616]
+commands:
+   showitem:
+      aliases: [si, show]
+      description: Shows the item you are holding in your hand
+      usage: /<command> [<player>]
+      permission: showitem.command
+      permission-message: You don't have the permission <permission>
+permissions:
+   showitem.command:
+      description: Gives permission to the some command
+      default: op
+   showitem.command.player:
+      description: Gives permission to show an item to a specific player wherever he is
+      default: op
+   showitem.command.radius:
+      description: Gives permission to show an item in radius you give
+      default: op
+   showitem.command.reload:
+      description: Gives permission to use the reload command
+      default: op

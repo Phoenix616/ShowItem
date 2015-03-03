@@ -1,0 +1,10 @@
+defaultradius: 16
+lang:
+  radius:
+    self: 'Du hälst dein Item %item% hoch! &8(Sichtweite: %radius% &8Blöcke)'
+    target: '%player% hält das Item %item% hoch!'
+    noone: '&cEs ist kein Spieler da um dein Item zu sehen :('
+  player:
+    self: 'Du zeigst %player% das Item %item%'
+    target: '%player% zeigt dir das Item %item%'
+    offline: 'Der Spieler %player% is nicht online'
