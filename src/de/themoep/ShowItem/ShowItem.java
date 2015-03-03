@@ -273,13 +273,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         String string = getTranslation(key);
 
         if (replacements != null)
-            for (String variable: replacements.keySet()) {
-                if(variable.equalsIgnoreCase("item")) {
-                    string = "[\"\",{\"text\":\"" + string.replaceAll("%" + variable + "%", "\"}," + replacements.get(variable) + ",{\"text\":\"" + msgcolor) + "\"}]";
-                } else {
-                    string = string.replaceAll("%" + variable + "%", msgsecondarycolor + replacements.get(variable) + msgcolor);
-                }
-            }
+            for (String variable: replacements.keySet())
+                string = "[\"\",{\"text\":\"" + string.replace("\"", "\\\"").replaceAll("%" + variable + "%", "\"}," + replacements.get(variable) + ",{\"text\":\"" + msgcolor) + "\"}]";
         return string;
     }
     
