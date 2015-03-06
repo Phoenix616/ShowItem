@@ -35,10 +35,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     public void loadConfig() {
+        this.getLogger().info("Loading Config...");
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
         lang = this.getConfig().getConfigurationSection("lang");
+        this.getLogger().info("Loading IdMapping...");
         idmap = new IdMapping(this.getConfig());
+        this.getLogger().info("IdMapping loaded.");
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -95,7 +98,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         }
         if(!found)
-            sender.sendMessage(getTranslation("radius.noone", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
+            tellRaw(sender, getTranslation("radius.noone", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
     }
 
     private void showPlayer(Player sender, Player target) {
@@ -272,11 +275,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private String getTranslation(String key, Map<String,String> replacements) {
-        String string = getTranslation(key);
+        String string = "[\"\",{\"text\":\"" + getTranslation(key).replace("\"", "\\\"") + "\"}]";
 
         if (replacements != null)
             for (String variable: replacements.keySet())
-                string = "[\"\",{\"text\":\"" + string.replace("\"", "\\\"").replaceAll("%" + variable + "%", "\"}," + replacements.get(variable) + ",{\"text\":\"" + msgcolor) + "\"}]";
+                string =  string.replace("%" + variable + "%", "\"}," + replacements.get(variable) + ",{\"text\":\"" + msgcolor);
         return string;
     }
     
