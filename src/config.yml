@@ -11,27 +11,20 @@ lang:
 idmapping:
   SKULL_ITEM:
     mc: skull
-    alias: Skull
   WOOD_DOOR:
     mc: wooden_door
-    alias: Wooden Door
   FIREWORK:
     mc: fireworks
   GOLD_HELMET:
     mc: golden_helmet
-    alias: Golden Helmet
   GOLD_CHESTPLATE:
     mc: golden_chestplate
-    alias: Golden Chestplate
   GOLD_LEGGINGS:
     mc: golden_leggings
-    alias: Golden Leggings
   GOLD_BOOTS:
     mc: golden_boots
-    alias: Golden Boots
   MONSTER_EGG:
     mc: spawn_egg
-    alias: Spawn Egg
   EXP_BOTTLE:
     mc: experience_bottle
     alias: Bottle o' Enchanting
@@ -46,44 +39,185 @@ idmapping:
     alias: Glistering Melon
   FLINT_AND_STEEL:
     mc: flint_and_steel
-    alias: Flint and Steel
   EMPTY_MAP:
     mc: map
+    alias: Empty Map
   GOLD_RECORD:
     mc: record_13
-    alias: Record 13
   GREEN_RECORD:
     mc: record_cat
-    alias: Record Cat
   RECORD_3:
     mc: record_blocks
-    alias: Record Blocks
   RECORD_4:
     mc: record_chirp
-    alias: Record Chirp
   RECORD_5:
     mc: record_far
-    alias: Record Far
   RECORD_6:
     mc: record_mall
-    alias: Record Mall
   RECORD_7:
     mc: record_mellohi
-    alias: Record Mellohi
   RECORD_8:
     mc: record_stal
-    alias: Record Stal
   RECORD_9:
     mc: record_strad
-    alias: Record Strad
   RECORD_10:
     mc: record_ward
-    alias: Record Ward
   RECORD_12:
     mc: record_wait
-    alias: Record Wait
   ENDER_PORTAL_FRAME:
     mc: end_portal_frame
-    alias: End Portal Frame
+  RED_ROSE:
+    mc: red_flower
+  WATER_LILY:
+    mc: waterlily
+    alias: Lily Pad
+  WEB:
+    alias: Cobweb
+  MONSTER_EGGS:
+    mc: monster_egg
+    alias: Monster Egg Stone
+  THIN_GLASS:
+    mc: glass_pane
+  ENCHANTMENT_TABLE:
+    mc: enchanting_table
+  FENCE:
+    alias: Oak Fence
+  SLIME_BLOCK:
+    mc: slime
+    alias: Slime Block
+  LEAVES_2:
+    mc: leaves2
+  LOG_2:
+    mc: log2
+  GRASS:
+    alias: Grass Block
+  WOOD:
+    mc: planks
+    alias: Wood Planks
+  ENDER_STONE:
+    mc: end_stone
+  MYCEL:
+    mc: mycelium
+  BRICK:
+    mc: brick_block
+  CLAY_BRICK:
+    mc: brick
+    alias: Clay Brick
+  HARD_CLAY:
+    mc: hardened_clay
+  STAINED_GLAY:
+    mc: stained_hardened_clay
+    alias: Stained Clay
+  COBBLESTONE_STAIRS:
+    mc: stone_stairs
+    alias: Cobblestone Stairs
+  COBBLE_WALL:
+    mc: cobblestone_wall
+  STEP:
+    mc: stone_slab
+  WOOD_STEP:
+    mc: wooden_slab
+    alias: Wood Slab
+  WOOD_STAIRS:
+    mc: oak_stairs
+  SMOOTH_STAIRS:
+    mc: stone_brick_stairs
+  SPRUCE_WOOD_STAIRS:
+    mc: spruce_stairs
+    alias: Spruce Wood Stairs
+  BIRCH_WOOD_STAIRS:
+    mc: birch_stairs
+    alias: Birch Wood Stairs
+  JUNGLE_WOOD_STAIRS:
+    mc: jungle_stairs
+    alias: Jungle Wood Stairs
+  ACACIA_STAIRS:
+    alias: Acacia Wood Stairs
+  DARK_OAK_STAIRS:
+    alias: Dark Oak Wood Stairs
+  HAY_BLOCK:
+    alias: Hay Bale
+  LONG_GRASS:
+    mc: tallgrass
+  DEAD_BUSH:
+    mc: deadbush
+    alias: Dead Bush
+  WORKBENCH:
+    mc: crafting_table
+    alias: Workbench
+  SNOW:
+    mc: snow_layer
+  SNOW_BLOCK:
+    mc: snow
+    alias: Snow Block
+  DIODE:
+    mc: repeater
+    alias: Redstone Repeater
+  REDSTONE_COMPARATOR:
+    mc: comparator
+    alias: Redstone Comparator
+  WOOD_BUTTON:
+    mc: wooden_button
+  GOLD_PLATE:
+    mc: light_weighted_pressure_plate
+  IRON_PLATE:
+    mc: heavy_weighted_pressure_plate
+  DAYLIGHT_DETECTOR:
+    alias: Daylight Sensor
+  POWERED_RAIL:
+    mc: golden_rail
+    alias: Powered Rail
+  RAILS:
+    mc: rail
+  STORAGE_MINECART:
+    mc: chest_minecart
+  POWERED_MINECART:
+    mc: furnace_minecart
+  EXPLOSIVE_MINECART:
+    mc: tnt_minecart
+    alias: TNT Minecart
+  CARROT_STICK:
+    mc: carrot_on_a_stick
+    alias: Carrot on a Stick
+  IRON_BARDING:
+    mc: iron_horse_armor
+  GOLD_BARDING:
+    mc: golden_horse_armor
+    alias: Golden Horse Armor
+  DIAMOND_BARDING:
+    mc: diamond_horse_armor
+  FIREBALL:
+    mc: fire_charge
   RAW_FISH:
     mc: fish
+    alias: Raw Fish
+  PORK:
+    mc: porkchop
+    alias: Raw Porkchop
+  JACK_O_LANTER:
+    mc: lit_pumpkin
+    alias: "Jack o'Lantern"
+  MUSHROOM_SOUP:
+    mc: mushroom_stew
+  RAW_BEEF:
+    mc: beef
+    alias: Raw Beef
+  RAW_CHICKEN:
+    mc: chicken
+    alias: Raw Chicken
+  RABBIT:
+    alias: Raw Rabbit
+  MUTTON:
+    alias: Raw Mutton
+  RAW_BEEF:
+    mc: beef
+    alias: Raw Beef
+  LEASH:
+    mc: lead
+  WATCH:
+    mc: clock
+  INK_SACK:
+    mc: dye
+    alias: Dye
+  NETHER_STALK:
+    mc: nether_wart
