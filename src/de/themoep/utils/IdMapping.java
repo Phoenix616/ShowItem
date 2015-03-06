@@ -30,6 +30,7 @@ public class IdMapping {
                 if (alias != null) {
                     aliasmap.put(mat, alias);
                 }
+                Bukkit.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
                 Bukkit.getLogger().warning("[IdMapping] " + s + " is not a valid Bukkit material name!");
             }
@@ -38,13 +39,13 @@ public class IdMapping {
 
     /**
      * Convert the item id to a more human readable name. Should equal the US translation of MC.
-     * @return The alias set int he config or if not existand a capitalized, human friendly material name
+     * @return The alias set int he config or if not existand a capitalized, human friendly id/material name
      */
     public String getHumanName(Material mat) {
         if(aliasmap.containsKey(mat))
             return aliasmap.get(mat);
         else
-            return WordUtils.capitalize(mat.toString().toLowerCase().replace("_item", "").replace("_", " "));
+            return WordUtils.capitalize(getMCid(mat).toLowerCase().replace("_item", "").replace("_", " "));
     }
 
     public String getMCid(Material mat) {
