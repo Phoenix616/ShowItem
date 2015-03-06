@@ -13,6 +13,7 @@ idmapping:
     mcid: skull
   WOOD_DOOR:
     mcid: wooden_door
+    alias: Oak Door
   FIREWORK:
     mcid: fireworks
   GOLD_HELMET:
