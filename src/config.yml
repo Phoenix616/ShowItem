@@ -8,3 +8,82 @@ lang:
     self: 'Du zeigst %player% das Item %item%'
     target: '%player% zeigt dir das Item %item%'
     offline: 'Der Spieler %player% is nicht online'
+idmapping:
+  SKULL_ITEM:
+    mc: skull
+    alias: Skull
+  WOOD_DOOR:
+    mc: wooden_door
+    alias: Wooden Door
+  FIREWORK:
+    mc: fireworks
+  GOLD_HELMET:
+    mc: golden_helmet
+    alias: Golden Helmet
+  GOLD_CHESTPLATE:
+    mc: golden_chestplate
+    alias: Golden Chestplate
+  GOLD_LEGGINGS:
+    mc: golden_leggings
+    alias: Golden Leggings
+  GOLD_BOOTS:
+    mc: golden_boots
+    alias: Golden Boots
+  MONSTER_EGG:
+    mc: spawn_egg
+    alias: Spawn Egg
+  EXP_BOTTLE:
+    mc: experience_bottle
+    alias: Bottle o' Enchanting
+  BOOK_AND_QUILL:
+    mc: writable_book
+    alias: Book and Quill
+  EYE_OF_ENDER:
+    mc: ender_eye
+    alias: Eye of Ender
+  SPECKLED_MELON:
+    mc: speckled_melon
+    alias: Glistering Melon
+  FLINT_AND_STEEL:
+    mc: flint_and_steel
+    alias: Flint and Steel
+  EMPTY_MAP:
+    mc: map
+  GOLD_RECORD:
+    mc: record_13
+    alias: Record 13
+  GREEN_RECORD:
+    mc: record_cat
+    alias: Record Cat
+  RECORD_3:
+    mc: record_blocks
+    alias: Record Blocks
+  RECORD_4:
+    mc: record_chirp
+    alias: Record Chirp
+  RECORD_5:
+    mc: record_far
+    alias: Record Far
+  RECORD_6:
+    mc: record_mall
+    alias: Record Mall
+  RECORD_7:
+    mc: record_mellohi
+    alias: Record Mellohi
+  RECORD_8:
+    mc: record_stal
+    alias: Record Stal
+  RECORD_9:
+    mc: record_strad
+    alias: Record Strad
+  RECORD_10:
+    mc: record_ward
+    alias: Record Ward
+  RECORD_12:
+    mc: record_wait
+    alias: Record Wait
+  ENDER_PORTAL_FRAME:
+    mc: end_portal_frame
+    alias: End Portal Frame
+  RAW_FISH:
+    mc: fish

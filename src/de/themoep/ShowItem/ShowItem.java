@@ -23,6 +23,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     ChatColor msgcolor = ChatColor.GREEN;
     ChatColor msgsecondarycolor = ChatColor.YELLOW;
     
+    IdMapping idmap;
+    
     int defaultradius;
     
     ConfigurationSection lang;
@@ -36,6 +38,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
         lang = this.getConfig().getConfigurationSection("lang");
+        idmap = new IdMapping(this.getConfig());
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -104,11 +107,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     private String convertItem(ItemStack item) {
         List<String> taglist = new ArrayList<String>();
         ChatColor itemcolor = ChatColor.WHITE;
-        IdMapping.getHumanName(item.getType());
             
-        String name = IdMapping.getHumanName(item.getType());
+        String name = idmap.getHumanName(item.getType());
 
-        String msg = "id:minecraft:" + IdMapping.getMCid(item.getType()) + ",";
+        String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
 
         msg += "Durability:" + ((item.getDurability() < item.getType().getMaxDurability()) ? item.getDurability() : item.getData().getData() )+ ",";
         
