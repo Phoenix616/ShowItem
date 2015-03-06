@@ -10,126 +10,126 @@ lang:
     offline: 'Der Spieler %player% is nicht online'
 idmapping:
   SKULL_ITEM:
-    mc: skull
+    mcid: skull
   WOOD_DOOR:
-    mc: wooden_door
+    mcid: wooden_door
   FIREWORK:
-    mc: fireworks
+    mcid: fireworks
   GOLD_HELMET:
-    mc: golden_helmet
+    mcid: golden_helmet
   GOLD_CHESTPLATE:
-    mc: golden_chestplate
+    mcid: golden_chestplate
   GOLD_LEGGINGS:
-    mc: golden_leggings
+    mcid: golden_leggings
   GOLD_BOOTS:
-    mc: golden_boots
+    mcid: golden_boots
   MONSTER_EGG:
-    mc: spawn_egg
+    mcid: spawn_egg
   EXP_BOTTLE:
-    mc: experience_bottle
+    mcid: experience_bottle
     alias: Bottle o' Enchanting
   BOOK_AND_QUILL:
-    mc: writable_book
+    mcid: writable_book
     alias: Book and Quill
   EYE_OF_ENDER:
-    mc: ender_eye
+    mcid: ender_eye
     alias: Eye of Ender
   SPECKLED_MELON:
-    mc: speckled_melon
+    mcid: speckled_melon
     alias: Glistering Melon
   FLINT_AND_STEEL:
-    mc: flint_and_steel
+    mcid: flint_and_steel
   EMPTY_MAP:
-    mc: map
+    mcid: map
     alias: Empty Map
   GOLD_RECORD:
-    mc: record_13
+    mcid: record_13
   GREEN_RECORD:
-    mc: record_cat
+    mcid: record_cat
   RECORD_3:
-    mc: record_blocks
+    mcid: record_blocks
   RECORD_4:
-    mc: record_chirp
+    mcid: record_chirp
   RECORD_5:
-    mc: record_far
+    mcid: record_far
   RECORD_6:
-    mc: record_mall
+    mcid: record_mall
   RECORD_7:
-    mc: record_mellohi
+    mcid: record_mellohi
   RECORD_8:
-    mc: record_stal
+    mcid: record_stal
   RECORD_9:
-    mc: record_strad
+    mcid: record_strad
   RECORD_10:
-    mc: record_ward
+    mcid: record_ward
   RECORD_12:
-    mc: record_wait
+    mcid: record_wait
   ENDER_PORTAL_FRAME:
-    mc: end_portal_frame
+    mcid: end_portal_frame
   RED_ROSE:
-    mc: red_flower
+    mcid: red_flower
   WATER_LILY:
-    mc: waterlily
+    mcid: waterlily
     alias: Lily Pad
   WEB:
     alias: Cobweb
   MONSTER_EGGS:
-    mc: monster_egg
+    mcid: monster_egg
     alias: Monster Egg Stone
   THIN_GLASS:
-    mc: glass_pane
+    mcid: glass_pane
   ENCHANTMENT_TABLE:
-    mc: enchanting_table
+    mcid: enchanting_table
   FENCE:
     alias: Oak Fence
   SLIME_BLOCK:
-    mc: slime
+    mcid: slime
     alias: Slime Block
   LEAVES_2:
-    mc: leaves2
+    mcid: leaves2
   LOG_2:
-    mc: log2
+    mcid: log2
   GRASS:
     alias: Grass Block
   WOOD:
-    mc: planks
+    mcid: planks
     alias: Wood Planks
   ENDER_STONE:
-    mc: end_stone
+    mcid: end_stone
   MYCEL:
-    mc: mycelium
+    mcid: mycelium
   BRICK:
-    mc: brick_block
+    mcid: brick_block
   CLAY_BRICK:
-    mc: brick
+    mcid: brick
     alias: Clay Brick
   HARD_CLAY:
-    mc: hardened_clay
-  STAINED_GLAY:
-    mc: stained_hardened_clay
+    mcid: hardened_clay
+  STAINED_CLAY:
+    mcid: stained_hardened_clay
     alias: Stained Clay
   COBBLESTONE_STAIRS:
-    mc: stone_stairs
+    mcid: stone_stairs
     alias: Cobblestone Stairs
   COBBLE_WALL:
-    mc: cobblestone_wall
+    mcid: cobblestone_wall
   STEP:
-    mc: stone_slab
+    mcid: stone_slab
   WOOD_STEP:
-    mc: wooden_slab
+    mcid: wooden_slab
     alias: Wood Slab
   WOOD_STAIRS:
-    mc: oak_stairs
+    mcid: oak_stairs
   SMOOTH_STAIRS:
-    mc: stone_brick_stairs
+    mcid: stone_brick_stairs
   SPRUCE_WOOD_STAIRS:
-    mc: spruce_stairs
+    mcid: spruce_stairs
     alias: Spruce Wood Stairs
   BIRCH_WOOD_STAIRS:
-    mc: birch_stairs
+    mcid: birch_stairs
     alias: Birch Wood Stairs
   JUNGLE_WOOD_STAIRS:
-    mc: jungle_stairs
+    mcid: jungle_stairs
     alias: Jungle Wood Stairs
   ACACIA_STAIRS:
     alias: Acacia Wood Stairs
@@ -138,86 +138,86 @@ idmapping:
   HAY_BLOCK:
     alias: Hay Bale
   LONG_GRASS:
-    mc: tallgrass
+    mcid: tallgrass
   DEAD_BUSH:
-    mc: deadbush
+    mcid: deadbush
     alias: Dead Bush
   WORKBENCH:
-    mc: crafting_table
+    mcid: crafting_table
     alias: Workbench
   SNOW:
-    mc: snow_layer
+    mcid: snow_layer
   SNOW_BLOCK:
-    mc: snow
+    mcid: snow
     alias: Snow Block
   DIODE:
-    mc: repeater
+    mcid: repeater
     alias: Redstone Repeater
   REDSTONE_COMPARATOR:
-    mc: comparator
+    mcid: comparator
     alias: Redstone Comparator
   WOOD_BUTTON:
-    mc: wooden_button
+    mcid: wooden_button
   GOLD_PLATE:
-    mc: light_weighted_pressure_plate
+    mcid: light_weighted_pressure_plate
   IRON_PLATE:
-    mc: heavy_weighted_pressure_plate
+    mcid: heavy_weighted_pressure_plate
   DAYLIGHT_DETECTOR:
     alias: Daylight Sensor
   POWERED_RAIL:
-    mc: golden_rail
+    mcid: golden_rail
     alias: Powered Rail
   RAILS:
-    mc: rail
+    mcid: rail
   STORAGE_MINECART:
-    mc: chest_minecart
+    mcid: chest_minecart
   POWERED_MINECART:
-    mc: furnace_minecart
+    mcid: furnace_minecart
   EXPLOSIVE_MINECART:
-    mc: tnt_minecart
+    mcid: tnt_minecart
     alias: TNT Minecart
   CARROT_STICK:
-    mc: carrot_on_a_stick
+    mcid: carrot_on_a_stick
     alias: Carrot on a Stick
   IRON_BARDING:
-    mc: iron_horse_armor
+    mcid: iron_horse_armor
   GOLD_BARDING:
-    mc: golden_horse_armor
+    mcid: golden_horse_armor
     alias: Golden Horse Armor
   DIAMOND_BARDING:
-    mc: diamond_horse_armor
+    mcid: diamond_horse_armor
   FIREBALL:
-    mc: fire_charge
+    mcid: fire_charge
   RAW_FISH:
-    mc: fish
+    mcid: fish
     alias: Raw Fish
   PORK:
-    mc: porkchop
+    mcid: porkchop
     alias: Raw Porkchop
-  JACK_O_LANTER:
-    mc: lit_pumpkin
+  JACK_O_LANTERN:
+    mcid: lit_pumpkin
     alias: "Jack o'Lantern"
   MUSHROOM_SOUP:
-    mc: mushroom_stew
+    mcid: mushroom_stew
   RAW_BEEF:
-    mc: beef
+    mcid: beef
     alias: Raw Beef
   RAW_CHICKEN:
-    mc: chicken
+    mcid: chicken
     alias: Raw Chicken
   RABBIT:
     alias: Raw Rabbit
   MUTTON:
     alias: Raw Mutton
   RAW_BEEF:
-    mc: beef
+    mcid: beef
     alias: Raw Beef
   LEASH:
-    mc: lead
+    mcid: lead
   WATCH:
-    mc: clock
+    mcid: clock
   INK_SACK:
-    mc: dye
+    mcid: dye
     alias: Dye
   NETHER_STALK:
-    mc: nether_wart
+    mcid: nether_wart
