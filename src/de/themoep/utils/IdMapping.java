@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +18,9 @@ public class IdMapping {
     Map<Material,String> mcidmap = new HashMap<Material, String>();
     Map<Material,String> aliasmap = new HashMap<Material, String>();
 
-    public IdMapping(FileConfiguration config) {
-        ConfigurationSection section = config.getConfigurationSection("idmapping");
+    public IdMapping(JavaPlugin plugin) {
+        plugin.getLogger().info("Loading IdMapping...");
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("idmapping");
         for(String s : section.getKeys(false)) {
             try {
                 Material mat = Material.valueOf(s.toUpperCase());
@@ -30,11 +32,12 @@ public class IdMapping {
                 if (alias != null) {
                     aliasmap.put(mat, alias);
                 }
-                Bukkit.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
+                plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
-                Bukkit.getLogger().warning("[IdMapping] " + s + " is not a valid Bukkit material name!");
+                plugin.getLogger().warning("[IdMapping] " + s + " is not a valid Bukkit material name!");
             }
         }
+        plugin.getLogger().info("IdMapping loaded.");
     }
 
     /**
