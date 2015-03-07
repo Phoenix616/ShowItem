@@ -1,6 +1,7 @@
 package de.themoep.ShowItem;
 
 import com.google.common.collect.ImmutableMap;
+import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -26,6 +27,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     IdMapping idmap;
     
     int defaultradius;
+    boolean iconRp;
+    
+    IconRpMapping iconrpmap;
     
     ConfigurationSection lang;
     
@@ -39,9 +43,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
         lang = this.getConfig().getConfigurationSection("lang");
-        this.getLogger().info("Loading IdMapping...");
-        idmap = new IdMapping(this.getConfig());
-        this.getLogger().info("IdMapping loaded.");
+        iconRp = this.getConfig().getBoolean("texticonrp");
+        idmap = new IdMapping(this);
+        if(iconRp)
+            this.iconrpmap = new IconRpMapping(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -261,9 +266,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if(item.getType().isRecord())
             itemcolor = ChatColor.AQUA;
 
-        name = itemcolor + "[" + itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
+        String finalname = itemcolor + "[";
+        if(iconRp)
+            finalname += iconrpmap.getIcon(item) + " ";
+        finalname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
-        return "{\"text\":\"" + name + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
+        return "{\"text\":\"" + finalname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
     }
 
     private String getTranslation(String key) {
