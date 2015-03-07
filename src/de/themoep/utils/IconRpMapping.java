@@ -30,12 +30,10 @@ public class IconRpMapping {
         
         List<String> matlist = iconconfig.getConfig().getStringList("map");
         for(String s : matlist) {
-            try {
-                Material mat = Material.valueOf(s.toUpperCase());
-                encoding.add(mat);
-            } catch (IllegalArgumentException e) {
+            Material mat = Material.getMaterial(s.toUpperCase());
+            encoding.add(mat);
+            if(mat == null)
                 plugin.getLogger().warning("[IconRpMapping] " + s + " is not a valid Bukkit material name!");
-            }
         }
         
         plugin.getLogger().info("Text Icon Resourcepack mapping loaded.");
