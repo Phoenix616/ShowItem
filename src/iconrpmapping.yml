@@ -49,10 +49,10 @@ map:
   - leather_chestplate
   - leather_pants
   - leather_boots
-  - chain_helmet
-  - chain_chestplate
-  - chain_leggings
-  - chain_boots
+  - chainmail_helmet
+  - chainmail_chestplate
+  - chainmail_leggings
+  - chainmail_boots
   - golden_helmet
   - golden_chestplate
   - golden_leggings
@@ -73,7 +73,7 @@ map:
   - compass_northeast
   - compass_east
   - compass_southeast
-  - clock
+  - watch
   - clock_evening
   - clock_dusk
   - clock_night
@@ -86,7 +86,7 @@ map:
   - carrot_on_a_stick
   - flint_and_steel
   - shears
-  - lead
+  - leash
   - name_tag
   - iron_barding
   - gold_barding
@@ -107,12 +107,12 @@ map:
   - bucket
   - water_bucket
   - lava_bucket
-  - milk
-  - snowball
+  - milk_bucket
+  - snow_ball
   - egg
   - ender_pearl
   - eye_of_ender
-  - fire_charge
+  - fireball
   - gold_record
   - green_record
   - record_3
@@ -171,29 +171,29 @@ map:
   - brewing_stand
   - cauldron
   - bed
-  - repeater
-  - comparator
-  - redstone_dust
+  - diode
+  - redstone_comparator
+  - redstone
   - glowstone_dust
-  - gunpowder
+  - sulphur
   - sugar
   - iron_ingot
   - gold_ingot
-  - brick
-  - nether_brick
+  - clay_brick
+  - nether_brick_item
   - coal
   - charcoal
   - diamond
   - ruby
   - emerald
-  - nether_quartz
+  - quartz
   - flint
   - gold_nugget
   - ghast_tear
   - nether_star
   - clay_ball
   - slimeball
-  - skeleton_skull
+  - skull_item
   - wither_skeleton_skull
   - zombie_head
   - head
@@ -212,35 +212,35 @@ map:
   - seeds
   - melon_seeds
   - pumpkin_seeds
-  - netherwart
-  - sugarcane
+  - nether_stalk
+  - sugar_cane
   - wheat
-  - carrot
+  - carrot_item
   - golden_carrot
-  - potato
+  - potato_item
   - baked_potato
   - poisonous_potato
   - melon
-  - glistering_melon
+  - speckled_melon
   - apple
   - golden_apple
   - rotten_flesh
-  - raw_porkchop
-  - porkchop
+  - pork
+  - grilled_pork
   - raw_beef
-  - steak
+  - cooked_beef
   - raw_fish
   - cooked_fish
   - raw_chicken
   - cooked_chicken
   - bowl
-  - mushroom_stew
+  - mushroom_soup
   - bread
   - cookie
   - cake
   - pumpkin_pie
   - glass_bottle
-  - water_bottle
+  - potion
   - potion_of_regeneration
   - splash_potion_of_regeneration
   - potion_of_swiftness
@@ -316,8 +316,8 @@ map:
   - saturation_potion
   - splash_saturation_potion
   - splash_mundane_potion
-  - spawn_egg
-  - spawn_egg_spots
+  - monster_egg
+  - monster_egg_spots
   - white_spawn_egg
   - spawn_creeper
   - spawn_skeleton
