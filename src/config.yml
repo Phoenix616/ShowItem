@@ -223,3 +223,5 @@ idmapping:
     alias: Dye
   NETHER_STALK:
     mcid: nether_wart
+  SULPHUR:
+    mcid: gunpowder
