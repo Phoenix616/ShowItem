@@ -15,6 +15,16 @@ idmapping:
   WOOD_DOOR:
     mcid: wooden_door
     alias: Oak Door
+  WOOD_SPADE:
+    mcid: wooden_shovel
+  STONE_SPADE:
+    mcid: stone_shovel
+  GOLD_SPADE:
+    mcid: gold_shovel
+  IRON_SPADE:
+    mcid: iron_shovel
+  DIAMOND_SPADE:
+    mcid: diamond_shovel
   FIREWORK:
     mcid: fireworks
   GOLD_HELMET:
