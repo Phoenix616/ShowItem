@@ -193,7 +193,7 @@ map:
   - nether_star
   - clay_ball
   - slimeball
-  - skull_item
+  - skeleton_skull
   - wither_skeleton_skull
   - zombie_head
   - head
@@ -240,7 +240,7 @@ map:
   - cake
   - pumpkin_pie
   - glass_bottle
-  - potion
+  - water_bottle
   - potion_of_regeneration
   - splash_potion_of_regeneration
   - potion_of_swiftness

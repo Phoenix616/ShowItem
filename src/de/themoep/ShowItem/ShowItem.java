@@ -1,6 +1,7 @@
 package de.themoep.ShowItem;
 
 import com.google.common.collect.ImmutableMap;
+import de.themoep.utils.ColorUtils;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import org.bukkit.*;
@@ -27,12 +28,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     IdMapping idmap;
     
     int defaultradius;
-    boolean iconRp;
+    boolean useIconRp;
     
     IconRpMapping iconrpmap;
     
     ConfigurationSection lang;
-    
+
     public void onEnable() {
         this.saveDefaultConfig();
         this.loadConfig();
@@ -43,9 +44,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
         lang = this.getConfig().getConfigurationSection("lang");
-        iconRp = this.getConfig().getBoolean("texticonrp");
+        useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
-        if(iconRp)
+        if(useIconRp)
             this.iconrpmap = new IconRpMapping(this);
     }
 
@@ -116,6 +117,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         List<String> taglist = new ArrayList<String>();
         ChatColor itemcolor = ChatColor.WHITE;
             
+        String icon = "";
+        if(useIconRp)
+            icon = iconrpmap.getIcon(item, true);
         String name = idmap.getHumanName(item.getType());
 
         String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
@@ -164,6 +168,33 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 taglist.add(potiontag);
                 itemcolor = ChatColor.YELLOW;
             }
+
+            if(meta instanceof BookMeta) {
+                BookMeta bm = (BookMeta) meta;
+                if(bm.getTitle() != null) {
+                    taglist.add("title:\\\"" + bm.getTitle() + "\\\",");
+                    name += ": " + bm.getTitle();
+                }
+                if(bm.getAuthor() != null) {
+                    taglist.add("author:\\\"" + bm.getAuthor() + "\\\",");
+                    if(bm.getTitle() == null)
+                        name += " by " + bm.getAuthor();
+                }
+
+            }
+
+            if(meta instanceof SkullMeta) {
+                SkullMeta sm = (SkullMeta) meta;
+                if(sm.hasOwner()) {
+                    String owner = sm.getOwner();
+                    /*taglist.add("SkullOwner:{Name:\\\\\"" + owner + "\\\\\",},");*/
+                    name = owner + "'";
+                    if(!(owner.substring(owner.length() -1).equalsIgnoreCase("s") || owner.substring(owner.length() -1).equalsIgnoreCase("x") || owner.substring(owner.length() -1).equalsIgnoreCase("z")))
+                        name += "s";
+                    name += " Head";
+                    meta.setDisplayName(name);
+                }
+            }
             
             if(meta.getLore() != null || meta.getDisplayName() != null || meta instanceof LeatherArmorMeta) {
                 String displaytag = "display:{";
@@ -174,44 +205,19 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                     displaytag = "],";
                 }
+                if(meta instanceof LeatherArmorMeta) {
+                    Color dye = ((LeatherArmorMeta) meta).getColor();
+                    displaytag += "color:" + dye.asRGB() + ",";
+                }
                 if(meta.getDisplayName() != null) {
                     displaytag += "Name:\\\"";
-                    if(iconRp)
-                        displaytag += iconrpmap.getIcon(item);
+                    if(useIconRp)
+                        displaytag += icon;
                     name = ChatColor.ITALIC + meta.getDisplayName();
                     displaytag += name + "\\\",";
                 }
-                if(meta instanceof LeatherArmorMeta) {
-                    displaytag += "color:" + ((LeatherArmorMeta) meta).getColor().asRGB() + ",";
-                }
                 displaytag += "},";
                 taglist.add(displaytag);
-            }
-            
-            if(meta instanceof BookMeta) {
-                BookMeta bm = (BookMeta) meta;
-                if(bm.getTitle() != null) {
-                    taglist.add("title:\\\\\"" + bm.getTitle() + "\\\\\",");
-                    name += ": " + bm.getTitle();
-                }
-                if(bm.getAuthor() != null) {
-                    taglist.add("author:\\\\\"" + bm.getAuthor() + "\\\\\",");
-                    if(bm.getTitle() == null)
-                        name += " by " + bm.getAuthor();
-                }
-                
-            }
-            
-            if(meta instanceof SkullMeta) {
-                SkullMeta sm = (SkullMeta) meta;
-                if(sm.hasOwner()) {
-                    String owner = sm.getOwner();
-                    /*taglist.add("SkullOwner:{Name:\\\\\"" + owner + "\\\\\",},");*/
-                    name = owner + "'";
-                    if(!(owner.substring(owner.length() -1).equalsIgnoreCase("s") || owner.substring(owner.length() -1).equalsIgnoreCase("x") || owner.substring(owner.length() -1).equalsIgnoreCase("z")))
-                        name += "s";
-                    name += " Head";
-                }
             }
             
             if(meta instanceof FireworkMeta) {
@@ -270,8 +276,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             itemcolor = ChatColor.AQUA;
 
         String finalname = itemcolor + "[";
-        if(iconRp)
-            finalname += iconrpmap.getIcon(item);
+        if(useIconRp) {
+            finalname += icon;
+        }
         finalname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
         return "{\"text\":\"" + finalname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
@@ -292,7 +299,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             for (String variable : replacements.keySet()) {
                 String r = replacements.get(variable);
                 if(!r.startsWith("{\"text\":\""))
-                    r = "{\"text\":\"" + r + "\"}";
+                    r = "{\"text\":\"" + msgsecondarycolor + r + "\"}";
                 string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
             }
         return string;
