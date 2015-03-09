@@ -1,7 +1,6 @@
 package de.themoep.ShowItem;
 
 import com.google.common.collect.ImmutableMap;
-import de.themoep.utils.ColorUtils;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import org.bukkit.*;
