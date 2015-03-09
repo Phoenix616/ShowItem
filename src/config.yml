@@ -20,7 +20,7 @@ idmapping:
   STONE_SPADE:
     mcid: stone_shovel
   GOLD_SPADE:
-    mcid: gold_shovel
+    mcid: golden_shovel
   IRON_SPADE:
     mcid: iron_shovel
   DIAMOND_SPADE:
