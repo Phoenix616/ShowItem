@@ -898,7 +898,7 @@ map:
   - gui_3
   - gui_4
   - gui_5
-  - gui_!!!
+  - gui_ex
   - unused
   - unused
   - messages_highlighted
@@ -908,13 +908,13 @@ map:
   - 3_messages_highlighted
   - 4_messages_highlighted
   - 5_messages_highlighted
-  - !!!_messages_highlighted
+  - ex_messages_highlighted
   - 1_message
   - 2_messages
   - 3_messages
   - 4_messages
   - 5_messages
-  - !!!_messages
+  - ex_messages
   - heart_container
   - healing_heart_container
   - heart
@@ -1616,7 +1616,7 @@ map:
   - white_gui_3
   - white_gui_4
   - white_gui_5
-  - white_gui_!!!
+  - white_gui_ex
   - unused
   - unused
   - unused
