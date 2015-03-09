@@ -120,7 +120,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
 
-        msg += "Durability:" + ((item.getDurability() < item.getType().getMaxDurability()) ? item.getDurability() : item.getData().getData() )+ ",";
+        msg += "Damage:" + item.getDurability() + ",";
         
         if(item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
