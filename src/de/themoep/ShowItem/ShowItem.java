@@ -175,7 +175,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     displaytag = "],";
                 }
                 if(meta.getDisplayName() != null) {
-                    displaytag += "Name:\\\\\"" + meta.getDisplayName() + "\\\\\",";
+                    displaytag += "Name:\\\\\"";
+                    if(iconRp)
+                        displaytag += iconrpmap.getIcon(item);
+                    displaytag += meta.getDisplayName() + "\\\\\",";
                     name = ChatColor.ITALIC + meta.getDisplayName();
                 }
                 if(meta instanceof LeatherArmorMeta) {
@@ -268,7 +271,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         String finalname = itemcolor + "[";
         if(iconRp)
-            finalname += iconrpmap.getIcon(item) + " ";
+            finalname += iconrpmap.getIcon(item);
         finalname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
         return "{\"text\":\"" + finalname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
