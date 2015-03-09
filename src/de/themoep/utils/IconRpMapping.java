@@ -23,8 +23,8 @@ public class IconRpMapping {
     public IconRpMapping(JavaPlugin plugin) {
         plugin.getLogger().info("Loading Text Icon Resourcepack mapping...");
         iconconfig = new ConfigAccessor(plugin, "iconrpmapping.yml");
-        iconconfig.saveDefaultConfig();
         iconconfig.reloadConfig();
+        iconconfig.saveDefaultConfig();
         
         offset = iconconfig.getConfig().getInt("offset");
         
@@ -32,7 +32,7 @@ public class IconRpMapping {
         for(String s : matlist) {
             Material mat = Material.getMaterial(s.toUpperCase());
             encoding.add(mat);
-            if(mat == null)
+            if(mat == null && !s.equalsIgnoreCase("unused"))
                 plugin.getLogger().warning("[IconRpMapping] " + s + " is not a valid Bukkit material name!");
         }
         
