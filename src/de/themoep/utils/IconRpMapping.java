@@ -2,7 +2,6 @@ package de.themoep.utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +13,8 @@ import java.util.List;
  */
 public class IconRpMapping {
     
-    List<Material> encoding = new ArrayList<Material>();
+    List<Material> encodingMaterial = new ArrayList<Material>();
+    List<String> encodingNames = new ArrayList<String>();
     
     int offset;
 
@@ -31,9 +31,10 @@ public class IconRpMapping {
         List<String> matlist = iconconfig.getConfig().getStringList("map");
         for(String s : matlist) {
             Material mat = Material.getMaterial(s.toUpperCase());
-            encoding.add(mat);
+            encodingMaterial.add(mat);
             if(mat == null && !s.equalsIgnoreCase("unused"))
                 plugin.getLogger().warning("[IconRpMapping] " + s + " is not a valid Bukkit material name!");
+            encodingNames.add(s);
         }
         
         plugin.getLogger().info("Text Icon Resourcepack mapping loaded.");
@@ -45,8 +46,21 @@ public class IconRpMapping {
      * @return A string of the unicode character which represents the item in the icon rp. Empty string if none was found.
      */
     public String getIcon(ItemStack item) {
-        if(encoding.contains(item.getType())) {
-            String symbol = Character.toString((char) (offset + encoding.indexOf(item.getType())));
+        if(encodingMaterial.contains(item.getType())) {
+            String symbol = Character.toString((char) (offset + encodingMaterial.indexOf(item.getType())));
+            return ChatColor.WHITE + symbol + ChatColor.RESET;
+        } else
+            return "";
+    }
+
+    /**
+     * Get the unicode character of the inputed icon
+     * @param iconname The name of the icon
+     * @return A string of the unicode character which represents the icon in the icon rp. Empty string if none was found.
+     */
+    public String getIcon(String iconname) {
+        if(encodingNames.contains(iconname)) {
+            String symbol = Character.toString((char) (offset + encodingMaterial.indexOf(iconname)));
             return ChatColor.WHITE + symbol + ChatColor.RESET;
         } else
             return "";
