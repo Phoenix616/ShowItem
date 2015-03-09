@@ -175,11 +175,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     displaytag = "],";
                 }
                 if(meta.getDisplayName() != null) {
-                    displaytag += "Name:\\\\\"";
+                    displaytag += "Name:\\\"";
                     if(iconRp)
                         displaytag += iconrpmap.getIcon(item);
-                    displaytag += meta.getDisplayName() + "\\\\\",";
                     name = ChatColor.ITALIC + meta.getDisplayName();
+                    displaytag += name + "\\\",";
                 }
                 if(meta instanceof LeatherArmorMeta) {
                     displaytag += "color:" + ((LeatherArmorMeta) meta).getColor().asRGB() + ",";
@@ -289,8 +289,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         String string = "[\"\",{\"text\":\"" + getTranslation(key).replace("\"", "\\\"") + "\"}]";
 
         if (replacements != null)
-            for (String variable: replacements.keySet())
-                string =  string.replace("%" + variable + "%", "\"}," + replacements.get(variable) + ",{\"text\":\"" + msgcolor);
+            for (String variable : replacements.keySet()) {
+                String r = replacements.get(variable);
+                if(!r.startsWith("{\"text\":\""))
+                    r = "{\"text\":\"" + r + "\"}";
+                string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
+            }
         return string;
     }
     
