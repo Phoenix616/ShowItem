@@ -437,34 +437,34 @@ map:
   - spruce_sapling
   - birch_sapling
   - jungle_sapling
-  - dead_bush
+  - deadbush
   - shrub
   - white_fern
   - fern
   - white_grass
-  - grass
+  - tallgrass
   - white_stem_attached
   - stem_attached
   - white_stem
   - stem
-  - white_vines
-  - vines
-  - white_lily_pad
-  - lily_pad
+  - white_vine
+  - vine
+  - white_waterlily
+  - waterlily
   - sugarcane_block
   - netherwart_3
   - netherwart_2
   - netherwart_1
   - red_mushroom
   - brown_mushroom
-  - rose
+  - red_flower
   - cyan_flower
-  - dandelion
+  - yellow_flower
   - unused
   - unused
   - iron_bars
   - glass_pane
-  - cobweb
+  - web
   - wheat_8
   - wheat_7
   - wheat_6
