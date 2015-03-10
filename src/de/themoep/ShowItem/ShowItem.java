@@ -214,7 +214,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 if(meta.getDisplayName() != null) {
                     displaytag += "Name:\\\"";
                     if(useIconRp)
-                        displaytag += icon;
+                        displaytag += icon + " ";
                     name = ChatColor.ITALIC + meta.getDisplayName();
                     displaytag += name + "\\\",";
                 }
@@ -325,13 +325,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if(item.getType().isRecord())
             itemcolor = ChatColor.AQUA;
 
-        String finalname = itemcolor + "[";
+        String resultname = itemcolor + "[";
         if(useIconRp) {
-            finalname += icon;
+            resultname += icon;
         }
-        finalname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
+        resultname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
-        return "{\"text\":\"" + finalname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
+        return "{\"text\":\"" + resultname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
     }
 
     private String getTranslation(String key) {
