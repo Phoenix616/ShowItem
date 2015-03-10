@@ -283,9 +283,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         fireworktag += "1";
                         break;
                     case STAR:
-                        fireworktag += "3";
+                        fireworktag += "2";
                         break;
                     case CREEPER:
+                        fireworktag += "3";
+                        break;
+                    case BURST:
                         fireworktag += "4";
                         break;
                     default:
