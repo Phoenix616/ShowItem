@@ -1,8 +1,8 @@
 package de.themoep.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -68,16 +68,16 @@ public class IconRpMapping {
             return ColorUtils.getNearestChatColor(((LeatherArmorMeta) meta).getColor()) + getIcon("white_" + item.getType().toString(), false) + ChatColor.RESET;
         } else if(item.getType() == Material.SKULL_ITEM) {
             switch(item.getDurability()) {
-                case 1: return getIcon("wither_skeleton_skull", true);
-                case 2: return getIcon("zombie_head", true);
-                case 3: return getIcon("head", true);
-                case 4: return getIcon("creeper_head", true);
-                default: return getIcon("skeleton_skull", true);
+                case 1: return getIcon("wither_skeleton_skull", escape);
+                case 2: return getIcon("zombie_head", escape);
+                case 3: return getIcon("head", escape);
+                case 4: return getIcon("creeper_head", escape);
+                default: return getIcon("skeleton_skull", escape);
             }
         } else if(item.getType() == Material.POTION) {
             String key = "water_bottle";
             if(item.getDurability() == 0)
-                return getIcon(key, true);
+                return getIcon(key, escape);
             
             String splash = "";
             
@@ -92,6 +92,13 @@ public class IconRpMapping {
             if(icon.isEmpty())
                 icon = getIcon(splash + key + "_potion", true);
             return icon;
+        } else if(meta instanceof FireworkEffectMeta) {
+            FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
+            Color median = fe.getColors().get(0);
+            for(int i = 1; i < fe.getColors().size(); i++)
+                median.mixColors(fe.getColors().get(i));
+            
+            return getIcon(item.getType().toString() + "_" + ColorUtils.getNearestChatColor(median).name(), escape);
         }
         return getIcon(item.getType().toString(), escape);
     }

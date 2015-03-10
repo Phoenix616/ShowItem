@@ -130,20 +130,20 @@ map:
   - firework_charge
   - firework_charge_spots
   - firework_charge_white
-  - firework_charge_orange
-  - firework_charge_magenta
-  - firework_charge_light_blue
-  - firework_charge_yellow
-  - firework_charge_lime
-  - firework_charge_pink
-  - firework_charge_gray
-  - firework_charge_light_gray
-  - firework_charge_cyan
-  - firework_charge_purple
-  - firework_charge_blue
-  - firework_charge_brown
-  - firework_charge_green
+  - firework_charge_gold
   - firework_charge_red
+  - firework_charge_blue
+  - firework_charge_yellow
+  - firework_charge_green
+  - firework_charge_light_purple
+  - firework_charge_dark_gray
+  - firework_charge_gray
+  - firework_charge_dark_aqua
+  - firework_charge_dark_purple
+  - firework_charge_dark_blue
+  - firework_charge_aqua
+  - firework_charge_dark_green
+  - firework_charge_dark_red
   - firework_charge_black
   - bonemeal
   - orange_dye
