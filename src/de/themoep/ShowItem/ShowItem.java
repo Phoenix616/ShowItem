@@ -95,7 +95,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     private void showInRadius(Player sender, int radius) {
         String itemstring = convertItem(sender.getItemInHand());
         Boolean found = false;
-        tellRaw(sender, getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius), "item", itemstring)));
+        String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
+        if(radius != defaultradius)
+            msg += " " + getTranslation("radius.custom", ImmutableMap.of("radius", Integer.toString(radius)));
+        tellRaw(sender, msg);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
                 tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
@@ -218,11 +221,14 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 displaytag += "},";
                 taglist.add(displaytag);
             }
-            
+
             if(meta instanceof FireworkMeta) {
                 FireworkMeta fm = (FireworkMeta) meta;
-                String fireworktag = "Explosion:{";
+                String fireworktag = "Fireworks:{";
+                fireworktag += "Flight:" + fm.getPower() + "b,";
+                fireworktag += "Explosions:[";
                 for(FireworkEffect fe : fm.getEffects()) {
+                    fireworktag += "{";
                     fireworktag += (fe.hasFlicker()) ? "Flicker:1," : "";
                     fireworktag += (fe.hasTrail()) ? "Trail:1," : "";
                     fireworktag += "Type:";
@@ -253,8 +259,47 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     for(Color c : fe.getFadeColors()) {
                         fireworktag += c.asRGB() + ",";
                     }
-                    fireworktag += "],";
+                    fireworktag += "]";
+                    fireworktag += "},";
                 }
+                fireworktag += "]},";
+                taglist.add(fireworktag);
+            }
+            
+            if(meta instanceof FireworkEffectMeta) {
+                FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
+                String fireworktag = "Explosion:{";
+                fireworktag += (fe.hasFlicker()) ? "Flicker:1," : "";
+                fireworktag += (fe.hasTrail()) ? "Trail:1," : "";
+                fireworktag += "Type:";
+                switch(fe.getType()) {
+                    case BALL:
+                        fireworktag += "0";
+                        break;
+                    case BALL_LARGE:
+                        fireworktag += "1";
+                        break;
+                    case STAR:
+                        fireworktag += "3";
+                        break;
+                    case CREEPER:
+                        fireworktag += "4";
+                        break;
+                    default:
+                        fireworktag += "42";
+                        break;
+                }
+                fireworktag += ",";
+                fireworktag += "Colors:[";
+                for(Color c : fe.getColors()) {
+                    fireworktag += c.asRGB() + ",";
+                }
+                fireworktag += "],";
+                fireworktag += "FadeColors:[";
+                for(Color c : fe.getFadeColors()) {
+                    fireworktag += c.asRGB() + ",";
+                }
+                fireworktag += "],";
                 fireworktag += "},";
                 taglist.add(fireworktag);
             }
