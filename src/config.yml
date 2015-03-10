@@ -2,7 +2,7 @@ texticonrp: false
 defaultradius: 16
 lang:
   radius:
-    self: 'Du hälst dein Item %item% hoch! &8(Sichtweite: %radius% &8Blöcke)'
+    self: 'Du hälst dein Item %item% hoch!'
     target: '%player% hält das Item %item% hoch!'
     noone: '&cEs ist kein Spieler da um dein Item zu sehen :('
   player:
@@ -10,6 +10,10 @@ lang:
     target: '%player% zeigt dir das Item %item%'
     offline: 'Der Spieler %player% is nicht online'
 idmapping:
+  SOIL:
+    mcid: farmland
+  PISTON_BASE:
+    mcid: piston
   SKULL_ITEM:
     mcid: skull
   WOOD_DOOR:
@@ -21,6 +25,14 @@ idmapping:
     mcid: stone_shovel
   GOLD_SPADE:
     mcid: golden_shovel
+  GOLD_AXE:
+    mcid: golden_axe
+  GOLD_PICKAXE:
+    mcid: golden_pickaxe
+  GOLD_HOE:
+    mcid: golden_hoe
+  GOLD_HOE:
+    mcid: golden_sword
   IRON_SPADE:
     mcid: iron_shovel
   DIAMOND_SPADE:
@@ -51,6 +63,8 @@ idmapping:
     alias: Glistering Melon
   FLINT_AND_STEEL:
     mcid: flint_and_steel
+  MAP:
+    mcid: filled_map
   EMPTY_MAP:
     mcid: map
     alias: Empty Map

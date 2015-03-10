@@ -1976,7 +1976,7 @@ map:
   - wooden_button
   - enderdragon_egg
   - command_block
-  - spawner
+  - mob_spawner
   - doubleslab
   - smooth_stone_doubleslab
   - smooth_sandstone_doubleslab
