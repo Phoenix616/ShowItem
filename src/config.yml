@@ -1,4 +1,6 @@
+# If the messages should try finding a text icon for this item from WolfieMarios Resourcepack (http://imgur.com/a/oHvbX)
 texticonrp: false
+# The default radius for the /showitem (/show, /si) command if no -r(adius) parameter is specified
 defaultradius: 16
 # Cooldown for the radius command in seconds. 
 # 0 to disable cooldowns entirely. 
