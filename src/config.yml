@@ -5,11 +5,13 @@ lang:
     self: 'Du hälst dein Item %item% hoch!'
     custom: '&8(Sichtweite: %radius% Blöcke)'
     target: '%player% hält das Item %item% hoch!'
-    noone: '&cEs ist kein Spieler da um dein Item zu sehen :('
   player:
     self: 'Du zeigst %player% das Item %item%'
     target: '%player% zeigt dir das Item %item%'
-    offline: 'Der Spieler %player% is nicht online'
+  error:
+    noitem: 'Du hast kein Item in der Hand welches du zeigen könntest :('
+    playeroffline: 'Der Spieler %player% is nicht online'
+    noonearound: '&cEs ist kein Spieler da um dein Item zu sehen :('
 idmapping:
   SOIL:
     mcid: farmland

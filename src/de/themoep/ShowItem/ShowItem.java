@@ -59,7 +59,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     sender.sendMessage("You don't have the permission showitem.command.reload");
                 }
             } else if(sender instanceof Player) {
-                if(args.length == 0) {
+                if(((Player) sender).getItemInHand().getType() == Material.AIR) {
+                    sender.sendMessage(getTranslation("error.noitem"));
+                } else if(args.length == 0) {
                     showInRadius((Player) sender, this.defaultradius);
                 } else if (args.length > 0) {
                     if(args.length > 1 && (args[0].equalsIgnoreCase("-radius") || args[0].equalsIgnoreCase("-r"))) {
@@ -78,7 +80,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             if(target != null && target.isOnline()) {
                                 showPlayer((Player) sender, target);
                             } else {
-                                sender.sendMessage(ChatColor.RED + getTranslation("player.offline", ImmutableMap.of("player", name)));
+                                sender.sendMessage(ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                             }
                         }
                     } else {
@@ -106,7 +108,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         }
         if(!found)
-            tellRaw(sender, getTranslation("radius.noone", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
+            tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
     }
 
     private void showPlayer(Player sender, Player target) {
