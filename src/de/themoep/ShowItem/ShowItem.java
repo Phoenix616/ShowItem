@@ -15,9 +15,7 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShowItem extends JavaPlugin implements CommandExecutor {
 
@@ -27,7 +25,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     IdMapping idmap;
     
     int defaultradius;
+    int cooldown;
     boolean useIconRp;
+    
+    Map<UUID, Long> cooldownmap = new HashMap<UUID, Long>();
     
     IconRpMapping iconrpmap;
     
@@ -42,6 +43,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         this.getLogger().info("Loading Config...");
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
+        cooldown = this.getConfig().getInt("cooldown");
         lang = this.getConfig().getConfigurationSection("lang");
         useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
@@ -95,6 +97,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     private void showInRadius(Player sender, int radius) {
+        
+        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && cooldownmap.containsKey(sender.getUniqueId())) {
+            long diff = System.currentTimeMillis() - cooldownmap.get(sender.getUniqueId());
+            if(diff < cooldown * 1000) {
+                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff/1000)))));
+                return;
+            }
+        }
+        
         String itemstring = convertItem(sender.getItemInHand());
         Boolean found = false;
         String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
