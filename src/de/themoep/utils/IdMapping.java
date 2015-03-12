@@ -30,7 +30,7 @@ public class IdMapping {
                 if (alias != null) {
                     aliasmap.put(mat, alias);
                 }
-                plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
+                //plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
                 plugin.getLogger().warning("[IdMapping] " + s + " is not a valid Bukkit material name!");
             }

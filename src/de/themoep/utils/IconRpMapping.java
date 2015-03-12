@@ -49,8 +49,8 @@ public class IconRpMapping {
         
         List<String> matlist = iconconfig.getConfig().getStringList("map");
         for(String s : matlist) {
-            if(Material.getMaterial(s.toUpperCase()) == null && !s.equalsIgnoreCase("unused"))
-                plugin.getLogger().warning("[IconRpMapping] " + s + " is not a valid Bukkit material name!");
+            /*if(Material.getMaterial(s.toUpperCase()) == null && !s.equalsIgnoreCase("unused"))
+                plugin.getLogger().warning("[IconRpMapping] " + s + " is not a valid Bukkit material name!");*/
             encodingNames.add(s.toLowerCase());
         }
         

@@ -369,7 +369,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private void tellRaw(Player player, String msg) {
-        this.getLogger().info("tellraw: " + msg);
+        //TODO: Find a good method of doing this with the bungee chat api! This is extremely dirty.
         this.getServer().dispatchCommand(this.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + msg);
     }
 }
