@@ -3,7 +3,12 @@ package de.themoep.ShowItem;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
-import org.bukkit.*;
+import net.md_5.bungee.chat.ComponentSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,7 +20,11 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ShowItem extends JavaPlugin implements CommandExecutor {
 
@@ -33,8 +42,19 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     IconRpMapping iconrpmap;
     
     ConfigurationSection lang;
+    
+    boolean spigot;
 
     public void onEnable() {
+        try {
+            Bukkit.class.getMethod("spigot");
+            spigot = true;
+            this.getLogger().info("Detected Spigot server. Using Bungee chat api for fancy messages!");
+        } catch (NoSuchMethodException e) {
+            spigot = false;
+            this.getLogger().info("Detected a non-Spigot server. Using vanilla tellraw command for fancy messages!");
+        }
+
         this.saveDefaultConfig();
         this.loadConfig();
     }
@@ -221,8 +241,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     displaytag = "],";
                 }
                 if(meta instanceof LeatherArmorMeta) {
-                    Color dye = ((LeatherArmorMeta) meta).getColor();
-                    displaytag += "color:" + dye.asRGB() + ",";
+                    displaytag += "color:" + ((LeatherArmorMeta) meta).getColor().asRGB() + ",";
                 }
                 if(meta.getDisplayName() != null) {
                     displaytag += "Name:\\\"";
@@ -369,7 +388,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private void tellRaw(Player player, String msg) {
-        //TODO: Find a good method of doing this with the bungee chat api! This is extremely dirty.
-        this.getServer().dispatchCommand(this.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + msg);
+        if(spigot)
+            player.spigot().sendMessage(new ComponentSerializer().parse(msg));
+        else
+            this.getServer().dispatchCommand(this.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + msg);
     }
 }
