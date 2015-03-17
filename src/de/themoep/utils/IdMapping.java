@@ -16,9 +16,16 @@ public class IdMapping {
     Map<Material,String> mcidmap = new HashMap<Material, String>();
     Map<Material,String> aliasmap = new HashMap<Material, String>();
 
+    ConfigAccessor idconfig;
+
     public IdMapping(JavaPlugin plugin) {
         plugin.getLogger().info("Loading IdMapping...");
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("idmapping");
+
+        idconfig = new ConfigAccessor(plugin, "idmapping.yml");
+        idconfig.reloadConfig();
+        idconfig.saveDefaultConfig();
+        
+        ConfigurationSection section = idconfig.getConfig().getConfigurationSection("idmapping");
         for(String s : section.getKeys(false)) {
             try {
                 Material mat = Material.valueOf(s.toUpperCase());
