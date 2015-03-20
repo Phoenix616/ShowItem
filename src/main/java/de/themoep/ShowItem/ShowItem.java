@@ -99,15 +99,24 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     sender.sendMessage("You don't have the permission showitem.command.reload");
                 }
             } else if(sender instanceof Player) {
+                boolean debug = false;
+                if(args.length > 0 && args[0].equalsIgnoreCase("-debug")) {
+                    if(sender.hasPermission("showitem.command.debug")) {
+                        debug = true;
+                        sender.sendMessage(ChatColor.GREEN + "Debug message. Look into the console!");
+                    } else {
+                        sender.sendMessage("You don't have the permission showitem.command.debug");
+                    }
+                }
                 if(((Player) sender).getItemInHand().getType() == Material.AIR) {
                     sender.sendMessage(getTranslation("error.noitem"));
                 } else if(args.length == 0) {
-                    showInRadius((Player) sender, this.defaultradius);
+                    showInRadius((Player) sender, this.defaultradius, debug);
                 } else if (args.length > 0) {
                     if(args.length > 1 && (args[0].equalsIgnoreCase("-radius") || args[0].equalsIgnoreCase("-r"))) {
                         if(sender.hasPermission("showitem.command.radius")) {
                             try {
-                                showInRadius((Player) sender, Integer.parseInt(args[1]));
+                                showInRadius((Player) sender, Integer.parseInt(args[1]), debug);
                             } catch(NumberFormatException e) {
                                 sender.sendMessage(ChatColor.RED + "Error: Your input " + args[1] + " is not a valid integer!");
                             }
@@ -134,7 +143,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    private void showInRadius(Player sender, int radius) {
+    private void showInRadius(Player sender, int radius, boolean debug) {
         
         if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && cooldownmap.containsKey(sender.getUniqueId())) {
             long diff = System.currentTimeMillis() - cooldownmap.get(sender.getUniqueId());
@@ -150,6 +159,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if(radius != defaultradius)
             msg += " " + getTranslation("radius.custom", ImmutableMap.of("radius", Integer.toString(radius)));
         tellRaw(sender, msg);
+        if(debug)
+            getLogger().info("Debug: " + itemstring);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
                 tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));

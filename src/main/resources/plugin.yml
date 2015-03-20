@@ -23,3 +23,6 @@ permissions:
    showitem.command.reload:
       description: Gives permission to use the reload command
       default: op
+   showitem.command.debug:
+      description: Gives permission to use the debug command
+      default: op
