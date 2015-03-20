@@ -91,43 +91,48 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("showitem.command")) {
-            if(args.length > 0 && args[0].equalsIgnoreCase("-reload")) {
-                if(sender.hasPermission("showitem.command.reload")) {
-                    this.loadConfig();
-                    sender.sendMessage(ChatColor.GREEN + "Config reloaded.");
-                } else {
-                    sender.sendMessage("You don't have the permission showitem.command.reload");
-                }
-            } else if(sender instanceof Player) {
-                boolean debug = false;
-                if(args.length > 0 && args[0].equalsIgnoreCase("-debug")) {
+            boolean debug = false;
+            int radius = this.defaultradius;
+            for(int i = 0; i < args.length; i++) {
+                if(args[i].equalsIgnoreCase("-reload")) {
+                    if (sender.hasPermission("showitem.command.reload")) {
+                        this.loadConfig();
+                        sender.sendMessage(ChatColor.GREEN + "Config reloaded.");
+                    } else {
+                        sender.sendMessage("You don't have the permission showitem.command.reload");
+                    }
+                } else if(args[i].equalsIgnoreCase("-debug")) {
                     if(sender.hasPermission("showitem.command.debug")) {
                         debug = true;
                         sender.sendMessage(ChatColor.GREEN + "Debug message. Look into the console!");
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.debug");
                     }
-                }
-                if(((Player) sender).getItemInHand().getType() == Material.AIR) {
-                    sender.sendMessage(getTranslation("error.noitem"));
-                } else if(args.length == 0) {
-                    showInRadius((Player) sender, this.defaultradius, debug);
-                } else if (args.length > 0) {
-                    if(args.length > 1 && (args[0].equalsIgnoreCase("-radius") || args[0].equalsIgnoreCase("-r"))) {
-                        if(sender.hasPermission("showitem.command.radius")) {
+                } else if (args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
+                    if(sender.hasPermission("showitem.command.radius")) {
+                        if(i + 1 <args.length ) {
                             try {
-                                showInRadius((Player) sender, Integer.parseInt(args[1]), debug);
-                            } catch(NumberFormatException e) {
-                                sender.sendMessage(ChatColor.RED + "Error: Your input " + args[1] + " is not a valid integer!");
+                                radius = Integer.parseInt(args[i + 1]);
+                            } catch (NumberFormatException e) {
+                                sender.sendMessage(ChatColor.RED + "Error: Your input " + args[i + 1] + " is not a valid integer!");
                             }
                         } else {
-                            sender.sendMessage("You don't have the permission showitem.command.radius");
+                            sender.sendMessage(ChatColor.RED + "Error: Please input a number after the radius argument!");
                         }
-                    } else if(sender.hasPermission("showitem.command.player")){
+                    } else {
+                        sender.sendMessage("You don't have the permission showitem.command.radius");
+                    }
+                }
+            }
+            if(sender instanceof Player) {
+                if(((Player) sender).getItemInHand().getType() == Material.AIR) {
+                    sender.sendMessage(getTranslation("error.noitem"));
+                } else if (args.length > 0) {
+                    if(sender.hasPermission("showitem.command.player")){
                         for(String name : args) {
                             Player target = Bukkit.getPlayer(name);
                             if(target != null && target.isOnline()) {
-                                showPlayer((Player) sender, target);
+                                showPlayer((Player) sender, target, debug);
                             } else {
                                 sender.sendMessage(ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                             }
@@ -135,11 +140,14 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.player");
                     }
+                } else {
+                    showInRadius((Player) sender, radius, debug);                    
                 }
             } else {
                 sender.sendMessage("This command can only be run by a player!");
             }
         }
+        sender.sendMessage("You don't have the permission showitem.command");
         return true;
     }
 
@@ -153,14 +161,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         }
         
-        String itemstring = convertItem(sender.getItemInHand());
+        String itemstring = convertItem(sender.getItemInHand(), debug);
         Boolean found = false;
         String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
         if(radius != defaultradius)
             msg += " " + getTranslation("radius.custom", ImmutableMap.of("radius", Integer.toString(radius)));
         tellRaw(sender, msg);
-        if(debug)
-            getLogger().info("Debug: " + itemstring);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
                 tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
@@ -171,13 +177,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
     }
 
-    private void showPlayer(Player sender, Player target) {
-        String itemstring = convertItem(sender.getItemInHand());
+    private void showPlayer(Player sender, Player target, boolean debug) {
+        String itemstring = convertItem(sender.getItemInHand(), debug);
         tellRaw(target, getTranslation("player.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
         tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)));
     }
 
-    private String convertItem(ItemStack item) {
+    private String convertItem(ItemStack item, boolean debug) {
         List<String> taglist = new ArrayList<String>();
         ChatColor itemcolor = ChatColor.WHITE;
             
@@ -392,7 +398,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         }
         resultname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
-        return "{\"text\":\"" + resultname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
+        String itemstring = "{\"text\":\"" + resultname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
+
+        if(debug)
+            getLogger().info("Debug: " + itemstring);
+        return itemstring;
     }
 
     private String getTranslation(String key) {
