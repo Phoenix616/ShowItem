@@ -73,11 +73,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             this.getLogger().info("Detected a non-Spigot server. Using vanilla tellraw command for fancy messages!");
         }
 
-        this.saveDefaultConfig();
         this.loadConfig();
     }
 
     public void loadConfig() {
+        this.saveDefaultConfig();
         this.getLogger().info("Loading Config...");
         this.reloadConfig();
         defaultradius = this.getConfig().getInt("defaultradius");
