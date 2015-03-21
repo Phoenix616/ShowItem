@@ -108,7 +108,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 } else if(args[i].equalsIgnoreCase("-debug")) {
                     if(sender.hasPermission("showitem.command.debug")) {
                         debugLevel = Level.INFO;
-                        sender.sendMessage(ChatColor.GREEN + "Debug message. Look into the console!");
+                        sender.sendMessage(ChatColor.GREEN + "Debug message.");
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.debug");
                     }
@@ -139,7 +139,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                                 if (target != null && target.isOnline()) {
                                     showPlayer((Player) sender, target);
                                 } else {
-                                    tellRaw((Player) sender, ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
+                                    tellRaw((Player) sender, getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                                 }
                             }
                         }
