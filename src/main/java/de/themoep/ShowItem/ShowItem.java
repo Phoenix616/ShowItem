@@ -552,9 +552,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
      * @return The Mojang item compatible json string
      */
     private String toMojangJsonString(String json) {
-        json.replace("\\\"", "{ESCAPED_QUOTE}");
-        json.replaceAll("\\{\"|\":|\\[\"|,\"", "");
-        json.replace("{ESCAPED_QUOTE}", "\\\"");
+        json = json.replace("\\\"", "{ESCAPED_QUOTE}");
+        json = json.replaceAll("\\{\"|\":|\\[\"|,\"", "");
+        json = json.replace("{ESCAPED_QUOTE}", "\\\"");
         return json;
     }
 
