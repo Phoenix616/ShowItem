@@ -19,8 +19,6 @@ package de.themoep.ShowItem;
  */
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.MalformedJsonException;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -576,8 +574,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
             try {
                 player.spigot().sendMessage(new ComponentSerializer().parse(msg));
-            } catch (JsonSyntaxException e) {
-                getLogger().severe("JsonSyntaxException: " + msg);
+            } catch (Exception e) {
+                getLogger().severe("Exception while using the following json string: " + msg);
                 e.printStackTrace();
             }
         } else
