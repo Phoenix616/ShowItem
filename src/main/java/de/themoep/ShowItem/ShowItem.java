@@ -44,6 +44,8 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.*;
 
 public class ShowItem extends JavaPlugin implements CommandExecutor {
@@ -524,18 +526,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         
         JSONObject hoverJson = new JSONObject();
         hoverJson.put("action", "show_item");
-        StringBuffer itemJsonStringBuffer = new StringBuffer();
-        itemJsonStringBuffer.append('{');
-        
-        Iterator itemIterator = itemJson.entrySet().iterator();
-        while(itemIterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)itemIterator.next();
-            toMojangJsonString(String.valueOf(entry.getKey()), entry.getValue(), itemJsonStringBuffer);
-            itemJsonStringBuffer.append(',');
-        }
-
-        itemJsonStringBuffer.append('}');
-        hoverJson.put("value", itemJsonStringBuffer.toString());
+        hoverJson.put("value", toMojangJsonString(itemJson.toJSONString()));
 
         JSONObject nameJson = new JSONObject ();
         nameJson.put("text", resultname);
@@ -551,54 +542,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         return nameJson.toJSONString();
     }
 
-    private void toMojangJsonString(String key, Object value, StringBuffer buffer) {
-        if(key == null) {
-            buffer.append("null");
-        } else {
-            for(int i = 0; i < key.length(); ++i) {
-                char ch = key.charAt(i);
-                switch(ch) {
-                    case '\b':
-                        buffer.append("\\b");
-                        break;
-                    case '\t':
-                        buffer.append("\\t");
-                        break;
-                    case '\n':
-                        buffer.append("\\n");
-                        break;
-                    case '\f':
-                        buffer.append("\\f");
-                        break;
-                    case '\r':
-                        buffer.append("\\r");
-                        break;
-                    case '\"':
-                        buffer.append("\\\"");
-                        break;
-                    case '/':
-                        buffer.append("\\/");
-                        break;
-                    case '\\':
-                        buffer.append("\\\\");
-                        break;
-                    default:
-                        if((ch < 0 || ch > 31) && (ch < 127 || ch > 159) && (ch < 8192 || ch > 8447)) {
-                            buffer.append(ch);
-                        } else {
-                            String ss = Integer.toHexString(ch);
-                            buffer.append("\\u");
-
-                            for(int k = 0; k < 4 - ss.length(); ++k) {
-                                buffer.append('0');
-                            }
-                            buffer.append(ss.toUpperCase());
-                        }
-                }
-            }
-        }
-        buffer.append(':');
-        buffer.append(JSONValue.toJSONString(value));
+    /**
+     * We have to remove alls quotes around key strings... why? Because Mojang!
+     * @param json The json string to convert
+     * @return The Mojang item compatible json string
+     */
+    private String toMojangJsonString(String json) {
+        json.replace("\\\"", "{ESCAPED_QUOTE}");
+        json.replaceAll("\\{\"|\":|\\[\"|,\"", "");
+        json.replace("{ESCAPED_QUOTE}", "\\\"");
+        return json;
     }
 
     private String getTranslation(String key) {
