@@ -146,8 +146,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             } else {
                 sender.sendMessage("This command can only be run by a player!");
             }
+        } else {
+            sender.sendMessage("You don't have the permission showitem.command");
         }
-        sender.sendMessage("You don't have the permission showitem.command");
         return true;
     }
 
