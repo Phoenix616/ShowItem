@@ -40,7 +40,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,26 +194,18 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         List<String> taglist = new ArrayList<String>();
         ChatColor itemcolor = ChatColor.WHITE;
 
-        
+        JSONObject itemJson = new JSONObject();
+
         String icon = "";
         if(useIconRp)
             icon = iconrpmap.getIcon(item, true);
         String name = idmap.getHumanName(item.getType());
 
-        /** 
-        JSONObject itemJson = new JSONObject();
         itemJson.put("id", "minecraft:"+ idmap.getMCid(item.getType()));
-         This is because our friends at Mojang can't use JSON correctly. #BlameMojang 
-         */
-        String itemJsonStr = "{id:minecraft:" + idmap.getMCid(item.getType()) + ",";
         String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
 
         msg += "Damage:" + item.getDurability() + ",";
-        /**
         itemJson.put("Damage", item.getDurability());
-         This is because our friends at Mojang can't use JSON correctly. #BlameMojang
-         */
-        itemJsonStr += "Damage:" + item.getDurability() + ",";
         
         JSONObject tagJson = new JSONObject();
         
@@ -517,11 +508,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         if(taglist.size() > 0 && !tagJson.isEmpty()) {
             msg += "tag:{";
-            /**
             itemJson.put("tag", tagJson);
-             This is because our friends at Mojang can't use JSON correctly. #BlameMojang 
-             */
-            itemJsonStr += "tag:" + tagJson.toJSONString() + "}";
             for(String tag : taglist)
                 msg += tag;
             msg += "}";            
@@ -538,12 +525,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         
         JSONObject hoverJson = new JSONObject();
         hoverJson.put("action", "show_item");
-        /**
         hoverJson.put("value", itemJson.toJSONString());
-         This is because our friends at Mojang can't use JSON correctly. #BlameMojang 
-         */
-        hoverJson.put("value", itemJsonStr);
-        
+
         JSONObject nameJson = new JSONObject ();
         nameJson.put("text", resultname);
         nameJson.put("hoverEvent", hoverJson);
@@ -555,7 +538,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             getLogger().info("Debug: " + nameJson.toJSONString());
         }
         //return itemstring;
-        return nameJson.toJSONString();
+        /* The replacement is because our friends at Mojang can't use JSON correctly. #BlameMojang */
+        return nameJson.toJSONString().replace("\\\"id\\\":", "id:");
     }
 
     private String getTranslation(String key) {
