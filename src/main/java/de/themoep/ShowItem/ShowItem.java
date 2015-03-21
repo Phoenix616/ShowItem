@@ -40,6 +40,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -556,7 +558,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if (replacements != null)
             for (String variable : replacements.keySet()) {
                 String r = replacements.get(variable);
-                if(!r.startsWith("{\"text\":\""))
+                JSONParser jp = new JSONParser();
+                boolean isPlainText = false;
+                try {
+                    Object o = jp.parse(r);
+                    if(!(o instanceof JSONObject) || !((JSONObject) o).containsKey("text")) {
+                        isPlainText = true;
+                    }                    
+                } catch (ParseException e) {
+                    isPlainText = true;
+                }
+                if(isPlainText)
                     r = "{\"text\":\"" + msgsecondarycolor + r + "\"}";
                 string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
             }
