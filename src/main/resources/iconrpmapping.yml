@@ -490,8 +490,7 @@ map:
   - activator_rail
   - powered_activator_rail
   - rail_horizontal
-  - rail_east
-  - south
+  - rail_east-south
   - powered_rail_horizontal
   - powered_powered_rail_horizontal
   - detector_rail_horizontal
