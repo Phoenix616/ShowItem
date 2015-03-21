@@ -33,10 +33,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,11 +133,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 } else if (args.length > 0) {
                     if(sender.hasPermission("showitem.command.player")){
                         for(String name : args) {
-                            Player target = Bukkit.getPlayer(name);
-                            if(target != null && target.isOnline()) {
-                                showPlayer((Player) sender, target, debug);
-                            } else {
-                                tellRaw((Player) sender, ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
+                            if(!name.startsWith("-")) {
+                                Player target = Bukkit.getPlayer(name);
+                                if (target != null && target.isOnline()) {
+                                    showPlayer((Player) sender, target, debug);
+                                } else {
+                                    tellRaw((Player) sender, ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
+                                }
                             }
                         }
                     } else {
@@ -187,67 +192,104 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     private String convertItem(ItemStack item, boolean debug) {
         List<String> taglist = new ArrayList<String>();
         ChatColor itemcolor = ChatColor.WHITE;
-            
+
+        JSONObject itemJson = new JSONObject();
+
         String icon = "";
         if(useIconRp)
             icon = iconrpmap.getIcon(item, true);
         String name = idmap.getHumanName(item.getType());
 
+        itemJson.put("id", "minecraft:"+ idmap.getMCid(item.getType()));
         String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
 
         msg += "Damage:" + item.getDurability() + ",";
+        itemJson.put("Damage", item.getDurability());
+        
+        JSONObject tagJson = new JSONObject();
         
         if(item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
             
-            if(meta.spigot() != null && meta.spigot().isUnbreakable())
+            if(meta.spigot() != null && meta.spigot().isUnbreakable()) {
+                tagJson.put("Unbreakable", 1);
                 taglist.add("Unbreakable:1,");
+            }
             
             if (meta.getEnchants() != null && meta.getEnchants().size() > 0) {
+                List<JSONObject> enchList = new ArrayList<JSONObject>();
+                
                 String enchtag = "ench:[";
-                for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet())
+                for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
                     enchtag += "{id:" + entry.getKey().hashCode() + ",lvl:" + entry.getValue() + "},";
+                    JSONObject enchJson = new JSONObject();
+                    enchJson.put("id", entry.getKey().hashCode());
+                    enchJson.put("lvl", entry.getValue());
+                    enchList.add(enchJson);
+                }
 
                 enchtag += "],";
                 taglist.add(enchtag);
+                
                 itemcolor = ChatColor.AQUA;
+                tagJson.put("ench", enchList);
             }
 
             if(meta instanceof EnchantmentStorageMeta) {
                 EnchantmentStorageMeta esm = (EnchantmentStorageMeta) meta;
                 if(esm.getStoredEnchants() != null) {
+                    List<JSONObject> enchList = new ArrayList<JSONObject>();
                     String storedenchtag = "StoredEnchantments:[";
-                    for (Map.Entry<Enchantment, Integer> entry : esm.getStoredEnchants().entrySet())
+                    for (Map.Entry<Enchantment, Integer> entry : esm.getStoredEnchants().entrySet()) {
                         storedenchtag += "{id:" + entry.getKey().hashCode() + ",lvl:" + entry.getValue() + "},";
+                        JSONObject enchJson = new JSONObject();
+                        enchJson.put("id", entry.getKey().hashCode());
+                        enchJson.put("lvl", entry.getValue());
+                        enchList.add(enchJson);
+                    }
 
                     storedenchtag += "],";
                     taglist.add(storedenchtag);
                     itemcolor = ChatColor.YELLOW;
+                    tagJson.put("StoredEnchantments", enchList);
                 }
             }
 
             if(meta instanceof PotionMeta) {
                 PotionMeta pm = (PotionMeta) meta;
+                List<JSONObject> potionList = new ArrayList<JSONObject>();
                 String potiontag = "CustomPotionEffects:[";
-                for (PotionEffect potion : pm.getCustomEffects())
-                    potiontag += "{Id:" + potion.getType().hashCode() + 
-                            ",Amplifier:" + potion.getAmplifier() + 
-                            ",Duration:" + potion.getDuration() + 
+                for (PotionEffect potion : pm.getCustomEffects()) {
+                    potiontag += "{Id:" + potion.getType().hashCode() +
+                            ",Amplifier:" + potion.getAmplifier() +
+                            ",Duration:" + potion.getDuration() +
                             ((potion.isAmbient()) ? "Ambient:1," : "") + "},";
+
+                    JSONObject potionJson = new JSONObject();
+                    potionJson.put("Id", potion.getType().hashCode());
+                    potionJson.put("Amplifier", potion.getAmplifier());
+                    potionJson.put("Duration", potion.getDuration());
+                    if(potion.isAmbient())
+                        potionJson.put("Ambient", (byte) 1);
+                    potionList.add(potionJson);
+                }
 
                 potiontag += "],";
                 taglist.add(potiontag);
                 itemcolor = ChatColor.YELLOW;
+                tagJson.put("CustomPotionEffects", potionList);
             }
 
             if(meta instanceof BookMeta) {
                 BookMeta bm = (BookMeta) meta;
                 if(bm.getTitle() != null) {
                     taglist.add("title:\\\"" + bm.getTitle() + "\\\",");
+                    tagJson.put("title", bm.getTitle());
                     name += ": " + bm.getTitle();
                 }
                 if(bm.getAuthor() != null) {
                     taglist.add("author:\\\"" + bm.getAuthor() + "\\\",");
+                    tagJson.put("author", bm.getAuthor());
                     if(bm.getTitle() == null)
                         name += " by " + bm.getAuthor();
                 }
@@ -259,6 +301,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 if(sm.hasOwner()) {
                     String owner = sm.getOwner();
                     /*taglist.add("SkullOwner:{Name:\\\\\"" + owner + "\\\\\",},");*/
+                    JSONObject ownerJson = new JSONObject();
+                    ownerJson.put("Name", owner);
+                    tagJson.put("SkullOwner", ownerJson);
                     name = owner + "'";
                     if(!(owner.substring(owner.length() -1).equalsIgnoreCase("s") || owner.substring(owner.length() -1).equalsIgnoreCase("x") || owner.substring(owner.length() -1).equalsIgnoreCase("z")))
                         name += "s";
@@ -267,17 +312,48 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 }
             }
             
-            if(meta.getLore() != null || meta.getDisplayName() != null || meta instanceof LeatherArmorMeta) {
+            if(meta.getLore() != null || meta.getDisplayName() != null || meta instanceof LeatherArmorMeta || meta.getItemFlags().size() > 0) {
+                JSONObject displayJson = new JSONObject();
                 String displaytag = "display:{";
                 if(meta.getLore() != null && meta.getLore().size() > 0) {
                     displaytag += "Lore:[";
+                    List<String> loreList = new ArrayList<String>();
                     for (String l : meta.getLore()) {
                         displaytag += "\\\"" + l + "\\\",";
+                        loreList.add(l);
                     }
                     displaytag = "],";
+                    displayJson.put("Lore", loreList);
+                }
+
+                if(meta.getItemFlags().size() > 0) {
+                    int flagBits = 0;
+                    for(ItemFlag flag : meta.getItemFlags())
+                        switch(flag) {
+                            case HIDE_ENCHANTS:
+                                flagBits += 1;
+                                break;
+                            case HIDE_ATTRIBUTES:
+                                flagBits += 2;
+                                break;
+                            case HIDE_UNBREAKABLE:
+                                flagBits += 4;
+                                break;
+                            case HIDE_DESTROYS:
+                                flagBits += 8;
+                                break;
+                            case HIDE_PLACED_ON:
+                                flagBits += 16;
+                                break;
+                            case HIDE_POTION_EFFECTS:
+                                flagBits += 32;
+                                break;
+                        }
+                    displayJson.put("HideFlags", flagBits);
                 }
                 if(meta instanceof LeatherArmorMeta) {
                     displaytag += "color:" + ((LeatherArmorMeta) meta).getColor().asRGB() + ",";
+                    displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
                 }
                 if(meta.getDisplayName() != null) {
                     displaytag += "Name:\\\"";
@@ -285,106 +361,153 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         displaytag += icon + " ";
                     name = ChatColor.ITALIC + meta.getDisplayName();
                     displaytag += name + "\\\",";
+                    displayJson.put("Name", name);
                 }
                 displaytag += "},";
                 taglist.add(displaytag);
+                tagJson.put("display", displayJson);
             }
 
             if(meta instanceof FireworkMeta) {
                 FireworkMeta fm = (FireworkMeta) meta;
-                String fireworktag = "Fireworks:{";
+                
+                String fireworktag = "Fireworks:{";                
+                JSONObject fireworkJson = new JSONObject();
+                
                 fireworktag += "Flight:" + fm.getPower() + "b,";
+                fireworkJson.put("Flight", fm.getPower());
+                
                 fireworktag += "Explosions:[";
+                List<JSONObject> explList = new ArrayList<JSONObject>();
                 for(FireworkEffect fe : fm.getEffects()) {
+                    JSONObject explJson = new JSONObject();
                     fireworktag += "{";
-                    fireworktag += (fe.hasFlicker()) ? "Flicker:1," : "";
-                    fireworktag += (fe.hasTrail()) ? "Trail:1," : "";
+                    if(fe.hasFlicker()) {
+                        fireworktag += "Flicker:1,";
+                        explJson.put("Flicker", (byte) 1);
+                    }
+                    if (fe.hasTrail()) {
+                        fireworktag += "Trail:1,";
+                        explJson.put("Trail", (byte) 1);
+                    }
                     fireworktag += "Type:";
+                    byte type = 42;
                     switch(fe.getType()) {
                         case BALL:
-                            fireworktag += "0";
+                            type = 0;
                             break;
                         case BALL_LARGE:
-                            fireworktag += "1";
+                            type = 1;
                             break;
                         case STAR:
-                            fireworktag += "2";
+                            type = 2;
                             break;
                         case CREEPER:
-                            fireworktag += "3";
+                            type = 3;
                             break;
                         case BURST:
-                            fireworktag += "4";
-                            break;
-                        default:
-                            fireworktag += "42";
+                            type = 4;
                             break;
                     }
+                    fireworktag += type;
+                    explJson.put("Type", type);
                     fireworktag += ",";
                     fireworktag += "Colors:[";
+                    JSONArray colorArray = new JSONArray();
                     for(Color c : fe.getColors()) {
                         fireworktag += c.asRGB() + ",";
+                        colorArray.add(c.asRGB());
                     }
+                    explJson.put("Colors", colorArray);
                     fireworktag += "],";
                     fireworktag += "FadeColors:[";
+                    JSONArray fadeArray = new JSONArray();
                     for(Color c : fe.getFadeColors()) {
                         fireworktag += c.asRGB() + ",";
+                        fadeArray.add(c.asRGB());
                     }
+                    explJson.put("FadeColors", fadeArray);
                     fireworktag += "]";
                     fireworktag += "},";
+                    explList.add(explJson);
                 }
                 fireworktag += "]},";
+                fireworkJson.put("Explosions", explList);
+                
                 taglist.add(fireworktag);
+                tagJson.put("Fireworks", fireworkJson);
             }
             
             if(meta instanceof FireworkEffectMeta) {
                 FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
+                
                 String fireworktag = "Explosion:{";
-                fireworktag += (fe.hasFlicker()) ? "Flicker:1," : "";
-                fireworktag += (fe.hasTrail()) ? "Trail:1," : "";
+                JSONObject explJson = new JSONObject();
+                
+                fireworktag += "{";
+                if(fe.hasFlicker()) {
+                    fireworktag += "Flicker:1,";
+                    explJson.put("Flicker", (byte) 1);
+                }
+                if (fe.hasTrail()) {
+                    fireworktag += "Trail:1,";
+                    explJson.put("Trail", (byte) 1);
+                }
                 fireworktag += "Type:";
+                byte type = 42;
                 switch(fe.getType()) {
                     case BALL:
-                        fireworktag += "0";
+                        type = 0;
                         break;
                     case BALL_LARGE:
-                        fireworktag += "1";
+                        type = 1;
                         break;
                     case STAR:
-                        fireworktag += "2";
+                        type = 2;
                         break;
                     case CREEPER:
-                        fireworktag += "3";
+                        type = 3;
                         break;
                     case BURST:
-                        fireworktag += "4";
-                        break;
-                    default:
-                        fireworktag += "42";
+                        type = 4;
                         break;
                 }
+                fireworktag += type;
+                explJson.put("Type", type);
                 fireworktag += ",";
                 fireworktag += "Colors:[";
+                JSONArray colorArray = new JSONArray();
                 for(Color c : fe.getColors()) {
                     fireworktag += c.asRGB() + ",";
+                    colorArray.add(c.asRGB());
                 }
+                explJson.put("Colors", colorArray);
                 fireworktag += "],";
                 fireworktag += "FadeColors:[";
+                JSONArray fadeArray = new JSONArray();
                 for(Color c : fe.getFadeColors()) {
                     fireworktag += c.asRGB() + ",";
+                    fadeArray.add(c.asRGB());
                 }
+                explJson.put("FadeColors", fadeArray);
+                
                 fireworktag += "],";
                 fireworktag += "},";
+                
                 taglist.add(fireworktag);
+                tagJson.put("Explosion", explJson);
             }
             
-            if(meta instanceof MapMeta && ((MapMeta) meta).isScaling())
+            if(meta instanceof MapMeta && ((MapMeta) meta).isScaling()) {
                 taglist.add("map_is_scaling:1");
+                tagJson.put("map_is_scaling", (byte) 1);
+            }
         }
 
 
-        if(taglist.size() > 0) {
+        if(taglist.size() > 0 && !tagJson.isEmpty()) {
             msg += "tag:{";
+            itemJson.put("tag", tagJson);
             for(String tag : taglist)
                 msg += tag;
             msg += "}";            
@@ -399,11 +522,22 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         }
         resultname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
         
+        JSONObject hoverJson = new JSONObject();
+        hoverJson.put("action", "show_item");
+        hoverJson.put("value", itemJson.toJSONString());
+
+        JSONObject nameJson = new JSONObject ();
+        nameJson.put("text", resultname);
+        nameJson.put("hoverEvent", hoverJson);
+        
         String itemstring = "{\"text\":\"" + resultname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
 
-        if(debug)
+        if(debug) {
             getLogger().info("Debug: " + itemstring);
-        return itemstring;
+            getLogger().info("Debug: " + nameJson.toJSONString());
+        }
+        //return itemstring;
+        return nameJson.toJSONString();
     }
 
     private String getTranslation(String key) {
