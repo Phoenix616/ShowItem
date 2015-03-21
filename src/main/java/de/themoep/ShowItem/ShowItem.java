@@ -101,6 +101,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     if (sender.hasPermission("showitem.command.reload")) {
                         this.loadConfig();
                         sender.sendMessage(ChatColor.GREEN + "Config reloaded.");
+                        return true;
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.reload");
                     }
@@ -130,7 +131,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(sender instanceof Player) {
                 if(((Player) sender).getItemInHand().getType() == Material.AIR) {
                     sender.sendMessage(getTranslation("error.noitem"));
-                } else if (args.length > 0) {
+                } else if (args.length > 0 && !args[0].startsWith("-")) {
                     if(sender.hasPermission("showitem.command.player")){
                         for(String name : args) {
                             if(!name.startsWith("-")) {
@@ -175,7 +176,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         tellRaw(sender, msg);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
-                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
+                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)), true);
                 found = true;
             }
         }
@@ -186,7 +187,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     private void showPlayer(Player sender, Player target, boolean debug) {
         String itemstring = convertItem(sender.getItemInHand(), debug);
         tellRaw(target, getTranslation("player.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
-        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)));
+        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)), true);
     }
 
     private String convertItem(ItemStack item, boolean debug) {
@@ -560,10 +561,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         return string;
     }
-    
+
     private void tellRaw(Player player, String msg) {
+        tellRaw(player, msg, false);
+    }
+    
+    private void tellRaw(Player player, String msg, boolean debug) {
         if(spigot)
             player.spigot().sendMessage(new ComponentSerializer().parse(msg));
+            if(debug) {
+                getLogger().info("Debug: " + msg);
+            }
         else
             this.getServer().dispatchCommand(this.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + msg);
     }
