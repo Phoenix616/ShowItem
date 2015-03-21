@@ -526,6 +526,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         
         JSONObject hoverJson = new JSONObject();
         hoverJson.put("action", "show_item");
+        if(debug) {
+            getLogger().info("Debug: " + itemJson.toJSONString());
+            getLogger().info("toMojangJsonString: " + toMojangJsonString(itemJson.toJSONString()));
+        }
         hoverJson.put("value", toMojangJsonString(itemJson.toJSONString()));
 
         JSONObject nameJson = new JSONObject ();
