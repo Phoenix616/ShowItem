@@ -40,13 +40,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.*;
+import java.util.logging.Level;
 
 public class ShowItem extends JavaPlugin implements CommandExecutor {
 
@@ -67,6 +65,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     
     boolean spigot;
 
+    Level debugLevel = Level.FINE;
+    
     public void onEnable() {
         try {
             Bukkit.class.getMethod("spigot");
@@ -95,7 +95,6 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("showitem.command")) {
-            boolean debug = false;
             int radius = this.defaultradius;
             for(int i = 0; i < args.length; i++) {
                 if(args[i].equalsIgnoreCase("-reload")) {
@@ -108,7 +107,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                 } else if(args[i].equalsIgnoreCase("-debug")) {
                     if(sender.hasPermission("showitem.command.debug")) {
-                        debug = true;
+                        debugLevel = Level.INFO;
                         sender.sendMessage(ChatColor.GREEN + "Debug message. Look into the console!");
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.debug");
@@ -138,7 +137,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             if(!name.startsWith("-")) {
                                 Player target = Bukkit.getPlayer(name);
                                 if (target != null && target.isOnline()) {
-                                    showPlayer((Player) sender, target, debug);
+                                    showPlayer((Player) sender, target);
                                 } else {
                                     tellRaw((Player) sender, ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                                 }
@@ -148,7 +147,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         sender.sendMessage("You don't have the permission showitem.command.player");
                     }
                 } else {
-                    showInRadius((Player) sender, radius, debug);                    
+                    showInRadius((Player) sender, radius);                    
                 }
             } else {
                 sender.sendMessage("This command can only be run by a player!");
@@ -159,7 +158,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    private void showInRadius(Player sender, int radius, boolean debug) {
+    private void showInRadius(Player sender, int radius) {
         
         if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && cooldownmap.containsKey(sender.getUniqueId())) {
             long diff = System.currentTimeMillis() - cooldownmap.get(sender.getUniqueId());
@@ -169,15 +168,19 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         }
         
-        String itemstring = convertItem(sender.getItemInHand(), debug);
+        String itemstring = convertItem(sender.getItemInHand());
         Boolean found = false;
         String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
-        if(radius != defaultradius)
+        if(debugLevel == Level.INFO) {
+            sender.sendMessage(ChatColor.stripColor(itemstring));
+        }
+        if(radius != defaultradius) {
             msg += " " + getTranslation("radius.custom", ImmutableMap.of("radius", Integer.toString(radius)));
+        }
         tellRaw(sender, msg);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
-                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)), true);
+                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
                 found = true;
             }
         }
@@ -185,14 +188,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
     }
 
-    private void showPlayer(Player sender, Player target, boolean debug) {
-        String itemstring = convertItem(sender.getItemInHand(), debug);
+    private void showPlayer(Player sender, Player target) {
+        String itemstring = convertItem(sender.getItemInHand());
+        if(debugLevel == Level.INFO) {
+            sender.sendMessage(ChatColor.stripColor(itemstring));
+        }
         tellRaw(target, getTranslation("player.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
-        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)), true);
+        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)));
     }
 
-    private String convertItem(ItemStack item, boolean debug) {
-        List<String> taglist = new ArrayList<String>();
+    private String convertItem(ItemStack item) {
         ChatColor itemcolor = ChatColor.WHITE;
 
         JSONObject itemJson = new JSONObject();
@@ -203,9 +208,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         String name = idmap.getHumanName(item.getType());
 
         itemJson.put("id", "minecraft:"+ idmap.getMCid(item.getType()));
-        String msg = "id:minecraft:" + idmap.getMCid(item.getType()) + ",";
 
-        msg += "Damage:" + item.getDurability() + ",";
         itemJson.put("Damage", item.getDurability());
         
         JSONObject tagJson = new JSONObject();
@@ -215,43 +218,33 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             
             if(meta.spigot() != null && meta.spigot().isUnbreakable()) {
                 tagJson.put("Unbreakable", 1);
-                taglist.add("Unbreakable:1,");
             }
             
             if (meta.getEnchants() != null && meta.getEnchants().size() > 0) {
                 List<JSONObject> enchList = new ArrayList<JSONObject>();
                 
-                String enchtag = "ench:[";
                 for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                    enchtag += "{id:" + entry.getKey().hashCode() + ",lvl:" + entry.getValue() + "},";
                     JSONObject enchJson = new JSONObject();
                     enchJson.put("id", entry.getKey().hashCode());
                     enchJson.put("lvl", entry.getValue());
                     enchList.add(enchJson);
                 }
-
-                enchtag += "],";
-                taglist.add(enchtag);
-                
                 itemcolor = ChatColor.AQUA;
                 tagJson.put("ench", enchList);
             }
 
             if(meta instanceof EnchantmentStorageMeta) {
                 EnchantmentStorageMeta esm = (EnchantmentStorageMeta) meta;
+                
                 if(esm.getStoredEnchants() != null) {
                     List<JSONObject> enchList = new ArrayList<JSONObject>();
-                    String storedenchtag = "StoredEnchantments:[";
+                    
                     for (Map.Entry<Enchantment, Integer> entry : esm.getStoredEnchants().entrySet()) {
-                        storedenchtag += "{id:" + entry.getKey().hashCode() + ",lvl:" + entry.getValue() + "},";
                         JSONObject enchJson = new JSONObject();
                         enchJson.put("id", entry.getKey().hashCode());
                         enchJson.put("lvl", entry.getValue());
                         enchList.add(enchJson);
                     }
-
-                    storedenchtag += "],";
-                    taglist.add(storedenchtag);
                     itemcolor = ChatColor.YELLOW;
                     tagJson.put("StoredEnchantments", enchList);
                 }
@@ -260,24 +253,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(meta instanceof PotionMeta) {
                 PotionMeta pm = (PotionMeta) meta;
                 List<JSONObject> potionList = new ArrayList<JSONObject>();
-                String potiontag = "CustomPotionEffects:[";
                 for (PotionEffect potion : pm.getCustomEffects()) {
-                    potiontag += "{Id:" + potion.getType().hashCode() +
-                            ",Amplifier:" + potion.getAmplifier() +
-                            ",Duration:" + potion.getDuration() +
-                            ((potion.isAmbient()) ? "Ambient:1," : "") + "},";
-
                     JSONObject potionJson = new JSONObject();
                     potionJson.put("Id", potion.getType().hashCode());
                     potionJson.put("Amplifier", potion.getAmplifier());
                     potionJson.put("Duration", potion.getDuration());
-                    if(potion.isAmbient())
+                    if(potion.isAmbient()) {
                         potionJson.put("Ambient", (byte) 1);
+                    }
                     potionList.add(potionJson);
                 }
-
-                potiontag += "],";
-                taglist.add(potiontag);
                 itemcolor = ChatColor.YELLOW;
                 tagJson.put("CustomPotionEffects", potionList);
             }
@@ -285,17 +270,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(meta instanceof BookMeta) {
                 BookMeta bm = (BookMeta) meta;
                 if(bm.getTitle() != null) {
-                    taglist.add("title:\\\"" + bm.getTitle() + "\\\",");
                     tagJson.put("title", bm.getTitle());
                     name += ": " + bm.getTitle();
                 }
                 if(bm.getAuthor() != null) {
-                    taglist.add("author:\\\"" + bm.getAuthor() + "\\\",");
                     tagJson.put("author", bm.getAuthor());
-                    if(bm.getTitle() == null)
+                    if(bm.getTitle() == null) {
                         name += " by " + bm.getAuthor();
+                    }
                 }
-
             }
 
             if(meta instanceof SkullMeta) {
@@ -316,15 +299,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             
             if(meta.getLore() != null || meta.getDisplayName() != null || meta instanceof LeatherArmorMeta || meta.getItemFlags().size() > 0) {
                 JSONObject displayJson = new JSONObject();
-                String displaytag = "display:{";
+                
                 if(meta.getLore() != null && meta.getLore().size() > 0) {
-                    displaytag += "Lore:[";
                     List<String> loreList = new ArrayList<String>();
                     for (String l : meta.getLore()) {
-                        displaytag += "\\\"" + l + "\\\",";
                         loreList.add(l);
                     }
-                    displaytag = "],";
                     displayJson.put("Lore", loreList);
                 }
 
@@ -353,46 +333,39 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         }
                     displayJson.put("HideFlags", flagBits);
                 }
+                
                 if(meta instanceof LeatherArmorMeta) {
-                    displaytag += "color:" + ((LeatherArmorMeta) meta).getColor().asRGB() + ",";
                     displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
                 }
+                
                 if(meta.getDisplayName() != null) {
-                    displaytag += "Name:\\\"";
-                    if(useIconRp)
-                        displaytag += icon + " ";
                     name = ChatColor.ITALIC + meta.getDisplayName();
-                    displaytag += name + "\\\",";
-                    displayJson.put("Name", name);
+                    if(useIconRp) {
+                        displayJson.put("Name", icon + " " + name);
+                    } else {
+                        displayJson.put("Name", name);                        
+                    }
                 }
-                displaytag += "},";
-                taglist.add(displaytag);
                 tagJson.put("display", displayJson);
             }
 
             if(meta instanceof FireworkMeta) {
                 FireworkMeta fm = (FireworkMeta) meta;
-                
-                String fireworktag = "Fireworks:{";                
+                          
                 JSONObject fireworkJson = new JSONObject();
                 
-                fireworktag += "Flight:" + fm.getPower() + "b,";
                 fireworkJson.put("Flight", fm.getPower());
                 
-                fireworktag += "Explosions:[";
                 List<JSONObject> explList = new ArrayList<JSONObject>();
                 for(FireworkEffect fe : fm.getEffects()) {
                     JSONObject explJson = new JSONObject();
-                    fireworktag += "{";
+                    
                     if(fe.hasFlicker()) {
-                        fireworktag += "Flicker:1,";
                         explJson.put("Flicker", (byte) 1);
                     }
                     if (fe.hasTrail()) {
-                        fireworktag += "Trail:1,";
                         explJson.put("Trail", (byte) 1);
                     }
-                    fireworktag += "Type:";
                     byte type = 42;
                     switch(fe.getType()) {
                         case BALL:
@@ -411,51 +384,34 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             type = 4;
                             break;
                     }
-                    fireworktag += type;
                     explJson.put("Type", type);
-                    fireworktag += ",";
-                    fireworktag += "Colors:[";
                     JSONArray colorArray = new JSONArray();
                     for(Color c : fe.getColors()) {
-                        fireworktag += c.asRGB() + ",";
                         colorArray.add(c.asRGB());
                     }
                     explJson.put("Colors", colorArray);
-                    fireworktag += "],";
-                    fireworktag += "FadeColors:[";
                     JSONArray fadeArray = new JSONArray();
                     for(Color c : fe.getFadeColors()) {
-                        fireworktag += c.asRGB() + ",";
                         fadeArray.add(c.asRGB());
                     }
                     explJson.put("FadeColors", fadeArray);
-                    fireworktag += "]";
-                    fireworktag += "},";
                     explList.add(explJson);
                 }
-                fireworktag += "]},";
                 fireworkJson.put("Explosions", explList);
-                
-                taglist.add(fireworktag);
+
                 tagJson.put("Fireworks", fireworkJson);
             }
             
             if(meta instanceof FireworkEffectMeta) {
                 FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
-                
-                String fireworktag = "Explosion:{";
                 JSONObject explJson = new JSONObject();
-                
-                fireworktag += "{";
+
                 if(fe.hasFlicker()) {
-                    fireworktag += "Flicker:1,";
                     explJson.put("Flicker", (byte) 1);
                 }
                 if (fe.hasTrail()) {
-                    fireworktag += "Trail:1,";
                     explJson.put("Trail", (byte) 1);
                 }
-                fireworktag += "Type:";
                 byte type = 42;
                 switch(fe.getType()) {
                     case BALL:
@@ -474,45 +430,28 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         type = 4;
                         break;
                 }
-                fireworktag += type;
                 explJson.put("Type", type);
-                fireworktag += ",";
-                fireworktag += "Colors:[";
                 JSONArray colorArray = new JSONArray();
                 for(Color c : fe.getColors()) {
-                    fireworktag += c.asRGB() + ",";
                     colorArray.add(c.asRGB());
                 }
                 explJson.put("Colors", colorArray);
-                fireworktag += "],";
-                fireworktag += "FadeColors:[";
                 JSONArray fadeArray = new JSONArray();
                 for(Color c : fe.getFadeColors()) {
-                    fireworktag += c.asRGB() + ",";
                     fadeArray.add(c.asRGB());
                 }
                 explJson.put("FadeColors", fadeArray);
-                
-                fireworktag += "],";
-                fireworktag += "},";
-                
-                taglist.add(fireworktag);
                 tagJson.put("Explosion", explJson);
             }
             
             if(meta instanceof MapMeta && ((MapMeta) meta).isScaling()) {
-                taglist.add("map_is_scaling:1");
                 tagJson.put("map_is_scaling", (byte) 1);
             }
         }
 
 
-        if(taglist.size() > 0 && !tagJson.isEmpty()) {
-            msg += "tag:{";
+        if(!tagJson.isEmpty()) {
             itemJson.put("tag", tagJson);
-            for(String tag : taglist)
-                msg += tag;
-            msg += "}";            
         }
         
         if(item.getType().isRecord())
@@ -526,23 +465,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         
         JSONObject hoverJson = new JSONObject();
         hoverJson.put("action", "show_item");
-        if(debug) {
-            getLogger().info("Debug: " + itemJson.toJSONString());
-            getLogger().info("toMojangJsonString: " + toMojangJsonString(itemJson.toJSONString()));
-        }
-        hoverJson.put("value", toMojangJsonString(itemJson.toJSONString()));
+        String mojangItemJson = toMojangJsonString(itemJson.toJSONString());
+        getLogger().log(debugLevel, "toMojangJsonString: " + mojangItemJson);
+        
+        hoverJson.put("value", mojangItemJson);
 
         JSONObject nameJson = new JSONObject ();
         nameJson.put("text", resultname);
         nameJson.put("hoverEvent", hoverJson);
-        
-        String itemstring = "{\"text\":\"" + resultname + "\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{" + msg + "}\"}}";
 
-        if(debug) {
-            getLogger().info("Debug: " + itemstring);
-            getLogger().info("Debug: " + nameJson.toJSONString());
-        }
-        //return itemstring;
+        getLogger().log(debugLevel, "Json string: " + nameJson.toJSONString());
         return nameJson.toJSONString();
     }
 
@@ -590,14 +522,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     private void tellRaw(Player player, String msg) {
-        tellRaw(player, msg, false);
-    }
-    
-    private void tellRaw(Player player, String msg, boolean debug) {
         if(spigot) {
-            if (debug) {
-                getLogger().info("Debug: " + msg);
-            }
+            getLogger().log(debugLevel, "Tellraw " + player.getName() + ": " + msg);
             try {
                 player.spigot().sendMessage(new ComponentSerializer().parse(msg));
             } catch (Exception e) {
