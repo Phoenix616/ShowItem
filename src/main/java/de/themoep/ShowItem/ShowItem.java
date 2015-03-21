@@ -531,6 +531,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         while(itemIterator.hasNext()) {
             Map.Entry entry = (Map.Entry)itemIterator.next();
             toMojangJsonString(String.valueOf(entry.getKey()), entry.getValue(), itemJsonStringBuffer);
+            itemJsonStringBuffer.append(',');
         }
 
         itemJsonStringBuffer.append('}');
