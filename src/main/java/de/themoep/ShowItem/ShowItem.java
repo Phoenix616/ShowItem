@@ -134,7 +134,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             if(target != null && target.isOnline()) {
                                 showPlayer((Player) sender, target, debug);
                             } else {
-                                sender.sendMessage(ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
+                                tellRaw((Player) sender, ChatColor.RED + getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                             }
                         }
                     } else {
