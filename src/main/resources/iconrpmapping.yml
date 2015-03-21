@@ -3,7 +3,7 @@ offset: 0x9000
 map:
   - wood_sword
   - wood_pickaxe
-  - wood_shovel
+  - wood_spade
   - wood_axe
   - wood_hoe
   - stone_sword
@@ -449,8 +449,8 @@ map:
   - stem
   - white_vine
   - vine
-  - white_waterlily
-  - waterlily
+  - white_water_lily
+  - water_lily
   - sugarcane_block
   - netherwart_3
   - netherwart_2
@@ -481,9 +481,8 @@ map:
   - carrots_3
   - carrots_2
   - carrots_1
-  - rail
-  - rail_north
-  - east
+  - rails
+  - rails_north-east
   - powered_rail
   - powered_powered_rail
   - detector_rail
@@ -499,10 +498,8 @@ map:
   - powered_detector_rail_horizontal
   - activator_rail_horizontal
   - powered_activator_rail_horizontal
-  - rail_south
-  - east
-  - rail_east
-  - north
+  - rail_south-east
+  - rail_east-north
   - ladder
   - ladder_horizontal
   - redstone
@@ -1734,21 +1731,17 @@ map:
   - unused
   - unused
   - symbol_x_tight_aa
-  - symbol_x_tight_even
-  - odd_aa
-  - symbol_adventure_aa
-  - symbol_x_even
+  - symbol_x_tight_even-odd_aa
+  - symbol_adventure_aa-symbol_x_even
   - odd_aa
   - unused
   - unused
   - unused
   - unused
   - symbol_x_tight
-  - symbol_x_tight_even
-  - odd
+  - symbol_x_tight_even-odd
   - symbol_adventure
-  - symbol_x_even
-  - odd
+  - symbol_x_even-odd
   - unused
   - unused
   - unused
@@ -2394,21 +2387,17 @@ map:
   - unused
   - unused
   - large_symbol_x_tight_aa
-  - large_symbol_x_tight_even
-  - odd_aa
+  - large_symbol_x_tight_even-odd_aa
   - large_symbol_adventure_aa
-  - large_symbol_x_even
-  - odd_aa
+  - large_symbol_x_even-odd_aa
   - unused
   - unused
   - unused
   - unused
   - large_symbol_x_tight
-  - large_symbol_x_tight_even
-  - odd
+  - large_symbol_x_tight_even-odd
   - large_symbol_adventure
-  - large_symbol_x_even
-  - odd
+  - large_symbol_x_even-odd
   - unused
   - unused
   - unused
