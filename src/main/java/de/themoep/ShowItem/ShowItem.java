@@ -567,12 +567,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private void tellRaw(Player player, String msg, boolean debug) {
-        if(spigot)
-            player.spigot().sendMessage(new ComponentSerializer().parse(msg));
-            if(debug) {
+        if(spigot) {
+            if (debug) {
                 getLogger().info("Debug: " + msg);
             }
-        else
+            player.spigot().sendMessage(new ComponentSerializer().parse(msg));
+        } else
             this.getServer().dispatchCommand(this.getServer().getConsoleSender(), "tellraw " + player.getName() + " " + msg);
     }
 }
