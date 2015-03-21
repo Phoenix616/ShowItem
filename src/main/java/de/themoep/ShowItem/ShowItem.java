@@ -521,7 +521,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             itemJson.put("tag", tagJson);
              This is because our friends at Mojang can't use JSON correctly. #BlameMojang 
              */
-            itemJsonStr += "tag:" + tagJson.toJSONString();
+            itemJsonStr += "tag:" + tagJson.toJSONString() + "}";
             for(String tag : taglist)
                 msg += tag;
             msg += "}";            
