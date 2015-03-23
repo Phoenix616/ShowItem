@@ -89,8 +89,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         lang = this.getConfig().getConfigurationSection("lang");
         useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
-        if(useIconRp)
+        if(useIconRp) {
             this.iconrpmap = new IconRpMapping(this);
+        }
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -214,69 +215,138 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         JSONObject tagJson = new JSONObject();
         
         if(item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
+            boolean hideEnchants = false;
+            boolean hideAttributes = false;
+            boolean hideUnbreakable = false;
+            boolean hideDestroys = false;
+            boolean hidePlacedOn = false;
+            boolean hideVarious = false;
             
-            if(meta.spigot() != null && meta.spigot().isUnbreakable()) {
+            ItemMeta meta = item.getItemMeta();
+
+            if(meta.getLore() != null || meta instanceof LeatherArmorMeta || meta.getItemFlags().size() > 0) {
+                JSONObject displayJson = new JSONObject();
+
+                if(meta.getLore() != null && meta.getLore().size() > 0) {
+                    List<String> loreList = new ArrayList<String>();
+                    for (String l : meta.getLore()) {
+                        loreList.add(l);
+                    }
+                    displayJson.put("Lore", loreList);
+                }
+
+                if(meta.getItemFlags().size() > 0) {
+                    int flagBits = 0;
+                    for(ItemFlag flag : meta.getItemFlags())
+                        switch(flag) {
+                            case HIDE_ENCHANTS:
+                                hideEnchants = true;
+                                flagBits += 1;
+                                break;
+                            case HIDE_ATTRIBUTES:
+                                hideAttributes = true;
+                                flagBits += 2;
+                                break;
+                            case HIDE_UNBREAKABLE:
+                                hideUnbreakable = true;
+                                flagBits += 4;
+                                break;
+                            case HIDE_DESTROYS:
+                                hideDestroys = true;
+                                flagBits += 8;
+                                break;
+                            case HIDE_PLACED_ON:
+                                hidePlacedOn = true;
+                                flagBits += 16;
+                                break;
+                            case HIDE_POTION_EFFECTS:
+                                hideVarious = true;
+                                flagBits += 32;
+                                break;
+                        }
+                    displayJson.put("HideFlags", flagBits);
+                }
+
+                if(meta instanceof LeatherArmorMeta) {
+                    displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
+                }
+                
+                tagJson.put("display", displayJson);
+            }
+
+            if(item.getType().isRecord()) {
+                itemcolor = ChatColor.AQUA;
+            }
+
+            if(meta.spigot() != null && meta.spigot().isUnbreakable() && !hideUnbreakable) {
                 tagJson.put("Unbreakable", 1);
             }
             
             if (meta.getEnchants() != null && meta.getEnchants().size() > 0) {
-                List<JSONObject> enchList = new ArrayList<JSONObject>();
-                
-                for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                    JSONObject enchJson = new JSONObject();
-                    enchJson.put("id", entry.getKey().hashCode());
-                    enchJson.put("lvl", entry.getValue());
-                    enchList.add(enchJson);
+                if(!hideEnchants) {
+                    List<JSONObject> enchList = new ArrayList<JSONObject>();
+
+                    for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
+                        JSONObject enchJson = new JSONObject();
+                        enchJson.put("id", entry.getKey().hashCode());
+                        enchJson.put("lvl", entry.getValue());
+                        enchList.add(enchJson);
+                    }
+                    tagJson.put("ench", enchList);
                 }
                 itemcolor = ChatColor.AQUA;
-                tagJson.put("ench", enchList);
             }
 
             if(meta instanceof EnchantmentStorageMeta) {
                 EnchantmentStorageMeta esm = (EnchantmentStorageMeta) meta;
                 
                 if(esm.getStoredEnchants() != null) {
-                    List<JSONObject> enchList = new ArrayList<JSONObject>();
-                    
-                    for (Map.Entry<Enchantment, Integer> entry : esm.getStoredEnchants().entrySet()) {
-                        JSONObject enchJson = new JSONObject();
-                        enchJson.put("id", entry.getKey().hashCode());
-                        enchJson.put("lvl", entry.getValue());
-                        enchList.add(enchJson);
+                    if(!hideVarious) {
+                        List<JSONObject> enchList = new ArrayList<JSONObject>();
+
+                        for (Map.Entry<Enchantment, Integer> entry : esm.getStoredEnchants().entrySet()) {
+                            JSONObject enchJson = new JSONObject();
+                            enchJson.put("id", entry.getKey().hashCode());
+                            enchJson.put("lvl", entry.getValue());
+                            enchList.add(enchJson);
+                        }
+                        tagJson.put("StoredEnchantments", enchList);
                     }
                     itemcolor = ChatColor.YELLOW;
-                    tagJson.put("StoredEnchantments", enchList);
                 }
             }
 
             if(meta instanceof PotionMeta) {
-                PotionMeta pm = (PotionMeta) meta;
-                List<JSONObject> potionList = new ArrayList<JSONObject>();
-                for (PotionEffect potion : pm.getCustomEffects()) {
-                    JSONObject potionJson = new JSONObject();
-                    potionJson.put("Id", potion.getType().hashCode());
-                    potionJson.put("Amplifier", potion.getAmplifier());
-                    potionJson.put("Duration", potion.getDuration());
-                    if(potion.isAmbient()) {
-                        potionJson.put("Ambient", (byte) 1);
+                if(!hideVarious) {
+                    PotionMeta pm = (PotionMeta) meta;
+                    List<JSONObject> potionList = new ArrayList<JSONObject>();
+                    for (PotionEffect potion : pm.getCustomEffects()) {
+                        JSONObject potionJson = new JSONObject();
+                        potionJson.put("Id", potion.getType().hashCode());
+                        potionJson.put("Amplifier", potion.getAmplifier());
+                        potionJson.put("Duration", potion.getDuration());
+                        if(potion.isAmbient()) {
+                            potionJson.put("Ambient", (byte) 1);
+                        }
+                        potionList.add(potionJson);
                     }
-                    potionList.add(potionJson);
+                    tagJson.put("CustomPotionEffects", potionList);
                 }
                 itemcolor = ChatColor.YELLOW;
-                tagJson.put("CustomPotionEffects", potionList);
             }
 
             if(meta instanceof BookMeta) {
-                BookMeta bm = (BookMeta) meta;
-                if(bm.getTitle() != null) {
-                    tagJson.put("title", bm.getTitle());
-                    name += ": " + bm.getTitle();
-                }
-                if(bm.getAuthor() != null) {
-                    tagJson.put("author", bm.getAuthor());
-                    if(bm.getTitle() == null) {
-                        name += " by " + bm.getAuthor();
+                if(!hideVarious) {
+                    BookMeta bm = (BookMeta) meta;
+                    if (bm.getTitle() != null) {
+                        tagJson.put("title", bm.getTitle());
+                        name += ": " + bm.getTitle();
+                    }
+                    if (bm.getAuthor() != null) {
+                        tagJson.put("author", bm.getAuthor());
+                        if (bm.getTitle() == null) {
+                            name += " by " + bm.getAuthor();
+                        }
                     }
                 }
             }
@@ -297,77 +367,74 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 }
             }
             
-            if(meta.getLore() != null || meta.getDisplayName() != null || meta instanceof LeatherArmorMeta || meta.getItemFlags().size() > 0) {
-                JSONObject displayJson = new JSONObject();
-                
-                if(meta.getLore() != null && meta.getLore().size() > 0) {
-                    List<String> loreList = new ArrayList<String>();
-                    for (String l : meta.getLore()) {
-                        loreList.add(l);
-                    }
-                    displayJson.put("Lore", loreList);
-                }
+            if(meta instanceof FireworkMeta) {
+                if(!hideVarious) {
+                    FireworkMeta fm = (FireworkMeta) meta;
 
-                if(meta.getItemFlags().size() > 0) {
-                    int flagBits = 0;
-                    for(ItemFlag flag : meta.getItemFlags())
-                        switch(flag) {
-                            case HIDE_ENCHANTS:
-                                flagBits += 1;
+                    JSONObject fireworkJson = new JSONObject();
+
+                    fireworkJson.put("Flight", fm.getPower());
+
+                    List<JSONObject> explList = new ArrayList<JSONObject>();
+                    for (FireworkEffect fe : fm.getEffects()) {
+                        JSONObject explJson = new JSONObject();
+
+                        if (fe.hasFlicker()) {
+                            explJson.put("Flicker", (byte) 1);
+                        }
+                        if (fe.hasTrail()) {
+                            explJson.put("Trail", (byte) 1);
+                        }
+                        byte type = 42;
+                        switch (fe.getType()) {
+                            case BALL:
+                                type = 0;
                                 break;
-                            case HIDE_ATTRIBUTES:
-                                flagBits += 2;
+                            case BALL_LARGE:
+                                type = 1;
                                 break;
-                            case HIDE_UNBREAKABLE:
-                                flagBits += 4;
+                            case STAR:
+                                type = 2;
                                 break;
-                            case HIDE_DESTROYS:
-                                flagBits += 8;
+                            case CREEPER:
+                                type = 3;
                                 break;
-                            case HIDE_PLACED_ON:
-                                flagBits += 16;
-                                break;
-                            case HIDE_POTION_EFFECTS:
-                                flagBits += 32;
+                            case BURST:
+                                type = 4;
                                 break;
                         }
-                    displayJson.put("HideFlags", flagBits);
-                }
-                
-                if(meta instanceof LeatherArmorMeta) {
-                    displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
-                }
-                
-                if(meta.getDisplayName() != null) {
-                    name = ChatColor.ITALIC + meta.getDisplayName();
-                    if(useIconRp) {
-                        displayJson.put("Name", icon + " " + name);
-                    } else {
-                        displayJson.put("Name", name);                        
+                        explJson.put("Type", type);
+                        JSONArray colorArray = new JSONArray();
+                        for (Color c : fe.getColors()) {
+                            colorArray.add(c.asRGB());
+                        }
+                        explJson.put("Colors", colorArray);
+                        JSONArray fadeArray = new JSONArray();
+                        for (Color c : fe.getFadeColors()) {
+                            fadeArray.add(c.asRGB());
+                        }
+                        explJson.put("FadeColors", fadeArray);
+                        explList.add(explJson);
                     }
-                }
-                tagJson.put("display", displayJson);
-            }
+                    fireworkJson.put("Explosions", explList);
 
-            if(meta instanceof FireworkMeta) {
-                FireworkMeta fm = (FireworkMeta) meta;
-                          
-                JSONObject fireworkJson = new JSONObject();
-                
-                fireworkJson.put("Flight", fm.getPower());
-                
-                List<JSONObject> explList = new ArrayList<JSONObject>();
-                for(FireworkEffect fe : fm.getEffects()) {
+                    tagJson.put("Fireworks", fireworkJson);
+                }
+            }
+            
+            if(meta instanceof FireworkEffectMeta) {
+                if(!hideVarious) {
+                    FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
                     JSONObject explJson = new JSONObject();
-                    
-                    if(fe.hasFlicker()) {
+
+                    if (fe.hasFlicker()) {
                         explJson.put("Flicker", (byte) 1);
                     }
                     if (fe.hasTrail()) {
                         explJson.put("Trail", (byte) 1);
                     }
                     byte type = 42;
-                    switch(fe.getType()) {
+                    switch (fe.getType()) {
                         case BALL:
                             type = 0;
                             break;
@@ -386,66 +453,39 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                     explJson.put("Type", type);
                     JSONArray colorArray = new JSONArray();
-                    for(Color c : fe.getColors()) {
+                    for (Color c : fe.getColors()) {
                         colorArray.add(c.asRGB());
                     }
                     explJson.put("Colors", colorArray);
                     JSONArray fadeArray = new JSONArray();
-                    for(Color c : fe.getFadeColors()) {
+                    for (Color c : fe.getFadeColors()) {
                         fadeArray.add(c.asRGB());
                     }
                     explJson.put("FadeColors", fadeArray);
-                    explList.add(explJson);
+                    tagJson.put("Explosion", explJson);
                 }
-                fireworkJson.put("Explosions", explList);
-
-                tagJson.put("Fireworks", fireworkJson);
             }
             
-            if(meta instanceof FireworkEffectMeta) {
-                FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
-                JSONObject explJson = new JSONObject();
-
-                if(fe.hasFlicker()) {
-                    explJson.put("Flicker", (byte) 1);
-                }
-                if (fe.hasTrail()) {
-                    explJson.put("Trail", (byte) 1);
-                }
-                byte type = 42;
-                switch(fe.getType()) {
-                    case BALL:
-                        type = 0;
-                        break;
-                    case BALL_LARGE:
-                        type = 1;
-                        break;
-                    case STAR:
-                        type = 2;
-                        break;
-                    case CREEPER:
-                        type = 3;
-                        break;
-                    case BURST:
-                        type = 4;
-                        break;
-                }
-                explJson.put("Type", type);
-                JSONArray colorArray = new JSONArray();
-                for(Color c : fe.getColors()) {
-                    colorArray.add(c.asRGB());
-                }
-                explJson.put("Colors", colorArray);
-                JSONArray fadeArray = new JSONArray();
-                for(Color c : fe.getFadeColors()) {
-                    fadeArray.add(c.asRGB());
-                }
-                explJson.put("FadeColors", fadeArray);
-                tagJson.put("Explosion", explJson);
-            }
-            
-            if(meta instanceof MapMeta && ((MapMeta) meta).isScaling()) {
+            if(meta instanceof MapMeta && ((MapMeta) meta).isScaling() && !hideVarious) {
                 tagJson.put("map_is_scaling", (byte) 1);
+            }
+
+            if(meta.getDisplayName() != null) {
+                name = ChatColor.ITALIC + meta.getDisplayName();
+                JSONObject displayJson;
+                if(tagJson.containsKey("display")) {
+                    displayJson = (JSONObject) tagJson.get("display");
+                } else {
+                    displayJson = new JSONObject();
+                }
+                
+                if(useIconRp) {
+                    displayJson.put("Name", icon + itemcolor + " " + name);
+                } else {
+                    displayJson.put("Name", itemcolor + name);
+                }
+                
+                tagJson.put("display", displayJson);
             }
         }
 
@@ -453,9 +493,6 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if(!tagJson.isEmpty()) {
             itemJson.put("tag", tagJson);
         }
-        
-        if(item.getType().isRecord())
-            itemcolor = ChatColor.AQUA;
 
         String resultname = itemcolor + "[";
         if(useIconRp) {
