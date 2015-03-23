@@ -22,11 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import net.md_5.bungee.chat.ComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -474,7 +470,14 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(meta instanceof BannerMeta) {
                 BannerMeta bm = (BannerMeta) meta;
                 JSONObject blockEntityJson = new JSONObject();
-                blockEntityJson.put("Base", bm.getBaseColor().getDyeData());
+                DyeColor baseColor = bm.getBaseColor();
+                byte base;
+                if(baseColor != null) {
+                    base = baseColor.getDyeData();
+                } else {
+                    base = (byte) item.getDurability();
+                }
+                blockEntityJson.put("Base", base);
                 
                 List<JSONObject> patternList = new ArrayList<JSONObject>();
                 for(Pattern p : bm.getPatterns()) {
