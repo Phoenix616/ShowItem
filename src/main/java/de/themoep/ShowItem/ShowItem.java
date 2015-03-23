@@ -471,11 +471,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 BannerMeta bm = (BannerMeta) meta;
                 JSONObject blockEntityJson = new JSONObject();
                 DyeColor baseColor = bm.getBaseColor();
-                byte base;
+                int base;
                 if(baseColor != null) {
                     base = baseColor.getDyeData();
                 } else {
-                    base = (byte) item.getDurability();
+                    base = (int) item.getDurability();
                 }
                 blockEntityJson.put("Base", base);
                 
