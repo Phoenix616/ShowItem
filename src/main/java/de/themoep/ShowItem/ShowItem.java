@@ -64,8 +64,6 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     ConfigurationSection lang;
     
     boolean spigot;
-
-    Level debugLevel = Level.FINE;
     
     public void onEnable() {
         try {
@@ -97,6 +95,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("showitem.command")) {
             int radius = this.defaultradius;
+            Level debugLevel = Level.FINE;
             for(int i = 0; i < args.length; i++) {
                 if(args[i].equalsIgnoreCase("-reload")) {
                     if (sender.hasPermission("showitem.command.reload")) {
@@ -129,6 +128,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                 }
             }
+            
             if(sender instanceof Player) {
                 if(((Player) sender).getItemInHand().getType() == Material.AIR) {
                     sender.sendMessage(getTranslation("error.noitem"));
@@ -138,7 +138,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             if(!name.startsWith("-")) {
                                 Player target = Bukkit.getPlayer(name);
                                 if (target != null && target.isOnline()) {
-                                    showPlayer((Player) sender, target);
+                                    showPlayer((Player) sender, target, debugLevel);
                                 } else {
                                     tellRaw((Player) sender, getTranslation("error.playeroffline", ImmutableMap.of("player", name)));
                                 }
@@ -148,7 +148,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         sender.sendMessage("You don't have the permission showitem.command.player");
                     }
                 } else {
-                    showInRadius((Player) sender, radius);                    
+                    showInRadius((Player) sender, radius, debugLevel);
                 }
             } else {
                 sender.sendMessage("This command can only be run by a player!");
@@ -159,7 +159,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    private void showInRadius(Player sender, int radius) {
+    private void showInRadius(Player sender, int radius, Level debugLevel) {
         
         if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && cooldownmap.containsKey(sender.getUniqueId())) {
             long diff = System.currentTimeMillis() - cooldownmap.get(sender.getUniqueId());
@@ -169,7 +169,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
         }
         
-        String itemstring = convertItem(sender.getItemInHand());
+        String itemstring = convertItem(sender.getItemInHand(), debugLevel);
         Boolean found = false;
         String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
         if(debugLevel == Level.INFO) {
@@ -181,7 +181,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         tellRaw(sender, msg);
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
-                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
+                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)), debugLevel);
                 found = true;
             }
         }
@@ -189,16 +189,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", Integer.toString(radius))));
     }
 
-    private void showPlayer(Player sender, Player target) {
-        String itemstring = convertItem(sender.getItemInHand());
+    private void showPlayer(Player sender, Player target, Level debugLevel) {
+        String itemstring = convertItem(sender.getItemInHand(), debugLevel);
         if(debugLevel == Level.INFO) {
             sender.sendMessage(ChatColor.stripColor(itemstring));
         }
         tellRaw(target, getTranslation("player.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)));
-        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)));
+        tellRaw(sender, getTranslation("player.self", ImmutableMap.of("player", target.getName(), "item", itemstring)), debugLevel);
     }
 
-    private String convertItem(ItemStack item) {
+    private String convertItem(ItemStack item, Level debugLevel) {
         ChatColor itemcolor = ChatColor.WHITE;
 
         JSONObject itemJson = new JSONObject();
@@ -559,6 +559,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     private void tellRaw(Player player, String msg) {
+        tellRaw(player, msg, Level.FINE);
+    }
+    
+    private void tellRaw(Player player, String msg, Level debugLevel) {
         if(spigot) {
             getLogger().log(debugLevel, "Tellraw " + player.getName() + ": " + msg);
             try {
