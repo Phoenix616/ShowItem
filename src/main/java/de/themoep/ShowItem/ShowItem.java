@@ -27,6 +27,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -468,6 +469,23 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             
             if(meta instanceof MapMeta && ((MapMeta) meta).isScaling() && !hideVarious) {
                 tagJson.put("map_is_scaling", (byte) 1);
+            }
+            
+            if(meta instanceof BannerMeta) {
+                BannerMeta bm = (BannerMeta) meta;
+                JSONObject blockEntityJson = new JSONObject();
+                blockEntityJson.put("Base", bm.getBaseColor().getDyeData());
+                
+                List<JSONObject> patternList = new ArrayList<JSONObject>();
+                for(Pattern p : bm.getPatterns()) {
+                    JSONObject patternJson = new JSONObject();
+                    patternJson.put("Pattern", p.getPattern().getIdentifier());
+                    patternJson.put("Color", p.getColor().getDyeData());
+                    patternList.add(patternJson);
+                }
+                blockEntityJson.put("Patterns", patternList);
+                
+                tagJson.put("BlockEntityTag", blockEntityJson);
             }
 
             if(meta.getDisplayName() != null) {
