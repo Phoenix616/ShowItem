@@ -19,7 +19,10 @@ package de.themoep.utils;
  */
 
 import org.bukkit.Material;
+import org.bukkit.block.Skull;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -66,7 +69,33 @@ public class TranslationMapping {
         plugin.getLogger().info("TranslationMapping loaded.");
     }
 
-    public String getKey(Material mat) {
+    public String getKey(ItemStack item) {
+        Material mat = item.getType();
+        if(mat == Material.SKULL_ITEM) {
+            String t = "item.skull.";
+            if(item.getItemMeta() instanceof SkullMeta && ((SkullMeta) item.getItemMeta()).getOwner() != null) {
+                t += "player";
+            } else {
+                switch(item.getDurability()) {
+                    case 0:
+                        t += "skeleton";
+                        break;
+                    case 1:
+                        t += "wither";
+                        break;
+                    case 2:
+                        t += "zombie";
+                        break;
+                    case 4:
+                        t += "creeper";
+                        break;
+                    default:
+                        t += "char";
+                        break;
+                }
+            }
+            return t + ".name";
+        }
         if(blockmap.containsKey(mat)) {
             String t = blockmap.get(mat) + ".name";
             if(!t.startsWith("item."))
