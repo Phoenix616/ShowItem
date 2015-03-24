@@ -68,9 +68,15 @@ public class TranslationMapping {
 
     public String getKey(Material mat) {
         if(blockmap.containsKey(mat)) {
-            return "tile." + blockmap.get(mat) + ".name";
+            String t = blockmap.get(mat) + ".name";
+            if(!t.startsWith("item."))
+                t = "tile." + t;
+            return t;
         } else if(itemmap.containsKey(mat)) {
-            return "item." + itemmap.get(mat) + ".name";
+            String t = itemmap.get(mat) + ".name";
+            if(!t.startsWith("tile."))
+                t = "item." + t;
+            return t;
         } else {
             if(mat.isBlock()) {
                 return "tile." + mat.toString().toLowerCase().replace("_block", "").replace("_", "") + ".name";
