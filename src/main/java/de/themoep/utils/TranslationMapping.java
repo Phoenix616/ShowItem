@@ -19,7 +19,6 @@ package de.themoep.utils;
  */
 
 import org.bukkit.Material;
-import org.bukkit.block.Skull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -30,8 +29,7 @@ import java.util.Map;
 
 public class TranslationMapping {
     
-    Map<Material, String> blockmap = new HashMap<Material, String>();
-    Map<Material, String> itemmap = new HashMap<Material, String>();
+    Map<Material, String> transmap = new HashMap<Material, String>();
     
     ConfigAccessor langconfig;
 
@@ -42,25 +40,13 @@ public class TranslationMapping {
         langconfig.reloadConfig();
         langconfig.saveDefaultConfig();
 
-        ConfigurationSection blocksection = langconfig.getConfig().getConfigurationSection("mapping.blocks");
+        ConfigurationSection blocksection = langconfig.getConfig().getConfigurationSection("mapping");
         for(String s : blocksection.getKeys(false)) {
             try {
                 Material mat = Material.valueOf(s.toUpperCase());
                 String mckey = blocksection.getString(s);
-                blockmap.put(mat, mckey);
+                transmap.put(mat, mckey);
                 
-                //plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
-            } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("[TranslationMapping] " + s + " is not a valid Bukkit material name!");
-            }
-        }
-        ConfigurationSection itemsection = langconfig.getConfig().getConfigurationSection("mapping.items");
-        for(String s : itemsection.getKeys(false)) {
-            try {
-                Material mat = Material.valueOf(s.toUpperCase());
-                String mckey = itemsection.getString(s);
-                itemmap.put(mat, mckey);
-
                 //plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
                 plugin.getLogger().warning("[TranslationMapping] " + s + " is not a valid Bukkit material name!");
@@ -96,15 +82,11 @@ public class TranslationMapping {
             }
             return t + ".name";
         }
-        if(blockmap.containsKey(mat)) {
-            String t = blockmap.get(mat) + ".name";
-            if(!t.startsWith("item."))
-                t = "tile." + t;
-            return t;
-        } else if(itemmap.containsKey(mat)) {
-            String t = itemmap.get(mat) + ".name";
-            if(!t.startsWith("tile."))
-                t = "item." + t;
+        if(transmap.containsKey(mat)) {
+            String t = transmap.get(mat) + ".name";
+            if(!t.startsWith("item.") && !t.startsWith("tile.")) {
+                t = (mat.isBlock()) ? "tile." : "item." + t;
+            }
             return t;
         } else {
             if(mat.isBlock()) {
