@@ -244,3 +244,5 @@ idmapping:
     mcid: nether_wart
   SULPHUR:
     mcid: gunpowder
+  TRAP_DOOR:
+    mcid: trapdoor
