@@ -543,7 +543,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
      */
     private String toMojangJsonString(String json) {
         json = json.replace("\\\"", "{ESCAPED_QUOTE}");
-        json = json.replaceAll("([\\{\\[,])\"|\"(:)", "$1$2");
+        json = json.replaceAll("\"([a-zA-Z]*)\":", "$1:");
         json = json.replace("{ESCAPED_QUOTE}", "\\\"");
         return json;
     }
