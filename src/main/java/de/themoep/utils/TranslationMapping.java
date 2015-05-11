@@ -63,6 +63,8 @@ public class TranslationMapping {
                                 }
                                 transmap.put(matkey + ":" + damage, mckey);
                             }
+                        } else {
+                            plugin.getLogger().warning("[TranslationMapping] The template " + template + " does not exist!");
                         }
                     }
                     
