@@ -68,7 +68,7 @@ public class TranslationMapping {
                         }
                     }
                     
-                    ConfigurationSection damagesection = extrasection.getConfigurationSection("damagevalues");
+                    ConfigurationSection damagesection = extrasection.getConfigurationSection("types");
                     if(damagesection != null) {
                         for(String damage : damagesection.getKeys(false)) {
                             String mckey = damagesection.getString(damage);
