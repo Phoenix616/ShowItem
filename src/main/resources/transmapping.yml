@@ -16,7 +16,24 @@ mapping:
   LONG_GRASS: tallgrass
   DEAD_BUSH: tallgrass.shrub
   PISTON_BASE: pistonBase
-  WOOL: cloth
+  WOOL:
+    general: cloth
+    15: black
+    14: red
+    13: green
+    12: brown
+    11: blue
+    10: purple
+    9: cyan
+    8: silver
+    7: gray
+    6: pink
+    5: lime
+    4: yellow
+    3: lightBlue
+    2: magenta
+    1: orange
+    0: white
   YELLOW_FLOWER: flower1.dandelion
   RED_ROSE: flower2.poppy
   BROWN_MUSHROOM:
@@ -292,6 +309,13 @@ mapping:
   EMPTY_MAP:
   GOLDEN_CARROT:
   SKULL_ITEM:
+    general: skull
+    damagevalues:
+      0: skeleton
+      1: wither
+      2: zombie
+      3: char
+      4: creeper
   CARROT_STICK:
   NETHER_STAR:
   PUMPKIN_PIE:

@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class TranslationMapping {
     
-    Map<Material, String> transmap = new HashMap<Material, String>();
+    Map<String, String> transmap = new HashMap<String, String>();
     
     ConfigAccessor langconfig;
 
@@ -41,15 +41,35 @@ public class TranslationMapping {
         langconfig.saveDefaultConfig();
 
         ConfigurationSection blocksection = langconfig.getConfig().getConfigurationSection("mapping");
-        for(String s : blocksection.getKeys(false)) {
+        for(String matname : blocksection.getKeys(false)) {
             try {
-                Material mat = Material.valueOf(s.toUpperCase());
-                String mckey = blocksection.getString(s);
-                transmap.put(mat, mckey);
+                String matkey = matname.toUpperCase();
+                Material.valueOf(matkey);
+                ConfigurationSection extrasection = blocksection.getConfigurationSection(matname);
                 
+                if(extrasection != null) {
+                    String general = blocksection.getString("general");
+                    if(general != null) {
+                        transmap.put(matkey, general);
+                    }
+                    
+                    ConfigurationSection damagesection = extrasection.getConfigurationSection("damagevalues");
+                    if(damagesection != null) {
+                        for (String damage : damagesection.getKeys(false)) {
+                            String mckey = damagesection.getString(damage);
+                            if(general != null) {
+                                mckey = general + "." + mckey;
+                            }
+                            transmap.put(matkey + ":" + damage, mckey);
+                        }
+                    }
+                } else {
+                    transmap.put(matkey, blocksection.getString(matname));
+                }
+
                 //plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
-                plugin.getLogger().warning("[TranslationMapping] " + s + " is not a valid Bukkit material name!");
+                plugin.getLogger().warning("[TranslationMapping] " + matname + " is not a valid Bukkit material name!");
             }
         }
         plugin.getLogger().info("TranslationMapping loaded.");
@@ -57,43 +77,20 @@ public class TranslationMapping {
 
     public String getKey(ItemStack item) {
         Material mat = item.getType();
-        if(mat == Material.SKULL_ITEM) {
-            String t = "item.skull.";
-            if(item.getItemMeta() instanceof SkullMeta && ((SkullMeta) item.getItemMeta()).getOwner() != null) {
-                t += "player";
-            } else {
-                switch(item.getDurability()) {
-                    case 0:
-                        t += "skeleton";
-                        break;
-                    case 1:
-                        t += "wither";
-                        break;
-                    case 2:
-                        t += "zombie";
-                        break;
-                    case 4:
-                        t += "creeper";
-                        break;
-                    default:
-                        t += "char";
-                        break;
-                }
-            }
-            return t + ".name";
+        if(mat == Material.SKULL_ITEM && item.getItemMeta() instanceof SkullMeta && ((SkullMeta) item.getItemMeta()).getOwner() != null) {
+                return "item.skull.player.name";
         }
-        if(transmap.containsKey(mat)) {
-            String t = transmap.get(mat) + ".name";
-            if(!t.startsWith("item.") && !t.startsWith("tile.")) {
-                t = (mat.isBlock()) ? "tile." : "item." + t;
-            }
-            return t;
+        String trans = "";
+        if(transmap.containsKey(mat.toString() + ":" + item.getDurability())) {
+            trans = transmap.get(mat.toString() + ":" + item.getDurability());
+        } else if(transmap.containsKey(mat.toString())) {
+            trans = transmap.get(mat.toString());
         } else {
-            if(mat.isBlock()) {
-                return "tile." + mat.toString().toLowerCase().replace("_block", "").replace("_", "") + ".name";
-            } else {
-                return "item." + mat.toString().toLowerCase().replace("_item", "").replace("_", "") + ".name";
-            }
+            trans = mat.toString().toLowerCase().replace("_block", "").replace("_item", "").replace("_", "");
         }
+        if(!trans.startsWith("item.") && !trans.startsWith("tile.")) {
+            trans = (mat.isBlock()) ? "tile." : "item." + trans;
+        }
+        return trans + ".name";
     }
 }
