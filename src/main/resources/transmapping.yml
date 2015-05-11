@@ -16,10 +16,19 @@ templates:
     2: magenta
     1: orange
     0: white
+  slabs:  
+    0: stone
+    1: sand
+    2: wood
+    3: cobble
+    4: brick
+    5: smoothStoneBrick
+    6: netherBrick
+    7: quartz
 mapping:
   STONE: 
     general: stone
-    damagevalues:
+    types:
       0: stone
       1: granite
       2: graniteSmooth
@@ -31,7 +40,7 @@ mapping:
   COBBLESTONE: stonebrick
   SAPLING: 
     general: sapling
-    damagevalues:
+    types:
       0: oak
       1: spruce
       2: birch
@@ -41,7 +50,11 @@ mapping:
   GOLD_ORE: oreGold
   IRON_ORE: oreIron
   COAL_ORE: oreCoal
-  SPONGE: sponge.dry
+  SPONGE: 
+    general: sponge
+    types:
+      0: dry
+      1: wet
   LAPIS_ORE: oreLapis
   LAPIS_BLOCK: blockLapis
   NOTE_BLOCK: musicBlock
@@ -55,13 +68,28 @@ mapping:
     general: cloth
     special: colors
   YELLOW_FLOWER: flower1.dandelion
-  RED_ROSE: flower2.poppy
+  RED_ROSE: 
+    general: flower2
+    types:
+      0: poppy
+      1: nlueOrchid
+      2: allium
+      3: houstonia
+      4: tulipRed
+      5: tulipOrange
+      6: tulipWhite
+      7: tulipPink
+      8: oxeyeDaisy
   BROWN_MUSHROOM:
   RED_MUSHROOM:
   GOLD_BLOCK: blockGold
   IRON_BLOCK: blockIron
-  DOUBLE_STEP: stoneSlab
-  STEP: stoneSlab
+  DOUBLE_STEP:
+    general: stoneSlab
+    template: slabs
+  STEP: 
+    general: stoneSlab
+    template: slabs
   MOSSY_COBBLESTONE: stoneMoss
   MOB_SPAWNER: mobSpawner
   WOOD_STAIRS: stairsWood
@@ -134,7 +162,11 @@ mapping:
   BIRCH_WOOD_STAIRS: stairsWoodBirch
   JUNGLE_WOOD_STAIRS: stairsWoodJungle
   COMMAND: commandBlock
-  COBBLE_WALL: cobbleWall.normal
+  COBBLE_WALL: 
+    general: cobbleWall
+    types:
+      0: normal
+      1: mossy
   FLOWER_POT: item.flowerPot
   CARROT: item.carrots
   POTATO: item.potato
@@ -163,14 +195,27 @@ mapping:
   DARK_OAK_STAIRS: stairsWoodDarkOak
   SLIME_BLOCK: slime
   IRON_TRAPDOOR: ironTrapdoor
-  PRISMARINE: prismarine.rough
+  PRISMARINE: 
+    general: prismarine
+    types:
+      0: rough
+      1: bricks
+      2: dark
   SEA_LANTERN: seaLantern
   HAY_BLOCK: hayBlock
   CARPET: woolCarpet
   HARD_CLAY: clayHardened
   COAL_BLOCK: blockCoal
   PACKED_ICE: icePacked
-  DOUBLE_PLANT: doublePlant
+  DOUBLE_PLANT: 
+    general: doublePlant
+    types:
+      0: sunflower
+      1: syringa
+      2: grass
+      3: fern
+      4: rose
+      5: paeonia
   STANDING_BANNER: item.banner.white
   WALL_BANNER: item.banner.white
   DAYLIGHT_DETECTOR_INVERTED: daylightDetector
@@ -336,7 +381,7 @@ mapping:
   GOLDEN_CARROT:
   SKULL_ITEM:
     general: skull
-    damagevalues:
+    types:
       0: skeleton
       1: wither
       2: zombie
