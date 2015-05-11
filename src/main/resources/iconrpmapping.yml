@@ -193,11 +193,11 @@ map:
   - nether_star
   - clay_ball
   - slimeball
-  - skeleton_skull
-  - wither_skeleton_skull
-  - zombie_head
-  - head
-  - creeper_head
+  - skull_item
+  - skull_item:1
+  - skull_item:2
+  - skull_item:3
+  - skull_item:4
   - stick
   - bone
   - blaze_rod

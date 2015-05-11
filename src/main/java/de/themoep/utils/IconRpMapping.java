@@ -82,16 +82,9 @@ public class IconRpMapping {
      */
     public String getIcon(ItemStack item, boolean escape) {
         ItemMeta meta = item.getItemMeta();
+        String iconstr = "";
         if(meta instanceof LeatherArmorMeta) {
-            return ColorUtils.getNearestChatColor(((LeatherArmorMeta) meta).getColor()) + getIcon("white_" + item.getType().toString(), false) + ChatColor.RESET;
-        } else if(item.getType() == Material.SKULL_ITEM) {
-            switch(item.getDurability()) {
-                case 1: return getIcon("wither_skeleton_skull", escape);
-                case 2: return getIcon("zombie_head", escape);
-                case 3: return getIcon("head", escape);
-                case 4: return getIcon("creeper_head", escape);
-                default: return getIcon("skeleton_skull", escape);
-            }
+            iconstr = ColorUtils.getNearestChatColor(((LeatherArmorMeta) meta).getColor()) + getIcon("white_" + item.getType().toString(), false) + ChatColor.RESET;
         } else if(item.getType() == Material.POTION) {
             String key = "water_bottle";
             if(item.getDurability() == 0)
@@ -106,19 +99,23 @@ public class IconRpMapping {
             
             if(bits[1])
                 splash = "splash_";
-            String icon = getIcon(splash + "potion_of_" + key, true);
-            if(icon.isEmpty())
-                icon = getIcon(splash + key + "_potion", true);
-            return icon;
+            iconstr = getIcon(splash + "potion_of_" + key, true);
+            if(iconstr.isEmpty())
+                iconstr = getIcon(splash + key + "_potion", true);
         } else if(meta instanceof FireworkEffectMeta) {
             FireworkEffect fe = ((FireworkEffectMeta) meta).getEffect();
             Color median = fe.getColors().get(0);
             for(int i = 1; i < fe.getColors().size(); i++)
                 median.mixColors(fe.getColors().get(i));
-            
-            return getIcon(item.getType().toString() + "_" + ColorUtils.getNearestChatColor(median).name(), escape);
+
+            iconstr = getIcon(item.getType().toString() + "_" + ColorUtils.getNearestChatColor(median).name(), escape);
+        } else {
+            iconstr = getIcon(item.getType().toString() + ":" + item.getDurability(), escape);
         }
-        return getIcon(item.getType().toString(), escape);
+        if(ChatColor.stripColor(iconstr).isEmpty()) {
+            iconstr = getIcon(item.getType().toString(), escape);
+        }
+        return iconstr;
     }
 
     /**
