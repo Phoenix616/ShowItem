@@ -1,23 +1,5 @@
-mapping:
-  STONE: stone.stone
-  DIRT: dirt.dirt
-  COBBLESTONE: stonebrick
-  SAPLING: sapling.oak
-  GOLD_ORE: oreGold
-  IRON_ORE: oreIron
-  COAL_ORE: oreCoal
-  SPONGE: sponge.dry
-  LAPIS_ORE: oreLapis
-  LAPIS_BLOCK: blockLapis
-  NOTE_BLOCK: musicBlock
-  POWERED_RAIL: goldenRail
-  DETECTOR_RAIL: detectorRail
-  PISTON_STICKY_BASE: pistonStickyBase
-  LONG_GRASS: tallgrass
-  DEAD_BUSH: tallgrass.shrub
-  PISTON_BASE: pistonBase
-  WOOL:
-    general: cloth
+templates:
+  colors:    
     15: black
     14: red
     13: green
@@ -34,6 +16,44 @@ mapping:
     2: magenta
     1: orange
     0: white
+mapping:
+  STONE: 
+    general: stone
+    damagevalues:
+      0: stone
+      1: granite
+      2: graniteSmooth
+      3: diorite
+      4: dioriteSmooth
+      5: andesite
+      6: andestieSmooth
+  DIRT: dirt.dirt
+  COBBLESTONE: stonebrick
+  SAPLING: 
+    general: sapling
+    damagevalues:
+      0: oak
+      1: spruce
+      2: birch
+      3: jungle
+      4: acacia
+      5: big_oak
+  GOLD_ORE: oreGold
+  IRON_ORE: oreIron
+  COAL_ORE: oreCoal
+  SPONGE: sponge.dry
+  LAPIS_ORE: oreLapis
+  LAPIS_BLOCK: blockLapis
+  NOTE_BLOCK: musicBlock
+  POWERED_RAIL: goldenRail
+  DETECTOR_RAIL: detectorRail
+  PISTON_STICKY_BASE: pistonStickyBase
+  LONG_GRASS: tallgrass
+  DEAD_BUSH: tallgrass.shrub
+  PISTON_BASE: pistonBase
+  WOOL:
+    general: cloth
+    special: colors
   YELLOW_FLOWER: flower1.dandelion
   RED_ROSE: flower2.poppy
   BROWN_MUSHROOM:
@@ -73,7 +93,9 @@ mapping:
   DIODE_BLOCK_OFF: diode
   DIODE_BLOCK_ON: diode
   LOCKED_CHEST: lockedchest
-  STAINED_GLASS: stainedGlass
+  STAINED_GLASS: 
+    general: stainedGlass
+    template: colors
   TRAP_DOOR: trapdoor
   MONSTER_EGGS: monsterStoneEgg
   SMOOTH_BRICK: stonebricksmooth
@@ -129,8 +151,12 @@ mapping:
   QUARTZ_BLOCK: quartzBlock
   QUARTZ_STAIRS: stairsQuartz
   ACTIVATOR_RAIL: activatorRail
-  STAINED_CLAY: clayHardenedStained
-  STAINED_GLASS_PANE: thinStainedGlass
+  STAINED_CLAY: 
+    general: clayHardenedStained
+    template: colors
+  STAINED_GLASS_PANE:
+    general: thinStainedGlass
+    template: colors
   LEAVES_2: leaves
   LOG_2: log
   ACACIA_STAIRS: stairsWoodAcacia

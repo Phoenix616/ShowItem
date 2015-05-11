@@ -45,19 +45,32 @@ public class TranslationMapping {
             try {
                 String matkey = matname.toUpperCase();
                 Material.valueOf(matkey);
-                ConfigurationSection extrasection = blocksection.getConfigurationSection(matname);
                 
-                if(extrasection != null) {
+                if(blocksection.isConfigurationSection(matname)) {
+                    ConfigurationSection extrasection = blocksection.getConfigurationSection(matname);
                     String general = blocksection.getString("general");
                     if(general != null) {
                         transmap.put(matkey, general);
                     }
+                    String template = blocksection.getString("template");
+                    if(template != null) {
+                        ConfigurationSection templatesection = langconfig.getConfig().getConfigurationSection("templates." + template);
+                        if(templatesection != null) {
+                            for(String damage : templatesection.getKeys(false)) {
+                                String mckey = templatesection.getString(damage);
+                                if (general != null) {
+                                    mckey = general + "." + mckey;
+                                }
+                                transmap.put(matkey + ":" + damage, mckey);
+                            }
+                        }
+                    }
                     
                     ConfigurationSection damagesection = extrasection.getConfigurationSection("damagevalues");
                     if(damagesection != null) {
-                        for (String damage : damagesection.getKeys(false)) {
+                        for(String damage : damagesection.getKeys(false)) {
                             String mckey = damagesection.getString(damage);
-                            if(general != null) {
+                            if (general != null) {
                                 mckey = general + "." + mckey;
                             }
                             transmap.put(matkey + ":" + damage, mckey);
