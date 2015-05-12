@@ -580,7 +580,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 JSONParser jp = new JSONParser();
                 boolean isPlainText = false;
                 try {
-                    Object o = jp.parse(r);
+                    Object o = jp.parse("[" + r + "]");
                     if(!(o instanceof JSONObject)) {
                         isPlainText = true;
                     }                    
