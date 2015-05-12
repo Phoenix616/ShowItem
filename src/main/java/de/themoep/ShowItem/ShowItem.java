@@ -578,15 +578,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             for (String variable : replacements.keySet()) {
                 String r = replacements.get(variable);
                 JSONParser jp = new JSONParser();
-                boolean isPlainText = false;
-                try {
-                    Object o = jp.parse("[" + r + "]");
-                    if(!(o instanceof JSONObject)) {
-                        isPlainText = true;
-                    }                    
-                } catch (ParseException e) {
-                    isPlainText = true;
-                }
+                boolean isPlainText = !(r.startsWith("{") && r.endsWith("}"));
                 if(isPlainText)
                     r = "{\"text\":\"" + msgsecondarycolor + r + "\"}";
                 string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
