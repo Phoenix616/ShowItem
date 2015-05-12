@@ -104,7 +104,7 @@ public class TranslationMapping {
             trans = mat.toString().toLowerCase().replace("_block", "").replace("_item", "").replace("_", "");
         }
         if(!trans.startsWith("item.") && !trans.startsWith("tile.")) {
-            trans = (mat.isBlock()) ? "tile." : "item." + trans;
+            trans = ((mat.isBlock()) ? "tile." : "item.") + trans;
         }
         return trans + ".name";
     }
