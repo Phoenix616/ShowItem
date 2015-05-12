@@ -538,9 +538,14 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         }        
         nameJson.put("translate", transmap.getKey(item));
         nameJson.put("hoverEvent", hoverJson);
+
+        String lbracket = itemcolor + "[";
+        if (useIconRp) {
+            lbracket += lbracket + icon;
+        }
         
         JSONObject lbracketJson = new JSONObject();
-        lbracketJson.put("text", itemcolor + "[");
+        lbracketJson.put("text", lbracket);
         lbracketJson.put("hoverEvent", hoverJson);
         
         JSONObject rbracketJson = new JSONObject();
