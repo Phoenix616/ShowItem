@@ -541,7 +541,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         String lbracket = itemcolor + "[";
         if (useIconRp) {
-            lbracket += lbracket + icon;
+            lbracket += icon;
         }
         
         JSONObject lbracketJson = new JSONObject();
