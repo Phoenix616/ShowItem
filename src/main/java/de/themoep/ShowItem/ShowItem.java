@@ -581,7 +581,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 boolean isPlainText = false;
                 try {
                     Object o = jp.parse(r);
-                    if(!(o instanceof JSONObject) || !((JSONObject) o).containsKey("text")) {
+                    if(!(o instanceof JSONObject)) {
                         isPlainText = true;
                     }                    
                 } catch (ParseException e) {
