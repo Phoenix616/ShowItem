@@ -540,15 +540,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         nameJson.put("hoverEvent", hoverJson);
         
         JSONObject lbracketJson = new JSONObject();
-        nameJson.put("text", itemcolor + "[");
-        nameJson.put("hoverEvent", hoverJson);
+        lbracketJson.put("text", itemcolor + "[");
+        lbracketJson.put("hoverEvent", hoverJson);
         
         JSONObject rbracketJson = new JSONObject();
-        nameJson.put("text", itemcolor + "]");
-        nameJson.put("hoverEvent", hoverJson);
+        rbracketJson.put("text", itemcolor + "]");
+        rbracketJson.put("hoverEvent", hoverJson);
 
         getLogger().log(debugLevel, "Json string: " + nameJson.toJSONString());
-        return lbracketJson.toJSONString() + nameJson.toJSONString() + rbracketJson.toJSONString();
+        return lbracketJson.toJSONString() + "," + nameJson.toJSONString() + "," + rbracketJson.toJSONString();
     }
 
     /**
@@ -572,7 +572,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private String getTranslation(String key, Map<String,String> replacements) {
-        String string = "[\"\",{\"text\":\"" + getTranslation(key).replace("\"", "\\\"") + "\"}]";
+        String string = "[{\"text\":\"" + getTranslation(key).replace("\"", "\\\"") + "\"}]";
 
         if (replacements != null)
             for (String variable : replacements.keySet()) {
