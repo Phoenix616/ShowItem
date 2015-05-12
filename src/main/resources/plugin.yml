@@ -1,7 +1,7 @@
-name: ShowItem
+name: ${project.name}
 main: de.themoep.ShowItem.ShowItem
-version: 0.1.2
-description: Show items in chat via a command. Also let's you see the item's info via hovering over the message
+version: '${minecraft.plugin.version}'
+description: ${project.description}
 authors: [Phoenix616]
 commands:
    showitem:
