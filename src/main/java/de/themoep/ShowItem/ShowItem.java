@@ -21,6 +21,7 @@ package de.themoep.ShowItem;
 import com.google.common.collect.ImmutableMap;
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
+import de.themoep.utils.TranslationMapping;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
@@ -49,6 +50,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     ChatColor msgsecondarycolor = ChatColor.YELLOW;
     
     IdMapping idmap;
+    TranslationMapping transmap;
     
     int defaultradius;
     int cooldown;
@@ -57,6 +59,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     Map<UUID, Long> cooldownmap = new HashMap<UUID, Long>();
     
     IconRpMapping iconrpmap;
+
     
     ConfigurationSection lang;
     
@@ -84,6 +87,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         lang = this.getConfig().getConfigurationSection("lang");
         useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
+        transmap = new TranslationMapping(this);
         if(useIconRp) {
             this.iconrpmap = new IconRpMapping(this);
         }
@@ -203,7 +207,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         String icon = "";
         if(useIconRp)
             icon = iconrpmap.getIcon(item, true);
-        String name = idmap.getHumanName(item.getType());
+        //String name = idmap.getHumanName(item.getType());
+        String name = "";
 
         itemJson.put("id", "minecraft:"+ idmap.getMCid(item.getType()));
 
@@ -335,6 +340,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(meta instanceof BookMeta) {
                 if(!hideVarious) {
                     BookMeta bm = (BookMeta) meta;
+                    name = idmap.getHumanName(item.getType());
                     if (bm.getTitle() != null) {
                         tagJson.put("title", bm.getTitle());
                         name += ": " + bm.getTitle();
@@ -509,31 +515,40 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 tagJson.put("display", displayJson);
             }
         }
-
-
+        
         if(!tagJson.isEmpty()) {
             itemJson.put("tag", tagJson);
         }
 
-        String resultname = itemcolor + "[";
-        if(useIconRp) {
-            resultname += icon;
-        }
-        resultname += itemcolor + name + ChatColor.RESET + "" +  itemcolor + "]";
-        
+
         JSONObject hoverJson = new JSONObject();
         hoverJson.put("action", "show_item");
         String mojangItemJson = toMojangJsonString(itemJson.toJSONString());
         getLogger().log(debugLevel, "toMojangJsonString: " + mojangItemJson);
-        
-        hoverJson.put("value", mojangItemJson);
 
-        JSONObject nameJson = new JSONObject ();
-        nameJson.put("text", resultname);
+        hoverJson.put("value", mojangItemJson);
+        
+        JSONObject nameJson = new JSONObject ();        
+        if(!name.isEmpty()) {
+            String resultname = itemcolor + name + ChatColor.RESET;
+            if (useIconRp) {
+                resultname = icon + resultname;
+            }
+            nameJson.put("text", resultname);
+        }        
+        nameJson.put("translate", transmap.getKey(item));
+        nameJson.put("hoverEvent", hoverJson);
+        
+        JSONObject lbracketJson = new JSONObject();
+        nameJson.put("text", itemcolor + "[");
+        nameJson.put("hoverEvent", hoverJson);
+        
+        JSONObject rbracketJson = new JSONObject();
+        nameJson.put("text", itemcolor + "]");
         nameJson.put("hoverEvent", hoverJson);
 
         getLogger().log(debugLevel, "Json string: " + nameJson.toJSONString());
-        return nameJson.toJSONString();
+        return lbracketJson.toJSONString() + nameJson.toJSONString() + rbracketJson.toJSONString();
     }
 
     /**
