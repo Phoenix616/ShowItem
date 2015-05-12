@@ -577,10 +577,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if (replacements != null)
             for (String variable : replacements.keySet()) {
                 String r = replacements.get(variable);
-                boolean isPlainText = !(r.startsWith("{") && r.endsWith("}"));
-                if(isPlainText)
-                    r = "{\"text\":\"" + msgsecondarycolor + r + "\"}";
-                string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
+                boolean isJson = r.startsWith("{") && r.endsWith("}");
+                if(isJson) {
+                    string = string.replace("%" + variable + "%", "\"}," + r + ",{\"text\":\"" + msgcolor);
+                } else {
+                    string = string.replace("%" + variable + "%", r + msgcolor);
+                }
+                
             }
         return string;
     }
