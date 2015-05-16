@@ -1,248 +1,101 @@
 idmapping:
-  SOIL:
-    mcid: farmland
-  PISTON_BASE:
-    mcid: piston
-  SKULL_ITEM:
-    mcid: skull
-  WOOD_DOOR:
-    mcid: wooden_door
-    alias: Oak Door
-  WOOD_SPADE:
-    mcid: wooden_shovel
-  WOOD_SWORD:
-    mcid: wooden_sword
-  WOOD_HOE:
-    mcid: wooden_hoe
-  WOOD_AXE:
-    mcid: wooden_axe
-  STONE_SPADE:
-    mcid: stone_shovel
-  GOLD_SPADE:
-    mcid: golden_shovel
-  GOLD_AXE:
-    mcid: golden_axe
-  GOLD_PICKAXE:
-    mcid: golden_pickaxe
-  GOLD_HOE:
-    mcid: golden_hoe
-  GOLD_SWORD:
-    mcid: golden_sword
-  IRON_SPADE:
-    mcid: iron_shovel
-  DIAMOND_SPADE:
-    mcid: diamond_shovel
-  FIREWORK:
-    mcid: fireworks
-  GOLD_HELMET:
-    mcid: golden_helmet
-  GOLD_CHESTPLATE:
-    mcid: golden_chestplate
-  GOLD_LEGGINGS:
-    mcid: golden_leggings
-  GOLD_BOOTS:
-    mcid: golden_boots
-  MONSTER_EGG:
-    mcid: spawn_egg
-  EXP_BOTTLE:
-    mcid: experience_bottle
-    alias: Bottle o' Enchanting
-  BOOK_AND_QUILL:
-    mcid: writable_book
-    alias: Book and Quill
-  EYE_OF_ENDER:
-    mcid: ender_eye
-    alias: Eye of Ender
-  SPECKLED_MELON:
-    mcid: speckled_melon
-    alias: Glistering Melon
-  FLINT_AND_STEEL:
-    mcid: flint_and_steel
-  MAP:
-    mcid: filled_map
-  EMPTY_MAP:
-    mcid: map
-    alias: Empty Map
-  GOLD_RECORD:
-    mcid: record_13
-  GREEN_RECORD:
-    mcid: record_cat
-  RECORD_3:
-    mcid: record_blocks
-  RECORD_4:
-    mcid: record_chirp
-  RECORD_5:
-    mcid: record_far
-  RECORD_6:
-    mcid: record_mall
-  RECORD_7:
-    mcid: record_mellohi
-  RECORD_8:
-    mcid: record_stal
-  RECORD_9:
-    mcid: record_strad
-  RECORD_10:
-    mcid: record_ward
-  RECORD_12:
-    mcid: record_wait
-  ENDER_PORTAL_FRAME:
-    mcid: end_portal_frame
-  RED_ROSE:
-    mcid: red_flower
-  WATER_LILY:
-    mcid: waterlily
-    alias: Lily Pad
-  WEB:
-    alias: Cobweb
-  MONSTER_EGGS:
-    mcid: monster_egg
-    alias: Monster Egg Stone
-  THIN_GLASS:
-    mcid: glass_pane
-  ENCHANTMENT_TABLE:
-    mcid: enchanting_table
-  FENCE:
-    alias: Oak Fence
-  SLIME_BLOCK:
-    mcid: slime
-    alias: Slime Block
-  LEAVES_2:
-    mcid: leaves2
-  LOG_2:
-    mcid: log2
-  GRASS:
-    alias: Grass Block
-  WOOD:
-    mcid: planks
-    alias: Wood Planks
-  ENDER_STONE:
-    mcid: end_stone
-  MYCEL:
-    mcid: mycelium
-  BRICK:
-    mcid: brick_block
-  CLAY_BRICK:
-    mcid: brick
-    alias: Clay Brick
-  HARD_CLAY:
-    mcid: hardened_clay
-  STAINED_CLAY:
-    mcid: stained_hardened_clay
-    alias: Stained Clay
-  COBBLESTONE_STAIRS:
-    mcid: stone_stairs
-    alias: Cobblestone Stairs
-  COBBLE_WALL:
-    mcid: cobblestone_wall
-  STEP:
-    mcid: stone_slab
-  WOOD_STEP:
-    mcid: wooden_slab
-    alias: Wood Slab
-  WOOD_STAIRS:
-    mcid: oak_stairs
-  SMOOTH_STAIRS:
-    mcid: stone_brick_stairs
-  SPRUCE_WOOD_STAIRS:
-    mcid: spruce_stairs
-    alias: Spruce Wood Stairs
-  BIRCH_WOOD_STAIRS:
-    mcid: birch_stairs
-    alias: Birch Wood Stairs
-  JUNGLE_WOOD_STAIRS:
-    mcid: jungle_stairs
-    alias: Jungle Wood Stairs
-  ACACIA_STAIRS:
-    alias: Acacia Wood Stairs
-  DARK_OAK_STAIRS:
-    alias: Dark Oak Wood Stairs
-  HAY_BLOCK:
-    alias: Hay Bale
-  LONG_GRASS:
-    mcid: tallgrass
-  DEAD_BUSH:
-    mcid: deadbush
+  SOIL: farmland
+  PISTON_BASE: piston
+  SKULL_ITEM: skull
+  WOOD_DOOR: wooden_door
+  WOOD_SPADE: wooden_shovel
+  WOOD_SWORD: wooden_sword
+  WOOD_HOE: wooden_hoe
+  WOOD_AXE: wooden_axe
+  STONE_SPADE: stone_shovel
+  GOLD_SPADE: golden_shovel
+  GOLD_AXE: golden_axe
+  GOLD_PICKAXE: golden_pickaxe
+  GOLD_HOE: golden_hoe
+  GOLD_SWORD: golden_sword
+  IRON_SPADE: iron_shovel
+  DIAMOND_SPADE: diamond_shovel
+  FIREWORK: fireworks
+  GOLD_HELMET: golden_helmet
+  GOLD_CHESTPLATE: golden_chestplate
+  GOLD_LEGGINGS: golden_leggings
+  GOLD_BOOTS: golden_boots
+  MONSTER_EGG: spawn_egg
+  EXP_BOTTLE: experience_bottle
+  BOOK_AND_QUILL: writable_book
+  EYE_OF_ENDER: ender_eye
+  SPECKLED_MELON: speckled_melon
+  FLINT_AND_STEEL: flint_and_steel
+  MAP: filled_map
+  EMPTY_MAP: map
+  GOLD_RECORD: record_13
+  GREEN_RECORD: record_cat
+  RECORD_3: record_blocks
+  RECORD_4: record_chirp
+  RECORD_5: record_far
+  RECORD_6: record_mall
+  RECORD_7: record_mellohi
+  RECORD_8: record_stal
+  RECORD_9: record_strad
+  RECORD_10: record_ward
+  RECORD_12: record_wait
+  ENDER_PORTAL_FRAME: end_portal_frame
+  RED_ROSE: red_flower
+  WATER_LILY: waterlily
+  MONSTER_EGGS: monster_egg
+  THIN_GLASS: glass_pane
+  ENCHANTMENT_TABLE: enchanting_table
+  SLIME_BLOCK: slime
+  LEAVES_2: leaves2
+  LOG_2: log2
+  WOOD: planks
+  ENDER_STONE: end_stone
+  MYCEL: mycelium
+  BRICK: brick_block
+  CLAY_BRICK: brick
+  HARD_CLAY: hardened_clay
+  STAINED_CLAY: stained_hardened_clay
+  COBBLESTONE_STAIRS: stone_stairs
+  COBBLE_WALL: cobblestone_wall
+  STEP: stone_slab
+  WOOD_STEP: wooden_slab
+  WOOD_STAIRS: oak_stairs
+  SMOOTH_STAIRS: stone_brick_stairs
+  SPRUCE_WOOD_STAIRS: spruce_stairs
+  BIRCH_WOOD_STAIRS: birch_stairs
+  JUNGLE_WOOD_STAIRS: jungle_stairs
+  LONG_GRASS: tallgrass
+  DEAD_BUSH: deadbush
     alias: Dead Bush
-  WORKBENCH:
-    mcid: crafting_table
-    alias: Workbench
-  SNOW:
-    mcid: snow_layer
-  SNOW_BLOCK:
-    mcid: snow
+  WORKBENCH: crafting_table
+  SNOW: snow_layer
+  SNOW_BLOCK: snow
     alias: Snow Block
-  DIODE:
-    mcid: repeater
-    alias: Redstone Repeater
-  REDSTONE_COMPARATOR:
-    mcid: comparator
-    alias: Redstone Comparator
-  WOOD_BUTTON:
-    mcid: wooden_button
-  GOLD_PLATE:
-    mcid: light_weighted_pressure_plate
-  IRON_PLATE:
-    mcid: heavy_weighted_pressure_plate
-  DAYLIGHT_DETECTOR:
-    alias: Daylight Sensor
-  POWERED_RAIL:
-    mcid: golden_rail
-    alias: Powered Rail
-  RAILS:
-    mcid: rail
-  STORAGE_MINECART:
-    mcid: chest_minecart
-  POWERED_MINECART:
-    mcid: furnace_minecart
-  EXPLOSIVE_MINECART:
-    mcid: tnt_minecart
-    alias: TNT Minecart
-  CARROT_STICK:
-    mcid: carrot_on_a_stick
-    alias: Carrot on a Stick
-  IRON_BARDING:
-    mcid: iron_horse_armor
-  GOLD_BARDING:
-    mcid: golden_horse_armor
-    alias: Golden Horse Armor
-  DIAMOND_BARDING:
-    mcid: diamond_horse_armor
-  FIREBALL:
-    mcid: fire_charge
-  RAW_FISH:
-    mcid: fish
-    alias: Raw Fish
-  PORK:
-    mcid: porkchop
-    alias: Raw Porkchop
-  JACK_O_LANTERN:
-    mcid: lit_pumpkin
-    alias: "Jack o'Lantern"
-  MUSHROOM_SOUP:
-    mcid: mushroom_stew
-  RAW_BEEF:
-    mcid: beef
-    alias: Raw Beef
-  RAW_CHICKEN:
-    mcid: chicken
-    alias: Raw Chicken
-  RABBIT:
-    alias: Raw Rabbit
-  MUTTON:
-    alias: Raw Mutton
-  RAW_BEEF:
-    mcid: beef
-    alias: Raw Beef
-  LEASH:
-    mcid: lead
-  WATCH:
-    mcid: clock
-  INK_SACK:
-    mcid: dye
-    alias: Dye
-  NETHER_STALK:
-    mcid: nether_wart
-  SULPHUR:
-    mcid: gunpowder
-  TRAP_DOOR:
-    mcid: trapdoor
+  DIODE: repeater
+  REDSTONE_COMPARATOR: comparator
+  WOOD_BUTTON: wooden_button
+  GOLD_PLATE: light_weighted_pressure_plate
+  IRON_PLATE: heavy_weighted_pressure_plate
+  POWERED_RAIL: golden_rail
+  RAILS: rail
+  STORAGE_MINECART: chest_minecart
+  POWERED_MINECART: furnace_minecart
+  EXPLOSIVE_MINECART: tnt_minecart
+  CARROT_STICK: carrot_on_a_stick
+  IRON_BARDING: iron_horse_armor
+  GOLD_BARDING: golden_horse_armor
+  DIAMOND_BARDING: diamond_horse_armor
+  FIREBALL: fire_charge
+  RAW_FISH: fish
+  PORK: porkchop
+  JACK_O_LANTERN: lit_pumpkin
+  MUSHROOM_SOUP: mushroom_stew
+  RAW_BEEF: beef
+  RAW_CHICKEN: chicken
+  RAW_BEEF: beef
+  LEASH: lead
+  WATCH: clock
+  INK_SACK: dye
+  NETHER_STALK: nether_wart
+  SULPHUR: gunpowder
+  TRAP_DOOR: trapdoor

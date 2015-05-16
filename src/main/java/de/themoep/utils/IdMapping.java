@@ -28,7 +28,6 @@ import java.util.Map;
 public class IdMapping {
     
     Map<Material,String> mcidmap = new HashMap<Material, String>();
-    Map<Material,String> aliasmap = new HashMap<Material, String>();
 
     ConfigAccessor idconfig;
 
@@ -43,13 +42,9 @@ public class IdMapping {
         for(String s : section.getKeys(false)) {
             try {
                 Material mat = Material.valueOf(s.toUpperCase());
-                String mcid = section.getString(s + ".mcid");
-                String alias = section.getString(s + ".alias");
+                String mcid = section.getString(s);
                 if (mcid != null) {
                     mcidmap.put(mat, mcid);
-                }
-                if (alias != null) {
-                    aliasmap.put(mat, alias);
                 }
                 //plugin.getLogger().info("[IdMapping] Loaded mapping for Material." + s);
             } catch (IllegalArgumentException e) {
@@ -57,17 +52,6 @@ public class IdMapping {
             }
         }
         plugin.getLogger().info("IdMapping loaded.");
-    }
-
-    /**
-     * Convert the item id to a more human readable name. Should equal the US translation of MC.
-     * @return The alias set int he config or if not existand a capitalized, human friendly id/material name
-     */
-    public String getHumanName(Material mat) {
-        if(aliasmap.containsKey(mat))
-            return aliasmap.get(mat);
-        else
-            return WordUtils.capitalize(getMCid(mat).toLowerCase().replace("_item", "").replace("_", " "));
     }
 
     public String getMCid(Material mat) {

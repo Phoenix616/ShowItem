@@ -340,7 +340,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             if(meta instanceof BookMeta) {
                 if(!hideVarious) {
                     BookMeta bm = (BookMeta) meta;
-                    name = idmap.getHumanName(item.getType());
+                    name = "Book";
                     if (bm.getTitle() != null) {
                         tagJson.put("title", bm.getTitle());
                         name += ": " + bm.getTitle();
