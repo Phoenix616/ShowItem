@@ -1,6 +1,7 @@
 offset: 0x9000
 # The index of a material in this list must correspond to the index of the symbol in the resource pack!
 map:
+  # unicode_page_90:
   - wood_sword
   - wood_pickaxe
   - wood_spade
@@ -101,7 +102,7 @@ map:
   - book
   - book_and_quill
   - written_book
-  - enchanted_book
+  - normal_enchanted_book
   - map
   - empty_map
   - bucket
@@ -125,7 +126,7 @@ map:
   - record_10
   - record_11
   - record_12
-  - exp_bottle
+  - exp_bottle_normal #(not glowing)
   - firework
   - firework_charge
   - firework_charge_spots
@@ -190,7 +191,7 @@ map:
   - flint
   - gold_nugget
   - ghast_tear
-  - nether_star
+  - nether_star_normal #(not glowing)
   - clay_ball
   - slimeball
   - skull_item
@@ -279,6 +280,8 @@ map:
   - splash_dullness_potion
   - strength_potion
   - splash_strength_potion
+  
+  # unicode_page_91:
   - health_potion
   - splash_health_potion
   - harm_potion
@@ -513,6 +516,8 @@ map:
   - torch
   - redstone_torch
   - redstone_torch_off
+  
+  # unicode_page_92:
   - fire_0
   - fire_1
   - fire_2
@@ -769,6 +774,8 @@ map:
   - doublechest
   - trapped_doublechest
   - christmas_doublechest
+  
+  # unicode_page_93:
   - ender_crystal_shell
   - ender_crystal_gem_1
   - ender_crystal_gem_2
@@ -1025,6 +1032,8 @@ map:
   - unused
   - unused
   - unused
+  
+  # unicode_page_94:
   - tfda_zombie
   - tfda_woman
   - unused
@@ -1281,6 +1290,8 @@ map:
   - unused
   - map_christmas_chest
   - map_trapped_chest
+  
+  # unicode_page_95:
   - tfda_zombie_mob
   - tfda_woman_mob
   - unused
@@ -1537,6 +1548,8 @@ map:
   - unused
   - tfda_white_chiseled_sandstone_tile
   - tfda_white_bricks_tile
+
+  # unicode_page_96:
   - white_boat_entity
   - white_sign_front
   - white_sign_back
@@ -1793,6 +1806,8 @@ map:
   - unused
   - unused
   - unused
+  
+  # unicode_page_97:
   - air
   - stone
   - bedrock
@@ -2049,6 +2064,8 @@ map:
   - unused
   - unused
   - unused
+  
+  # unicode_page_98:
   - tfda_bedrock
   - tfda_redstone_ore
   - corrupt_bricks
@@ -2305,11 +2322,13 @@ map:
   - tfda_white_trapped_chest
   - unused
   - unused
-  - glowing_nether_star
-  - glowing_bottle_o'_enchanting
-  - glowing_golden_apple
-  - glowing_enchanted_book
-  - glowing_written_book
+
+  # unicode_page_99:
+  - nether_star #glowing
+  - exp_bottle #glowing
+  - golden_apple:1 #glowing
+  - enchanted_book #glowing
+  - glowing_written_book #glowing
   - unused
   - unused
   - unused
