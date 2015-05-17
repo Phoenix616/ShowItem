@@ -8,14 +8,14 @@ defaultradius: 16
 cooldown: 10
 lang:
   radius:
-    self: 'Du hälst dein Item %item% hoch!'
-    custom: '&8(Sichtweite: %radius%&8 Blöcke)'
-    target: '%player% hält das Item %item% hoch!'
+    self: 'You hold up the item %item%!'
+    custom: '&8(View distance: %radius%&8 blocks)'
+    target: '%player% holds up the item %item%!'
   player:
-    self: 'Du zeigst %player% das Item %item%'
-    target: '%player% zeigt dir das Item %item%'
+    self: 'You show %player% the item %item%'
+    target: '%player% shows you the item %item%'
   error:
-    noitem: '&cDu hast kein Item in der Hand welches du zeigen könntest :('
-    playeroffline: '&cDer Spieler %player%&c ist nicht online'
-    noonearound: '&cEs ist kein Spieler da um dein Item zu sehen :('
-    coolden: '&cDu musst noch %remaining%s&c warten bevor du wieder ein Item zeigen kannst!'
+    noitem: '&cYou don't have an item to show in your hand. :('
+    playeroffline: '&cThe player %player%&c is not online'
+    noonearound: '&cThere are no players around which could see your item :('
+    coolden: '&cYou have to wait %remaining%&c more seconds before showing another item!'
