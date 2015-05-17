@@ -316,33 +316,33 @@ map:
   - saturation_potion
   - splash_saturation_potion
   - splash_mundane_potion
-  - monster_egg
-  - monster_egg_spots
-  - white_spawn_egg
-  - spawn_creeper
-  - spawn_skeleton
-  - spawn_spider
-  - spawn_zombie
-  - spawn_slime
-  - spawn_ghast
-  - spawn_zombie_pigman
-  - spawn_enderman
-  - spawn_cave_spider
-  - spawn_silverfish
-  - spawn_blaze
-  - spawn_magma_cube
-  - spawn_bat
-  - spawn_witch
-  - spawn_pig
-  - spawn_sheep
-  - spawn_cow
-  - spawn_chicken
-  - spawn_squid
-  - spawn_wolf
-  - spawn_mooshroom
-  - spawn_ocelot
-  - spawn_horse
-  - spawn_villager
+  - spawn_egg
+  - spawn_eggspots
+  - monster_egg #white_spawn_egg
+  - monster_egg:50 #creeper
+  - monster_egg:51 #skeleton
+  - monster_egg:52 #spider
+  - monster_egg:54 #zombie
+  - monster_egg:55 #slime
+  - monster_egg:56 #ghast
+  - monster_egg:57 #zombie_pigman
+  - monster_egg:58 #enderman
+  - monster_egg:59 #cave_spider
+  - monster_egg:60 #silverfish
+  - monster_egg:61 #blaze
+  - monster_egg:62 #magma_cube
+  - monster_egg:65 #bat
+  - monster_egg:66 #witch
+  - monster_egg:90 #pig
+  - monster_egg:91 #sheep
+  - monster_egg:92 #cow
+  - monster_egg:93 #chicken
+  - monster_egg:94 #squid
+  - monster_egg:95 #wolf
+  - monster_egg:96 #mooshroom
+  - monster_egg:98 #ocelot
+  - monster_egg:100 #horse
+  - monster_egg:120 #villager
   - spawn_snow_golem
   - spawn_iron_golem
   - spawn_wither_skeleton
