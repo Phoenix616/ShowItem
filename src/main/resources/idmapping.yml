@@ -66,11 +66,9 @@ idmapping:
   JUNGLE_WOOD_STAIRS: jungle_stairs
   LONG_GRASS: tallgrass
   DEAD_BUSH: deadbush
-    alias: Dead Bush
   WORKBENCH: crafting_table
   SNOW: snow_layer
   SNOW_BLOCK: snow
-    alias: Snow Block
   DIODE: repeater
   REDSTONE_COMPARATOR: comparator
   WOOD_BUTTON: wooden_button
