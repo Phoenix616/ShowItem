@@ -588,10 +588,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             NbtCompound attrNbt = (NbtCompound) attrObj;
                             attrJson.put("AttributeName", attrNbt.getString("AttributeName", "ERROR"));
                             attrJson.put("Name", attrNbt.getString("Name", "ERROR"));
-                            attrJson.put("Name", attrNbt.getInteger("Amount", -1));
-                            attrJson.put("Name", attrNbt.getInteger("Operation", -1));
-                            attrJson.put("Name", attrNbt.getInteger("UUIDLeast", -1));
-                            attrJson.put("Name", attrNbt.getInteger("UUIDMost", -1));
+                            attrJson.put("Amount", attrNbt.getInteger("Amount", -1));
+                            attrJson.put("Operation", attrNbt.getInteger("Operation", -1));
+                            attrJson.put("UUIDLeast", attrNbt.getInteger("UUIDLeast", -1));
+                            attrJson.put("UUIDMost", attrNbt.getInteger("UUIDMost", -1));
                             attrList.add(attrJson);
                         }
                     }
