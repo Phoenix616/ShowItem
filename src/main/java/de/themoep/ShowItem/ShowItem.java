@@ -18,12 +18,24 @@ package de.themoep.ShowItem;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.*
  */
 
+import com.comphenix.attribute.NbtFactory;
+import com.comphenix.attribute.NbtFactory.NbtCompound;
+import com.comphenix.attribute.NbtFactory.NbtList;
+
 import com.google.common.collect.ImmutableMap;
+
 import de.themoep.utils.IconRpMapping;
 import de.themoep.utils.IdMapping;
 import de.themoep.utils.TranslationMapping;
+
 import net.md_5.bungee.chat.ComponentSerializer;
-import org.bukkit.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -33,13 +45,21 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -215,14 +235,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         itemJson.put("Damage", item.getDurability());
         
         JSONObject tagJson = new JSONObject();
+
+        boolean hideEnchants = false;
+        boolean hideAttributes = false;
+        boolean hideUnbreakable = false;
+        boolean hideDestroys = false;
+        boolean hidePlacedOn = false;
+        boolean hideVarious = false;
         
         if(item.hasItemMeta()) {
-            boolean hideEnchants = false;
-            boolean hideAttributes = false;
-            boolean hideUnbreakable = false;
-            boolean hideDestroys = false;
-            boolean hidePlacedOn = false;
-            boolean hideVarious = false;
             
             ItemMeta meta = item.getItemMeta();
 
@@ -513,6 +534,71 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 }
                 
                 tagJson.put("display", displayJson);
+            }
+        }
+
+        NbtCompound tagNbt = NbtFactory.fromItemTag(item).getMap("tag", false);
+
+        if (tagNbt != null) {
+
+            if(!hideUnbreakable) {
+                Byte unbreakable = tagNbt.getByte("Unbreakable", (byte) 0);
+                if(unbreakable != 0) {
+                    tagJson.put("Unbreakable", unbreakable);
+                }
+            }
+            
+            if(!hideDestroys) {
+                NbtList destroyNbtList = tagNbt.getList("CanDestroy", false);
+                if(destroyNbtList != null) {
+                    List<String> destroyList = new ArrayList<String>();
+                    for(Object destroyObj : destroyNbtList) {
+                        if(destroyObj instanceof String) {
+                            destroyList.add((String) destroyObj);
+                        }
+                    }
+                    if(destroyList.size() > 0) {
+                        tagJson.put("CanDestroy", destroyList);
+                    }
+                }
+            }
+
+            if(!hidePlacedOn) {
+                NbtList placeNbtList = tagNbt.getList("CanPlaceOn", false);
+                if(placeNbtList != null) {
+                    List<String> placeList = new ArrayList<String>();
+                    for(Object destroyObj : placeNbtList) {
+                        if(destroyObj instanceof String) {
+                            placeList.add((String) destroyObj);
+                        }
+                    }
+                    if(placeList.size() > 0) {
+                        tagJson.put("CanPlaceOn", placeList);
+                    }
+                }
+            }
+
+            if(!hideAttributes) {
+                NbtList attrNbtList = tagNbt.getList("AttributeModifiers", false);
+                if (attrNbtList != null) {
+                    List<JSONObject> attrList = new ArrayList<JSONObject>();
+                    for (Object attrObj : attrNbtList) {
+                        if (attrObj instanceof NbtCompound) {
+                            JSONObject attrJson = new JSONObject();
+                            NbtCompound attrNbt = (NbtCompound) attrObj;
+                            attrJson.put("AttributeName", attrNbt.getString("AttributeName", "ERROR"));
+                            attrJson.put("Name", attrNbt.getString("Name", "ERROR"));
+                            attrJson.put("Name", attrNbt.getInteger("Amount", -1));
+                            attrJson.put("Name", attrNbt.getInteger("Operation", -1));
+                            attrJson.put("Name", attrNbt.getInteger("UUIDLeast", -1));
+                            attrJson.put("Name", attrNbt.getInteger("UUIDMost", -1));
+                            attrList.add(attrJson);
+                        }
+                    }
+                    if (attrList.size() > 0) {
+                        tagJson.put("AttributeModifiers", attrList);
+                    }
+                }
             }
         }
         
