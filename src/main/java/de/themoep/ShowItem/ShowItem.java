@@ -539,21 +539,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         NbtCompound itemNbt = NbtFactory.fromItemTag(item);
         getLogger().log(debugLevel, "Item-Nbt: " + itemNbt.toString());
-        
-        NbtCompound tagNbt = itemNbt.getPath("tag");
 
-        if (tagNbt != null) {
-            getLogger().log(debugLevel, "Item-Tag-Nbt: " + tagNbt.toString());
-
+        if (!itemNbt.isEmpty()) {
             if(!hideUnbreakable) {
-                Byte unbreakable = tagNbt.getByte("Unbreakable", (byte) 0);
+                Byte unbreakable = itemNbt.getByte("Unbreakable", (byte) 0);
                 if(unbreakable != 0) {
                     tagJson.put("Unbreakable", unbreakable);
                 }
             }
             
             if(!hideDestroys) {
-                NbtList destroyNbtList = tagNbt.getList("CanDestroy", false);
+                NbtList destroyNbtList = itemNbt.getList("CanDestroy", false);
                 if(destroyNbtList != null) {
                     List<String> destroyList = new ArrayList<String>();
                     for(Object destroyObj : destroyNbtList) {
@@ -568,7 +564,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
 
             if(!hidePlacedOn) {
-                NbtList placeNbtList = tagNbt.getList("CanPlaceOn", false);
+                NbtList placeNbtList = itemNbt.getList("CanPlaceOn", false);
                 if(placeNbtList != null) {
                     List<String> placeList = new ArrayList<String>();
                     for(Object destroyObj : placeNbtList) {
@@ -583,7 +579,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             }
 
             if(!hideAttributes) {
-                NbtList attrNbtList = tagNbt.getList("AttributeModifiers", false);
+                NbtList attrNbtList = itemNbt.getList("AttributeModifiers", false);
                 if (attrNbtList != null) {
                     List<JSONObject> attrList = new ArrayList<JSONObject>();
                     for (Object attrObj : attrNbtList) {
@@ -604,8 +600,6 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                 }
             }
-        } else {
-            getLogger().log(debugLevel, "Item-Tag-Nbt: null");
         }
         
         if(!tagJson.isEmpty()) {
