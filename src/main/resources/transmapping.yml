@@ -25,6 +25,10 @@ templates:
     5: smoothStoneBrick
     6: netherBrick
     7: quartz
+  sandstones:
+    0: default
+    1: chiseled
+    2: smooth
 mapping:
   STONE: 
     general: stone
@@ -47,6 +51,17 @@ mapping:
       3: jungle
       4: acacia
       5: big_oak
+  SAND:
+    general: sand
+    types:
+      0: default
+      1: red
+  SANDSTONE:
+    general: sandStone
+    template: sandstones
+  RED_SANDSTONE: 
+    general: redSandStone
+    template: sandstones
   GOLD_ORE: oreGold
   IRON_ORE: oreIron
   COAL_ORE: oreCoal
@@ -219,7 +234,6 @@ mapping:
   STANDING_BANNER: item.banner.white
   WALL_BANNER: item.banner.white
   DAYLIGHT_DETECTOR_INVERTED: daylightDetector
-  RED_SANDSTONE: redSandStone
   RED_SANDSTONE_STAIRS: stairsRedSandStone
   DOUBLE_STONE_SLAB2: stoneSlab2.red_sandstone
   STONE_SLAB2: stoneSlab2.red_sandstone
