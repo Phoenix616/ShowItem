@@ -539,9 +539,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         NbtCompound tagNbt = NbtFactory.fromItemTag(item).getMap("tag", false);
 
-        getLogger().log(debugLevel, "Item-Nbt: " + tagNbt.toString());
-
         if (tagNbt != null) {
+            getLogger().log(debugLevel, "Item-Tag-Nbt: " + tagNbt.toString());
 
             if(!hideUnbreakable) {
                 Byte unbreakable = tagNbt.getByte("Unbreakable", (byte) 0);
@@ -602,6 +601,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                 }
             }
+        } else {
+            getLogger().log(debugLevel, "Item-Tag-Nbt: null");
         }
         
         if(!tagJson.isEmpty()) {
