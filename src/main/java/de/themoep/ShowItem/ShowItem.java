@@ -539,6 +539,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
         NbtCompound tagNbt = NbtFactory.fromItemTag(item).getMap("tag", false);
 
+        getLogger().log(debugLevel, "Item-Nbt: " + tagNbt.toString());
+
         if (tagNbt != null) {
 
             if(!hideUnbreakable) {
