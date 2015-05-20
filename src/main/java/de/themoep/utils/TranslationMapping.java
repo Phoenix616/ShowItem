@@ -48,17 +48,17 @@ public class TranslationMapping {
                 
                 if(blocksection.isConfigurationSection(matname)) {
                     ConfigurationSection extrasection = blocksection.getConfigurationSection(matname);
-                    String general = blocksection.getString("general");
+                    String general = extrasection.getString("general");
                     if(general != null) {
                         transmap.put(matkey, general);
                     }
-                    String template = blocksection.getString("template");
+                    String template = extrasection.getString("template");
                     if(template != null) {
                         ConfigurationSection templatesection = langconfig.getConfig().getConfigurationSection("templates." + template);
                         if(templatesection != null) {
                             for(String damage : templatesection.getKeys(false)) {
                                 String mckey = templatesection.getString(damage);
-                                if (general != null) {
+                                if(general != null) {
                                     mckey = general + "." + mckey;
                                 }
                                 transmap.put(matkey + ":" + damage, mckey);
@@ -72,7 +72,7 @@ public class TranslationMapping {
                     if(damagesection != null) {
                         for(String damage : damagesection.getKeys(false)) {
                             String mckey = damagesection.getString(damage);
-                            if (general != null) {
+                            if(general != null) {
                                 mckey = general + "." + mckey;
                             }
                             transmap.put(matkey + ":" + damage, mckey);
