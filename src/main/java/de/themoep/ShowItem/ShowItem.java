@@ -629,7 +629,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             nameJson.put("with", translateWith);
         }
         nameJson.put("hoverEvent", hoverJson);
-        nameJson.put("color", itemcolor.toString().toLowerCase());
+        nameJson.put("color", itemcolor.name().toLowerCase());
 
         String lbracket = itemcolor + "[";
         if (useIconRp) {
