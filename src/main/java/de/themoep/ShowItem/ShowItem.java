@@ -229,6 +229,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             icon = iconrpmap.getIcon(item, true);
         //String name = idmap.getHumanName(item.getType());
         String name = "";
+        List<String> translateWith = new ArrayList<String>();
 
         itemJson.put("id", "minecraft:"+ idmap.getMCid(item.getType()));
 
@@ -379,15 +380,16 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 SkullMeta sm = (SkullMeta) meta;
                 if(sm.hasOwner()) {
                     String owner = sm.getOwner();
+                    translateWith.add(0, owner);
                     /*taglist.add("SkullOwner:{Name:\\\\\"" + owner + "\\\\\",},");*/
                     JSONObject ownerJson = new JSONObject();
                     ownerJson.put("Name", owner);
                     tagJson.put("SkullOwner", ownerJson);
-                    name = owner + "'";
+                    /*name = owner + "'";
                     if(!(owner.substring(owner.length() -1).equalsIgnoreCase("s") || owner.substring(owner.length() -1).equalsIgnoreCase("x") || owner.substring(owner.length() -1).equalsIgnoreCase("z")))
                         name += "s";
                     name += " Head";
-                    meta.setDisplayName(name);
+                    meta.setDisplayName(name);*/
                 }
             }
             
@@ -623,6 +625,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
             nameJson.put("text", resultname);
         }        
         nameJson.put("translate", transmap.getKey(item));
+        if(!translateWith.isEmpty()) {
+            nameJson.put("with", translateWith);
+        }
         nameJson.put("hoverEvent", hoverJson);
 
         String lbracket = itemcolor + "[";
