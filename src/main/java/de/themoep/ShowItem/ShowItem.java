@@ -380,11 +380,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 SkullMeta sm = (SkullMeta) meta;
                 if(sm.hasOwner()) {
                     String owner = sm.getOwner();
-                    translateWith.add(0, owner);
+                    if(owner != null) {
+                        translateWith.add(0, owner);
                     /*taglist.add("SkullOwner:{Name:\\\\\"" + owner + "\\\\\",},");*/
-                    JSONObject ownerJson = new JSONObject();
-                    ownerJson.put("Name", owner);
-                    tagJson.put("SkullOwner", ownerJson);
+                        JSONObject ownerJson = new JSONObject();
+                        ownerJson.put("Name", owner);
+                        tagJson.put("SkullOwner", ownerJson);
+                    }
                     /*name = owner + "'";
                     if(!(owner.substring(owner.length() -1).equalsIgnoreCase("s") || owner.substring(owner.length() -1).equalsIgnoreCase("x") || owner.substring(owner.length() -1).equalsIgnoreCase("z")))
                         name += "s";
