@@ -71,6 +71,7 @@ idmapping:
   SNOW_BLOCK: snow
   DIODE: repeater
   REDSTONE_COMPARATOR: comparator
+  REDSTONE_TORCH_ON: redstone_torch
   WOOD_BUTTON: wooden_button
   GOLD_PLATE: light_weighted_pressure_plate
   IRON_PLATE: heavy_weighted_pressure_plate
@@ -86,6 +87,7 @@ idmapping:
   FIREBALL: fire_charge
   RAW_FISH: fish
   PORK: porkchop
+  GRILLED_PORK: cooked_porkchop
   JACK_O_LANTERN: lit_pumpkin
   MUSHROOM_SOUP: mushroom_stew
   RAW_BEEF: beef
