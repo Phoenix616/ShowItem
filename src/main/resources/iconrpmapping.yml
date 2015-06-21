@@ -54,10 +54,10 @@ map:
   - chainmail_chestplate
   - chainmail_leggings
   - chainmail_boots
-  - golden_helmet
-  - golden_chestplate
-  - golden_leggings
-  - golden_boots
+  - gold_helmet
+  - gold_chestplate
+  - gold_leggings
+  - gold_boots
   - iron_helmet
   - iron_chestplate
   - iron_leggings
@@ -514,7 +514,7 @@ map:
   - tripwire_hook
   - lever
   - torch
-  - redstone_torch
+  - redstone_torch_on
   - redstone_torch_off
   
   # unicode_page_92:
