@@ -302,7 +302,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 itemcolor = ChatColor.AQUA;
             }
 
-            if(meta.spigot() != null && meta.spigot().isUnbreakable() && !hideUnbreakable) {
+            if(spigot && meta.spigot().isUnbreakable() && !hideUnbreakable) {
                 tagJson.put("Unbreakable", 1);
             }
             
