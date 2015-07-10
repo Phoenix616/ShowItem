@@ -83,8 +83,8 @@ public class ConfigAccessor {
     }
 
     public void saveDefaultConfig() {
-        if (!configFile.exists()) {
-            this.plugin.saveResource(fileName, false);
+        if (configFile == null || !configFile.exists()) {
+            plugin.saveResource(fileName, false);
         }
     }
 
