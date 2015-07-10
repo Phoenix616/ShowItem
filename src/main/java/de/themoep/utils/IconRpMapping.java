@@ -60,8 +60,8 @@ public class IconRpMapping {
     public IconRpMapping(JavaPlugin plugin) {
         plugin.getLogger().info("Loading Text Icon Resourcepack mapping...");
         iconconfig = new ConfigAccessor(plugin, "iconrpmapping.yml");
-        iconconfig.reloadConfig();
         iconconfig.saveDefaultConfig();
+        iconconfig.reloadConfig();
         
         offset = iconconfig.getConfig().getInt("offset");
         

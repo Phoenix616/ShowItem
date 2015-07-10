@@ -37,8 +37,8 @@ public class TranslationMapping {
         plugin.getLogger().info("Loading TranslationMapping...");
 
         langconfig = new ConfigAccessor(plugin, "transmapping.yml");
-        langconfig.reloadConfig();
         langconfig.saveDefaultConfig();
+        langconfig.reloadConfig();
 
         ConfigurationSection blocksection = langconfig.getConfig().getConfigurationSection("mapping");
         for(String matname : blocksection.getKeys(false)) {

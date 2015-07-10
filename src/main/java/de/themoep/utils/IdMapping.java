@@ -35,8 +35,8 @@ public class IdMapping {
         plugin.getLogger().info("Loading IdMapping...");
 
         idconfig = new ConfigAccessor(plugin, "idmapping.yml");
-        idconfig.reloadConfig();
         idconfig.saveDefaultConfig();
+        idconfig.reloadConfig();
         
         ConfigurationSection section = idconfig.getConfig().getConfigurationSection("idmapping");
         for(String s : section.getKeys(false)) {
