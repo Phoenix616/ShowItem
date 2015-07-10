@@ -12,11 +12,11 @@ commands:
       permission-message: You don't have the permission <permission>
 permissions:
    showitem.command:
-      description: Gives permission to the some command
-      default: op
+      description: Gives permission to the plugin command
+      default: true
    showitem.command.player:
       description: Gives permission to show an item to a specific player wherever he is
-      default: op
+      default: true
    showitem.command.radius:
       description: Gives permission to show an item in radius you give
       default: op
