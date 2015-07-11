@@ -621,9 +621,6 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         JSONObject nameJson = new JSONObject ();        
         if(!name.isEmpty()) {
             String resultname = itemcolor + name + ChatColor.RESET;
-            if (useIconRp) {
-                resultname = icon + resultname;
-            }
             nameJson.put("text", resultname);
         } else {
             nameJson.put("translate", transmap.getKey(item));
