@@ -135,7 +135,6 @@ mapping:
   CAKE_BLOCK: cake
   DIODE_BLOCK_OFF: diode
   DIODE_BLOCK_ON: diode
-  LOCKED_CHEST: lockedchest
   STAINED_GLASS: 
     general: stainedGlass
     template: colors
