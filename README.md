@@ -42,4 +42,4 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 ```
 ##### Extra licenses
-This plugin uses [libraries](https://github.com/Minebench/ShowItem/tree/master/src/de/themoep/utils) licensed under the GPLv3 compatible [MPL v2.0](https://www.mozilla.org/MPL/2.0/) and [MIT](http://opensource.org/licenses/MIT) licenses!
+This plugin uses libraries licensed under the GPLv3 compatible [MPL v2.0](https://www.mozilla.org/MPL/2.0/) and [MIT](http://opensource.org/licenses/MIT) licenses!
