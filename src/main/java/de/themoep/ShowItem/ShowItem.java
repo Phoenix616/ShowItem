@@ -625,10 +625,11 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 resultname = icon + resultname;
             }
             nameJson.put("text", resultname);
-        }        
-        nameJson.put("translate", transmap.getKey(item));
-        if(!translateWith.isEmpty()) {
-            nameJson.put("with", translateWith);
+        } else {
+            nameJson.put("translate", transmap.getKey(item));
+            if(!translateWith.isEmpty()) {
+                nameJson.put("with", translateWith);
+            }
         }
         nameJson.put("hoverEvent", hoverJson);
         nameJson.put("color", itemcolor.name().toLowerCase());
