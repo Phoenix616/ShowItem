@@ -1,5 +1,8 @@
 # If the messages should try finding a text icon for this item from WolfieMarios Resourcepack (http://imgur.com/a/oHvbX)
 texticonrp: false
+# This option sets wether we should try to use the Bungee chat api when we detect a spigot server
+# It does nothing on a normal craftbukkit
+usefancymsg: true
 # The default radius for the /showitem (/show, /si) command if no -r(adius) parameter is specified
 defaultradius: 16
 # Cooldown for the radius command in seconds. 

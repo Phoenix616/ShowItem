@@ -699,7 +699,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private void tellRaw(Player player, String msg, Level debugLevel) {
-        if(spigot) {
+        if(spigot && getConfig().getBoolean("usefancymsg", true)) {
             getLogger().log(debugLevel, "Tellraw " + player.getName() + ": " + msg);
             try {
                 player.spigot().sendMessage(new ComponentSerializer().parse(msg));
