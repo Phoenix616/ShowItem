@@ -86,24 +86,26 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     ConfigurationSection lang;
     
     boolean spigot;
+    boolean usebungeeapi;
     
     public void onEnable() {
+
+        this.loadConfig();
         try {
             Bukkit.class.getMethod("spigot");
             spigot = true;
-            this.getLogger().info("Detected Spigot server. Using Bungee chat api for fancy messages!");
+            this.getLogger().info("Detected Spigot server. " + (usebungeeapi ? "Using Bungee chat api for fancy messages!" : "However it looks like you disabled the usage of the Bungee api in your config! (usefancymsg) Using vanilla tellraw command instead!"));
         } catch (NoSuchMethodException e) {
             spigot = false;
             this.getLogger().info("Detected a non-Spigot server. Using vanilla tellraw command for fancy messages!");
         }
-
-        this.loadConfig();
     }
 
     public void loadConfig() {
         this.saveDefaultConfig();
         this.getLogger().info("Loading Config...");
         this.reloadConfig();
+        usebungeeapi = getConfig().getBoolean("usefancymsg", true);
         defaultradius = this.getConfig().getInt("defaultradius",16);
         radiuscooldown = this.getConfig().getInt("cooldown", 0);
         if(radiuscooldown == 0) {
@@ -718,7 +720,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
     
     private void tellRaw(Player player, String msg, Level debugLevel) {
-        if(spigot && getConfig().getBoolean("usefancymsg", true)) {
+        if(spigot && usebungeeapi) {
             getLogger().log(debugLevel, "Tellraw " + player.getName() + ": " + msg);
             try {
                 player.spigot().sendMessage(new ComponentSerializer().parse(msg));
