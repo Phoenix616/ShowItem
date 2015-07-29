@@ -73,10 +73,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     TranslationMapping transmap;
     
     int defaultradius;
-    int cooldown;
+    int radiuscooldown;
+    int directcooldown;
     boolean useIconRp;
     
-    Map<UUID, Long> cooldownmap = new HashMap<UUID, Long>();
+    Map<UUID, Long> radiuscooldownmap = new HashMap<UUID, Long>();
+    Map<String, Long> directcooldownmap = new HashMap<String, Long>();
     
     IconRpMapping iconrpmap;
 
@@ -102,8 +104,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         this.saveDefaultConfig();
         this.getLogger().info("Loading Config...");
         this.reloadConfig();
-        defaultradius = this.getConfig().getInt("defaultradius");
-        cooldown = this.getConfig().getInt("cooldown");
+        defaultradius = this.getConfig().getInt("defaultradius",16);
+        radiuscooldown = this.getConfig().getInt("cooldown", 0);
+        if(radiuscooldown == 0) {
+            radiuscooldown = this.getConfig().getInt("cooldowns.radius", 0);
+        }
+        directcooldown = this.getConfig().getInt("cooldowns.direct", 0);
         lang = this.getConfig().getConfigurationSection("lang");
         useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
@@ -182,11 +188,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     private void showInRadius(Player sender, int radius, Level debugLevel) {
         
-        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && cooldownmap.containsKey(sender.getUniqueId())) {
-            long diff = System.currentTimeMillis() - cooldownmap.get(sender.getUniqueId());
-            if(diff < cooldown * 1000) {
-                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff/1000)))));
+        if(radiuscooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && radiuscooldownmap.containsKey(sender.getUniqueId())) {
+            long diff = System.currentTimeMillis() - radiuscooldownmap.get(sender.getUniqueId());
+            if(diff < radiuscooldown * 1000) {
+                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (radiuscooldown - diff/1000)))));
                 return;
+            } else {
+                radiuscooldownmap.remove(sender.getUniqueId());
             }
         }
         
@@ -211,6 +219,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     private void showPlayer(Player sender, Player target, Level debugLevel) {
+
+        if(directcooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && directcooldownmap.containsKey(sender.getName() + "-" + target.getName())) {
+            long diff = System.currentTimeMillis() - directcooldownmap.get(sender.getName() + "-" + target.getName());
+            if(diff < directcooldown * 1000) {
+                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (directcooldown - diff/1000)))));
+                return;
+            } else {
+                directcooldownmap.remove(sender.getName() + "-" + target.getName());
+            }
+        }
+        
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);
         if(debugLevel == Level.INFO) {
             sender.sendMessage(ChatColor.stripColor(itemstring));

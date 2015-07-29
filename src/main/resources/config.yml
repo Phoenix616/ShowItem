@@ -5,10 +5,12 @@ texticonrp: false
 usefancymsg: true
 # The default radius for the /showitem (/show, /si) command if no -r(adius) parameter is specified
 defaultradius: 16
-# Cooldown for the radius command in seconds. 
+# Cooldowns for the radius and the direct show command in seconds.
 # 0 to disable cooldowns entirely. 
 # Exempt permission: showitem.cooldownexempt
-cooldown: 10
+cooldowns: 
+  radius: 10
+  direct: 0
 lang:
   radius:
     self: "You hold up the item %item%!"
@@ -21,4 +23,4 @@ lang:
     noitem: "&cYou don't have an item to show in your hand. :("
     playeroffline: "&cThe player %player%&c is not online"
     noonearound: "&cThere are no players around which could see your item :("
-    coolden: "&cYou have to wait %remaining%&c more seconds before showing another item!"
+    cooldown: "&cYou have to wait %remaining%&c more seconds before showing another item!"
