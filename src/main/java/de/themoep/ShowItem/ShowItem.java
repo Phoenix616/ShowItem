@@ -196,7 +196,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (radiuscooldown - diff/1000)))));
                 return;
             } else {
-                radiuscooldownmap.remove(sender.getUniqueId());
+                radiuscooldownmap.put(sender.getUniqueId(), System.currentTimeMillis());
             }
         }
         
@@ -228,7 +228,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (directcooldown - diff/1000)))));
                 return;
             } else {
-                directcooldownmap.remove(sender.getName() + "-" + target.getName());
+                directcooldownmap.put(sender.getName() + "-" + target.getName(), System.currentTimeMillis());
             }
         }
         
