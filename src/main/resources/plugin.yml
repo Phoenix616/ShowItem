@@ -26,3 +26,6 @@ permissions:
    showitem.command.debug:
       description: Gives permission to use the debug command
       default: op
+   showitem.cooldownexempt:
+      description: Gives permission to bypass the command cooldowns
+      default: op
