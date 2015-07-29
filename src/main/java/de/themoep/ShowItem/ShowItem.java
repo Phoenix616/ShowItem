@@ -190,14 +190,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     private void showInRadius(Player sender, int radius, Level debugLevel) {
         
-        if(radiuscooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && radiuscooldownmap.containsKey(sender.getUniqueId())) {
-            long diff = System.currentTimeMillis() - radiuscooldownmap.get(sender.getUniqueId());
-            if(diff < radiuscooldown * 1000) {
-                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (radiuscooldown - diff/1000)))));
-                return;
-            } else {
-                radiuscooldownmap.put(sender.getUniqueId(), System.currentTimeMillis());
+        if(radiuscooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            if(radiuscooldownmap.containsKey(sender.getUniqueId())) {
+                long diff = System.currentTimeMillis() - radiuscooldownmap.get(sender.getUniqueId());
+                if(diff < radiuscooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (radiuscooldown - diff / 1000)))));
+                    return;
+                }
             }
+            radiuscooldownmap.put(sender.getUniqueId(), System.currentTimeMillis());
         }
         
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);
@@ -222,14 +223,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
     private void showPlayer(Player sender, Player target, Level debugLevel) {
 
-        if(directcooldown > 0 && !sender.hasPermission("showitem.cooldownexempt") && directcooldownmap.containsKey(sender.getName() + "-" + target.getName())) {
-            long diff = System.currentTimeMillis() - directcooldownmap.get(sender.getName() + "-" + target.getName());
-            if(diff < directcooldown * 1000) {
-                tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (directcooldown - diff/1000)))));
-                return;
-            } else {
-                directcooldownmap.put(sender.getName() + "-" + target.getName(), System.currentTimeMillis());
+        if(directcooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            if(directcooldownmap.containsKey(sender.getName() + "-" + target.getName())) {
+                long diff = System.currentTimeMillis() - directcooldownmap.get(sender.getName() + "-" + target.getName());
+                if(diff < directcooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (directcooldown - diff / 1000)))));
+                    return;
+                }
             }
+            directcooldownmap.put(sender.getName() + "-" + target.getName(), System.currentTimeMillis());
         }
         
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);
