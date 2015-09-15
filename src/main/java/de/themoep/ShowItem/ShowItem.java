@@ -145,14 +145,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                 } else if(args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
                     if(sender.hasPermission("showitem.command.radius")) {
                         i++;
-                        if(i < args.length) {
-                            try {
-                                radius = Integer.parseInt(args[i]);
-                            } catch (NumberFormatException e) {
-                                sender.sendMessage(ChatColor.RED + "Error: Your input " + args[i] + " is not a valid integer!");
-                                return true;
-                            }
-                        } else {
+                        try {
+                            radius = Integer.parseInt(args[i]);
+                        } catch (NumberFormatException e) {
+                            sender.sendMessage(ChatColor.RED + "Error: Your input " + args[i] + " is not a valid integer!");
+                            return true;
+                        } catch(IndexOutOfBoundsException e) {
                             sender.sendMessage(ChatColor.RED + "Error: Please input a number after the radius argument!");
                             return true;
                         }
