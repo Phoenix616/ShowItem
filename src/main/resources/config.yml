@@ -13,7 +13,7 @@ cooldowns:
   direct: 0
 lang:
   radius:
-    self: "You hold up the item %item%!"
+    self: "You hold up the item %item%!%customradius%"
     custom: "&8(View distance: %radius%&8 blocks)"
     target: "%player% holds up the item %item%!"
   player:

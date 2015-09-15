@@ -206,17 +206,21 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);
         Boolean found = false;
-        String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
+
+        String radiusMsg = "";
+        if(radius != defaultradius) {
+            radiusMsg += " " + getTranslation("radius.custom");
+            radiusMsg = radiusMsg.replace("%radius%", Integer.toString(radius));
+        }
+        String msg = getTranslation("radius.self", ImmutableMap.of("player", sender.getName(), "item", itemstring, "customradius", radiusMsg));
         if(debugLevel == Level.INFO) {
             sender.sendMessage(ChatColor.stripColor(itemstring));
         }
-        if(radius != defaultradius) {
-            msg += " " + getTranslation("radius.custom", ImmutableMap.of("radius", Integer.toString(radius)));
-        }
         tellRaw(sender, msg);
+        String targetMsg = getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring, "customradius", radiusMsg));
         for(Player target : sender.getWorld().getPlayers()) {
             if(target != sender && sender.getLocation().distanceSquared(target.getLocation()) <= (radius*radius)) {
-                tellRaw(target, getTranslation("radius.target", ImmutableMap.of("player", sender.getName(), "item", itemstring)), debugLevel);
+                tellRaw(target, targetMsg, debugLevel);
                 found = true;
             }
         }
@@ -728,7 +732,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         if(spigot && usebungeeapi) {
             getLogger().log(debugLevel, "Tellraw " + player.getName() + ": " + msg);
             try {
-                player.spigot().sendMessage(new ComponentSerializer().parse(msg));
+                player.spigot().sendMessage(ComponentSerializer.parse(msg));
             } catch (Exception e) {
                 getLogger().severe("Exception while using the following json string: " + msg);
                 e.printStackTrace();
