@@ -141,9 +141,9 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.debug");
                     }
-                } else if (args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
+                } else if(args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
                     if(sender.hasPermission("showitem.command.radius")) {
-                        if(i + 1 <args.length ) {
+                        if(i < args.length) {
                             try {
                                 radius = Integer.parseInt(args[i + 1]);
                             } catch (NumberFormatException e) {
