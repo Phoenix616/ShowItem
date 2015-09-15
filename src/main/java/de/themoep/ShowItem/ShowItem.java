@@ -144,7 +144,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     }
                 } else if(args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
                     if(sender.hasPermission("showitem.command.radius")) {
-                        if(i < args.length) {
+                        if(i + 1 < args.length) {
                             try {
                                 radius = Integer.parseInt(args[i + 1]);
                             } catch (NumberFormatException e) {
