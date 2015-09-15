@@ -130,16 +130,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     if (sender.hasPermission("showitem.command.reload")) {
                         this.loadConfig();
                         sender.sendMessage(ChatColor.GREEN + "Config reloaded.");
-                        return true;
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.reload");
                     }
+                    return true;
                 } else if(args[i].equalsIgnoreCase("-debug")) {
                     if(sender.hasPermission("showitem.command.debug")) {
                         debugLevel = Level.INFO;
                         sender.sendMessage(ChatColor.GREEN + "Debug message.");
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.debug");
+                        return true;
                     }
                 } else if(args[i].equalsIgnoreCase("-radius") || args[i].equalsIgnoreCase("-r")){
                     if(sender.hasPermission("showitem.command.radius")) {
@@ -148,12 +149,15 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                                 radius = Integer.parseInt(args[i + 1]);
                             } catch (NumberFormatException e) {
                                 sender.sendMessage(ChatColor.RED + "Error: Your input " + args[i + 1] + " is not a valid integer!");
+                                return true;
                             }
                         } else {
                             sender.sendMessage(ChatColor.RED + "Error: Please input a number after the radius argument!");
+                            return true;
                         }
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.radius");
+                        return true;
                     }
                 }
             }
