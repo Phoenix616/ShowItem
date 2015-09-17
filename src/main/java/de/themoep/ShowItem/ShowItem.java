@@ -622,43 +622,13 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                             NbtCompound attrNbt = (NbtCompound) attrObj;
                             attrJson.put("AttributeName", attrNbt.getString("AttributeName", "ERROR"));
                             attrJson.put("Name", attrNbt.getString("Name", "ERROR"));
-                            try{
-                                attrJson.put("Amount", attrNbt.getDouble("Amount", -1.0));
-                            } catch (ClassCastException e) {
-                                try{
-                                    attrJson.put("Amount", attrNbt.getInteger("Amount", -1));
-                                } catch (ClassCastException e2) {
-                                    //wat
-                                    attrJson.put("Amount", -1);
-                                }
-                            }
-                            try {
-                                attrJson.put("Operation", attrNbt.getInteger("Operation", -1));
-                            } catch(ClassCastException e) {
-                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
-                                    attrJson.put("Operation", attrNbt.getLong("Operation", -1L));
-                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
-                                    attrJson.put("Operation", attrNbt.getFloat("Operation", -1f));
-                                }
-                            }
-
-                            try {
-                                attrJson.put("UUIDLeast", attrNbt.getInteger("UUIDLeast", -1));
-                            } catch(ClassCastException e) {
-                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
-                                    attrJson.put("UUIDLeast", attrNbt.getLong("UUIDLeast", -1L));
-                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
-                                    attrJson.put("UUIDLeast", attrNbt.getFloat("UUIDLeast", -1f));
-                                }
-                            }
-
-                            try {
-                                attrJson.put("UUIDMost", attrNbt.getInteger("UUIDMost", -1));
-                            } catch(ClassCastException e) {
-                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
-                                    attrJson.put("UUIDMost", attrNbt.getLong("UUIDMost", -1L));
-                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
-                                    attrJson.put("UUIDLeast", attrNbt.getFloat("UUIDLeast", -1f));
+                            String tags[] = {"Amount", "Operation", "UUIDLeast", "UUIDMost"};
+                            for(String tag : tags) {
+                                Object value = attrNbt.get(tag);
+                                if(value == null || !(value instanceof Number)) {
+                                    attrJson.put(tag, -1);
+                                } else {
+                                    attrJson.put(tag, value);
                                 }
                             }
                             attrList.add(attrJson);
