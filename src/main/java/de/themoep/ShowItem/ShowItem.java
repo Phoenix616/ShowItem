@@ -632,9 +632,35 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                                     attrJson.put("Amount", -1);
                                 }
                             }
-                            attrJson.put("Operation", attrNbt.getInteger("Operation", -1));
-                            attrJson.put("UUIDLeast", attrNbt.getInteger("UUIDLeast", -1));
-                            attrJson.put("UUIDMost", attrNbt.getInteger("UUIDMost", -1));
+                            try {
+                                attrJson.put("Operation", attrNbt.getInteger("Operation", -1));
+                            } catch(ClassCastException e) {
+                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
+                                    attrJson.put("Operation", attrNbt.getLong("Operation", -1L));
+                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
+                                    attrJson.put("Operation", attrNbt.getFloat("Operation", -1f));
+                                }
+                            }
+
+                            try {
+                                attrJson.put("UUIDLeast", attrNbt.getInteger("UUIDLeast", -1));
+                            } catch(ClassCastException e) {
+                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
+                                    attrJson.put("UUIDLeast", attrNbt.getLong("UUIDLeast", -1L));
+                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
+                                    attrJson.put("UUIDLeast", attrNbt.getFloat("UUIDLeast", -1f));
+                                }
+                            }
+
+                            try {
+                                attrJson.put("UUIDMost", attrNbt.getInteger("UUIDMost", -1));
+                            } catch(ClassCastException e) {
+                                if(e.getMessage().matches("(.*)java.lang.Long(.*)")) {
+                                    attrJson.put("UUIDMost", attrNbt.getLong("UUIDMost", -1L));
+                                } else if(e.getMessage().matches("(.*)java.lang.Float(.*)")) {
+                                    attrJson.put("UUIDLeast", attrNbt.getFloat("UUIDLeast", -1f));
+                                }
+                            }
                             attrList.add(attrJson);
                         }
                     }
