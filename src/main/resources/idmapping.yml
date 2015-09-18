@@ -99,3 +99,4 @@ idmapping:
   NETHER_STALK: nether_wart
   SULPHUR: gunpowder
   TRAP_DOOR: trapdoor
+  COMMAND: command_block
