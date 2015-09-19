@@ -230,8 +230,15 @@ mapping:
       3: fern
       4: rose
       5: paeonia
-  STANDING_BANNER: item.banner.white
-  WALL_BANNER: item.banner.white
+  STANDING_BANNER:
+    general: item.banner
+    template: colors
+  WALL_BANNER:
+    general: item.banner
+    template: colors
+  BANNER:
+    general: item.banner
+    template: colors
   DAYLIGHT_DETECTOR_INVERTED: daylightDetector
   RED_SANDSTONE_STAIRS: stairsRedSandStone
   DOUBLE_STONE_SLAB2: stoneSlab2.red_sandstone
