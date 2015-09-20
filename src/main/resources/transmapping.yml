@@ -16,6 +16,23 @@ templates:
     2: magenta
     1: orange
     0: white
+  colorsinverted:
+    0: black
+    1: red
+    2: green
+    3: brown
+    4: blue
+    5: purple
+    6: cyan
+    7: silver
+    8: gray
+    9: pink
+    10: lime
+    11: yellow
+    12: lightBlue
+    13: magenta
+    14: orange
+    15: white
   slabs:  
     0: stone
     1: sand
@@ -232,13 +249,13 @@ mapping:
       5: paeonia
   STANDING_BANNER:
     general: item.banner
-    template: colors
+    template: colorsinverted
   WALL_BANNER:
     general: item.banner
-    template: colors
+    template: colorsinverted
   BANNER:
     general: item.banner
-    template: colors
+    template: colorsinverted
   DAYLIGHT_DETECTOR_INVERTED: daylightDetector
   RED_SANDSTONE_STAIRS: stairsRedSandStone
   DOUBLE_STONE_SLAB2: stoneSlab2.red_sandstone
