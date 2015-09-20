@@ -18,9 +18,11 @@ package de.themoep.utils;
  * along with this program. If not, see <http://mozilla.org/MPL/2.0/>.
  */
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -96,8 +98,16 @@ public class TranslationMapping {
                 return "item.skull.player.name";
         }
         String trans = "";
-        if(transmap.containsKey(mat.toString() + ":" + item.getDurability())) {
-            trans = transmap.get(mat.toString() + ":" + item.getDurability());
+        int data = item.getDurability();
+        if(item.hasItemMeta() && item.getItemMeta() instanceof BannerMeta) {
+            BannerMeta bm = (BannerMeta) item.getItemMeta();
+            DyeColor baseColor = bm.getBaseColor();
+            if(baseColor != null) {
+                data = baseColor.getDyeData();
+            }
+        }
+        if(transmap.containsKey(mat.toString() + ":" + data)) {
+            trans = transmap.get(mat.toString() + ":" + data);
         } else if(transmap.containsKey(mat.toString())) {
             trans = transmap.get(mat.toString());
         } else {
