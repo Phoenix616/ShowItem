@@ -73,12 +73,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     TranslationMapping transmap;
     
     int defaultradius;
-    int radiuscooldown;
-    int directcooldown;
+    Map<String, Integer> cooldowns = new HashMap<String, Integer>();
     boolean useIconRp;
-    
-    Map<UUID, Long> radiuscooldownmap = new HashMap<UUID, Long>();
-    Map<String, Long> directcooldownmap = new HashMap<String, Long>();
+
+    Map<String, Map<UUID, Long>> cooldownMaps = new HashMap<String, Map<UUID, Long>>();
     
     IconRpMapping iconrpmap;
 
@@ -90,28 +88,31 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     
     public void onEnable() {
 
-        this.loadConfig();
+        loadConfig();
         try {
             Bukkit.class.getMethod("spigot");
             spigot = true;
-            this.getLogger().info("Detected Spigot server. " + (usebungeeapi ? "Using Bungee chat api for fancy messages!" : "However it looks like you disabled the usage of the Bungee api in your config! (usefancymsg) Using vanilla tellraw command instead!"));
+            getLogger().info("Detected Spigot server. " + (usebungeeapi ? "Using Bungee chat api for fancy messages!" : "However it looks like you disabled the usage of the Bungee api in your config! (usefancymsg) Using vanilla tellraw command instead!"));
         } catch (NoSuchMethodException e) {
             spigot = false;
-            this.getLogger().info("Detected a non-Spigot server. Using vanilla tellraw command for fancy messages!");
+            getLogger().info("Detected a non-Spigot server. Using vanilla tellraw command for fancy messages!");
+        }
+        for(String s : new String[]{"all", "world", "radius", "direct"}) {
+            cooldownMaps.put(s, new HashMap<UUID, Long>());
         }
     }
 
     public void loadConfig() {
-        this.saveDefaultConfig();
-        this.getLogger().info("Loading Config...");
-        this.reloadConfig();
+        saveDefaultConfig();
+        getLogger().info("Loading Config...");
+        reloadConfig();
         usebungeeapi = getConfig().getBoolean("usefancymsg", true);
         defaultradius = this.getConfig().getInt("defaultradius",16);
-        radiuscooldown = this.getConfig().getInt("cooldown", 0);
-        if(radiuscooldown == 0) {
-            radiuscooldown = this.getConfig().getInt("cooldowns.radius", 0);
-        }
-        directcooldown = this.getConfig().getInt("cooldowns.direct", 0);
+        cooldowns.put("all", getConfig().getInt("cooldowns.all", 0));
+        cooldowns.put("world", getConfig().getInt("cooldowns.world", 0));
+        cooldowns.put("radius", getConfig().getInt("cooldowns.radius", getConfig().getInt("cooldown", 0)));
+        cooldowns.put("direct", getConfig().getInt("cooldowns.direct", 0));
+
         lang = this.getConfig().getConfigurationSection("lang");
         useIconRp = this.getConfig().getBoolean("texticonrp");
         idmap = new IdMapping(this);
@@ -124,6 +125,8 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender.hasPermission("showitem.command")) {
             int radius = this.defaultradius;
+            boolean showWorld = false;
+            boolean showAll = false;
             Level debugLevel = Level.FINE;
             for(int i = 0; i < args.length; i++) {
                 if(args[i].equalsIgnoreCase("-reload")) {
@@ -158,6 +161,20 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         sender.sendMessage("You don't have the permission showitem.command.radius");
                         return true;
                     }
+                } else if(args[i].equalsIgnoreCase("-world") || args[i].equalsIgnoreCase("-w")){
+                    if(sender.hasPermission("showitem.command.world")) {
+                        showWorld = true;
+                    } else {
+                        sender.sendMessage("You don't have the permission showitem.command.world");
+                        return true;
+                    }
+                } else if(args[i].equalsIgnoreCase("-all") || args[i].equalsIgnoreCase("-a")){
+                    if(sender.hasPermission("showitem.command.all")) {
+                        showAll = true;
+                    } else {
+                        sender.sendMessage("You don't have the permission showitem.command.all");
+                        return true;
+                    }
                 }
             }
             
@@ -179,6 +196,10 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                     } else {
                         sender.sendMessage("You don't have the permission showitem.command.player");
                     }
+                } else if(showAll) {
+                    showAll((Player) sender, debugLevel);
+                } else if(showWorld) {
+                    showWorld((Player) sender, debugLevel);
                 } else {
                     showInRadius((Player) sender, radius, debugLevel);
                 }
@@ -191,17 +212,84 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         return true;
     }
 
-    private void showInRadius(Player sender, int radius, Level debugLevel) {
-        
-        if(radiuscooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
-            if(radiuscooldownmap.containsKey(sender.getUniqueId())) {
-                long diff = System.currentTimeMillis() - radiuscooldownmap.get(sender.getUniqueId());
-                if(diff < radiuscooldown * 1000) {
-                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (radiuscooldown - diff / 1000)))));
+    private void showAll(Player sender, Level debugLevel) {
+        int cooldown = cooldowns.get("all");
+        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            Map<UUID, Long> cooldownMap = cooldownMaps.get("all");
+            if(cooldownMap.containsKey(sender.getUniqueId())) {
+                long diff = System.currentTimeMillis() - cooldownMap.get(sender.getUniqueId());
+                if(diff < cooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff / 1000)))));
                     return;
                 }
             }
-            radiuscooldownmap.put(sender.getUniqueId(), System.currentTimeMillis());
+            cooldownMap.put(sender.getUniqueId(), System.currentTimeMillis());
+        }
+
+        String itemstring = convertItem(sender.getItemInHand(), debugLevel);
+        Boolean found = false;
+
+        String msg = getTranslation("all.self", ImmutableMap.of("player", sender.getName(), "item", itemstring));
+        if(debugLevel == Level.INFO) {
+            sender.sendMessage(ChatColor.stripColor(itemstring));
+        }
+        tellRaw(sender, msg);
+        String targetMsg = getTranslation("all.target", ImmutableMap.of("player", sender.getName(), "item", itemstring));
+        for(Player target : getServer().getOnlinePlayers()) {
+            if(target != sender) {
+                tellRaw(target, targetMsg, debugLevel);
+                found = true;
+            }
+        }
+        if(!found)
+            tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", "everywhere")));
+    }
+
+    private void showWorld(Player sender, Level debugLevel) {
+        int cooldown = cooldowns.get("world");
+        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            Map<UUID, Long> cooldownMap = cooldownMaps.get("world");
+            if(cooldownMap.containsKey(sender.getUniqueId())) {
+                long diff = System.currentTimeMillis() - cooldownMap.get(sender.getUniqueId());
+                if(diff < cooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff / 1000)))));
+                    return;
+                }
+            }
+            cooldownMap.put(sender.getUniqueId(), System.currentTimeMillis());
+        }
+
+        String itemstring = convertItem(sender.getItemInHand(), debugLevel);
+        Boolean found = false;
+
+        String msg = getTranslation("world.self", ImmutableMap.of("player", sender.getName(), "item", itemstring, "world", sender.getWorld().getName()));
+        if(debugLevel == Level.INFO) {
+            sender.sendMessage(ChatColor.stripColor(itemstring));
+        }
+        tellRaw(sender, msg);
+        String targetMsg = getTranslation("world.target", ImmutableMap.of("player", sender.getName(), "item", itemstring, "world", sender.getWorld().getName()));
+        for(Player target : sender.getWorld().getPlayers()) {
+            if(target != sender) {
+                tellRaw(target, targetMsg, debugLevel);
+                found = true;
+            }
+        }
+        if(!found)
+            tellRaw(sender, getTranslation("error.noonearound", ImmutableMap.of("player", sender.getName(), "radius", sender.getWorld().getName())));
+    }
+
+    private void showInRadius(Player sender, int radius, Level debugLevel) {
+        int cooldown = cooldowns.get("radius");
+        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            Map<UUID, Long> cooldownMap = cooldownMaps.get("radius");
+            if(cooldownMap.containsKey(sender.getUniqueId())) {
+                long diff = System.currentTimeMillis() - cooldownMap.get(sender.getUniqueId());
+                if(diff < cooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff / 1000)))));
+                    return;
+                }
+            }
+            cooldownMap.put(sender.getUniqueId(), System.currentTimeMillis());
         }
         
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);
@@ -229,16 +317,17 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
     }
 
     private void showPlayer(Player sender, Player target, Level debugLevel) {
-
-        if(directcooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
-            if(directcooldownmap.containsKey(sender.getName() + "-" + target.getName())) {
-                long diff = System.currentTimeMillis() - directcooldownmap.get(sender.getName() + "-" + target.getName());
-                if(diff < directcooldown * 1000) {
-                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (directcooldown - diff / 1000)))));
+        int cooldown = cooldowns.get("direct");
+        if(cooldown > 0 && !sender.hasPermission("showitem.cooldownexempt")) {
+            Map<UUID, Long> cooldownMap = cooldownMaps.get("direct");
+            if(cooldownMap.containsKey(sender.getUniqueId())) {
+                long diff = System.currentTimeMillis() - cooldownMap.get(sender.getUniqueId());
+                if(diff < cooldown * 1000) {
+                    tellRaw(sender, getTranslation("error.cooldown", ImmutableMap.of("remaining", Integer.toString((int) (cooldown - diff / 1000)))));
                     return;
                 }
             }
-            directcooldownmap.put(sender.getName() + "-" + target.getName(), System.currentTimeMillis());
+            cooldownMap.put(sender.getUniqueId(), System.currentTimeMillis());
         }
         
         String itemstring = convertItem(sender.getItemInHand(), debugLevel);

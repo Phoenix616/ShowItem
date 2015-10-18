@@ -1,8 +1,9 @@
-name: ${project.name}
+name: ShowItem
 main: de.themoep.ShowItem.ShowItem
 version: '${minecraft.plugin.version}'
 description: ${project.description}
 authors: [Phoenix616]
+website: https://github.com/Phoenix616/ShowItem
 commands:
    showitem:
       aliases: [si, show]
@@ -18,7 +19,13 @@ permissions:
       description: Gives permission to show an item to a specific player wherever he is
       default: true
    showitem.command.radius:
-      description: Gives permission to show an item in radius you give
+      description: Gives permission to show an item in a radius you give
+      default: op
+   showitem.command.world:
+      description: Gives permission to show an item to all players in his current world
+      default: op
+   showitem.command.all:
+      description: Gives permission to show an item to all online players
       default: op
    showitem.command.reload:
       description: Gives permission to use the reload command

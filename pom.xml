@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.themoep</groupId>
-    <artifactId>ShowItem</artifactId>
-    <version>1.0.4</version>
+    <artifactId>showitem</artifactId>
+    <version>1.0.5</version>
     <name>ShowItem</name>
     <description>Show items in chat via a command. Also let's you see the item's info via hovering over the message</description>
 

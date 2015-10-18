@@ -8,10 +8,18 @@ defaultradius: 16
 # Cooldowns for the radius and the direct show command in seconds.
 # 0 to disable cooldowns entirely. 
 # Exempt permission: showitem.cooldownexempt
-cooldowns: 
+cooldowns:
+  all: 300
+  world: 60
   radius: 10
   direct: 0
 lang:
+  all:
+    self: "You show the item %item% to everyone!"
+    target: "%player% shows everyone the item %item%!"
+  world:
+    self: "You show the item %item% to everyone in your world!"
+    target: "%player% shows the item %item% to everyone in his world!"
   radius:
     self: "You hold up the item %item%!%customradius%"
     custom: "&8(View distance: %radius%&8 blocks)"
