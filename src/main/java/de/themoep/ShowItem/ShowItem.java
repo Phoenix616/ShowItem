@@ -275,20 +275,19 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         boolean hideVarious = false;
         
         if(item.hasItemMeta()) {
-            
             ItemMeta meta = item.getItemMeta();
 
-            if(meta.getLore() != null || meta instanceof LeatherArmorMeta || meta.getItemFlags().size() > 0) {
-                JSONObject displayJson = new JSONObject();
+            JSONObject displayJson = new JSONObject();
 
-                if(meta.getLore() != null && meta.getLore().size() > 0) {
-                    List<String> loreList = new ArrayList<String>();
-                    for (String l : meta.getLore()) {
-                        loreList.add(l);
-                    }
-                    displayJson.put("Lore", loreList);
+            if(meta.getLore() != null && meta.getLore().size() > 0) {
+                List<String> loreList = new ArrayList<String>();
+                for (String l : meta.getLore()) {
+                    loreList.add(l);
                 }
+                displayJson.put("Lore", loreList);
+            }
 
+            try {
                 if(meta.getItemFlags().size() > 0) {
                     int flagBits = 0;
                     for(ItemFlag flag : meta.getItemFlags())
@@ -320,12 +319,12 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
                         }
                     displayJson.put("HideFlags", flagBits);
                 }
+            } catch (NoSuchMethodError e) {
+                // Catch for 1.7.3-1.7.10 servers, there are no item flags previous to 1.8!
+            }
 
-                if(meta instanceof LeatherArmorMeta) {
-                    displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
-                }
-                
-                tagJson.put("display", displayJson);
+            if(meta instanceof LeatherArmorMeta) {
+                displayJson.put("color", ((LeatherArmorMeta) meta).getColor().asRGB());
             }
 
             if(item.getType().isRecord()) {
@@ -554,19 +553,14 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
 
             if(meta.getDisplayName() != null) {
                 name = ChatColor.ITALIC + meta.getDisplayName();
-                JSONObject displayJson;
-                if(tagJson.containsKey("display")) {
-                    displayJson = (JSONObject) tagJson.get("display");
-                } else {
-                    displayJson = new JSONObject();
-                }
-                
                 if(useIconRp) {
                     displayJson.put("Name", icon + itemcolor + " " + name);
                 } else {
                     displayJson.put("Name", itemcolor + name);
                 }
-                
+            }
+
+            if(!displayJson.isEmpty()) {
                 tagJson.put("display", displayJson);
             }
         }
