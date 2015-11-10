@@ -30,6 +30,7 @@ import de.themoep.utils.TranslationMapping;
 
 import net.md_5.bungee.chat.ComponentSerializer;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -775,6 +776,7 @@ public class ShowItem extends JavaPlugin implements CommandExecutor {
         json = json.replace("\\\"", "{ESCAPED_QUOTE}");
         json = json.replaceAll("\"([a-zA-Z]*)\":", "$1:");
         json = json.replace("{ESCAPED_QUOTE}", "\\\"");
+        json = StringEscapeUtils.unescapeJava(json);
         return json;
     }
 
